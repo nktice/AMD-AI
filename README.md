@@ -10,16 +10,16 @@
 ###
 ### 2023-07 nktice
 ###
-######## I have composed this collection of instructions as they are my notes.
-######## I use to setup my own Linux system with AMD parts.
-######## I've gone over these doing many re-installs to get them all right.
-######## This is what I had hoped to find when I had search for install instructions -
-######## so I'm sharing them in the hopes that they save time for other people. 
-######## There may be in here extra parts that aren't needed but this works for me.
-######## Originally text, with comments like a shell script that I cut and paste -
-######## Here I've converted the text to markdown format for ease of reading. 
-######## I am commenting with hash marks at start of line so it works as text
-######## as I maintain this in a text shell script format where they're comments. 
+###### I have composed this collection of instructions as they are my notes.
+###### I use to setup my own Linux system with AMD parts.
+###### I've gone over these doing many re-installs to get them all right.
+###### This is what I had hoped to find when I had search for install instructions -
+###### so I'm sharing them in the hopes that they save time for other people. 
+###### There may be in here extra parts that aren't needed but this works for me.
+###### Originally text, with comments like a shell script that I cut and paste -
+###### Here I've converted the text to markdown format for ease of reading. 
+###### I am commenting with hash marks at start of line so it works as text
+###### as I maintain this in a text shell script format where they're comments. 
 
 #
 # Ubuntu 22.04 / 23.04 - Base system install 
