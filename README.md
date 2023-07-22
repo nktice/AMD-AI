@@ -1,39 +1,30 @@
-# 
-# AMD / Radeon 7900XTX 6900XT GPU ROCm  
+# AMD / Radeon 7900XTX 6900XT GPU ROCm install / setup / config 
 # Ubuntu 22.04 / 23.04  
-# Stable Diffusion / Oobabooga 
-# PyTorch (ROCm) / EXLLAMA 
-# 
-##
-## Install notes / instructions 
-##
-###
-### 2023-07 nktice
-###
-###### I have composed this collection of instructions as they are my notes.
-###### I use to setup my own Linux system with AMD parts.
-###### I've gone over these doing many re-installs to get them all right.
-###### This is what I had hoped to find when I had search for install instructions -
-###### so I'm sharing them in the hopes that they save time for other people. 
-###### There may be in here extra parts that aren't needed but this works for me.
-###### Originally text, with comments like a shell script that I cut and paste -
-###### Here I've converted the text to markdown format for ease of reading. 
-###### I am commenting with hash marks at start of line so it works as text
-###### as I maintain this in a text shell script format where they're comments. 
+# Conda / PyTorch (ROCm) / EXLLAMA / BitsAndBytes-ROCm
+# Automatic1111 Stable Diffusion 
+# Oobabooga - Text Generation WebUI
 
-#
+## Install notes / instructions ##
+
+ I have composed this collection of instructions as they are my notes.
+ I use to setup my own Linux system with AMD parts.
+ I've gone over these doing many re-installs to get them all right.
+ This is what I had hoped to find when I had search for install instructions -
+ so I'm sharing them in the hopes that they save time for other people. 
+ There may be in here extra parts that aren't needed but this works for me.
+ Originally text, with comments like a shell script that I cut and paste - 2023-07 - nktice
+
+---
+
+
 # Ubuntu 22.04 / 23.04 - Base system install 
-#
-####
-#### Ubuntu 22.04 works great on Radeon 6900 XT video cards, 
-#### but does not support 7900XTX cards as they came out later 
-#### Ubuntu 23.04 is newer but has issues with some of the tools. 
-#### So the notes below should work on either system, unless commented.
-#### 
-## 
-## At this point we assume you've done the system install
-## and you know what that is, have a user, root, etc. 
-## 
+Ubuntu 22.04 works great on Radeon 6900 XT video cards, 
+but does not support 7900XTX cards as they came out later 
+Ubuntu 23.04 is newer but has issues with some of the tools. 
+So the notes below should work on either system, unless commented.
+
+At this point we assume you've done the system install
+and you know what that is, have a user, root, etc. 
 
 ```bash
 # update system packages 
@@ -48,44 +39,43 @@ sudo apt install -y "linux-headers-$(uname -r)" \
 ```
 
 #### [ for Ubuntu 23.04 - lunar ]
-#### some things may require older versions of python, so we need to add
-#### jammy packages, so that they can be installed, on lunar systems.
+some things may require older versions of python, so we need to add
+jammy packages, so that they can be installed, on lunar systems.
 ```bash
 sudo add-apt-repository -y -s deb http://security.ubuntu.com/ubuntu jammy main universe
 ```
 
-##
 ## Add AMD GPU package sources 
-##
-#### Make the directory if it doesn't exist yet.
-#### This location is recommended by the distribution maintainers.
+Make the directory if it doesn't exist yet.
+This location is recommended by the distribution maintainers.
 
 ```bash
 sudo mkdir --parents --mode=0755 /etc/apt/keyrings
 ```
 
-#### Download the key, convert the signing-key to a full
-#### keyring required by apt and store in the keyring directory
+Download the key, convert the signing-key to a full
+keyring required by apt and store in the keyring directory
 ```bash
 wget https://repo.radeon.com/rocm/rocm.gpg.key -O - | \
     gpg --dearmor | sudo tee /etc/apt/keyrings/rocm.gpg > /dev/null
 ```
-#### amdgpu repository for jammy
+amdgpu repository for jammy
 ```bash
 echo 'deb [arch=amd64 signed-by=/etc/apt/keyrings/rocm.gpg] https://repo.radeon.com/amdgpu/latest/ubuntu jammy main' \
     | sudo tee /etc/apt/sources.list.d/amdgpu.list
 sudo apt update -y 
 ```
 
+AMDGPU DKMS
 ```bash
 sudo apt install -y amdgpu-dkms
 ```
 
 
 # ROCm repositories for jammy
-###### https://rocmdocs.amd.com/en/latest/deploy/linux/os-native/install.html
-###### whereas 5.4.2 is the stable version supported by pytorch let's us that...
-###### note : bitsandbytes-rocm requires 5.4.2
+https://rocmdocs.amd.com/en/latest/deploy/linux/os-native/install.html
+whereas 5.4.2 is the stable version supported by pytorch let's us that...
+note : bitsandbytes-rocm requires 5.4.2
 ```bash
 echo "deb [arch=amd64 signed-by=/etc/apt/keyrings/rocm.gpg] https://repo.radeon.com/rocm/apt/5.4.2 jammy main" \
     | sudo tee --append /etc/apt/sources.list.d/rocm.list
@@ -94,21 +84,18 @@ echo -e 'Package: *\nPin: release o=repo.radeon.com\nPin-Priority: 600' \
 sudo apt update -y
 ```
 
-#
 # More AMD ROCm related packages 
-#
-###### This is lots of stuff, but comparatively small so worth including,
-###### as some stuff later may want as dependencies without much notice.
-###### ROCm...
+This is lots of stuff, but comparatively small so worth including,
+as some stuff later may want as dependencies without much notice.
 ```bash
+# ROCm...
 sudo apt install -y rocm-dev rocm-libs rocm-hip-sdk rock-dkms rocm-libs \ 
 	hipsparse hipblas hipblas-dev rocblas rocblas-dev rccl rocthrust \
 	hipcub roctracer-dev rocm-opencl rocm-opencl-dev
 ```
 
-####
-#### ld.so.conf update 
 ```bash
+# ld.so.conf update 
 sudo tee --append /etc/ld.so.conf.d/rocm.conf <<EOF
 /opt/rocm/lib
 /opt/rocm/lib64
@@ -116,24 +103,20 @@ EOF
 sudo ldconfig
 ```
 
-##### Update path - may want this in .profile ...
 ```bash
+# update path
 echo "PATH=/opt/rocm/bin:/opt/rocm/opencl/bin:$PATH" >> ~/.profile
 ```
 
-##
 ## Find graphics device
-##
 ```bash
 sudo /opt/rocm/bin/rocminfo | grep gfx
 ```
-####### Found : gfx1030 [ Radeon 6900 ]
-###### Found : gfx1100 [ Radeon 7900 ] 
+Found : gfx1030 [ Radeon 6900 ]
+Found : gfx1100 [ Radeon 7900 ] 
 
-##
 ## Add user to groups
-##
-######## Of course note to change the user name to match your user. 
+Of course note to change the user name to match your user. 
 ```bash
 sudo adduser n video
 sudo adduser n render
@@ -148,32 +131,37 @@ sudo apt install -y libstdc++-12-dev
 sudo apt install -y libtcmalloc-minimal4
 ```
 
-## 
 ## Performance Tuning 
-##
-###### You can skip this section...
-#######
-####### Here are instructions for turning on control of GPU clocks..
-####### https://www.reddit.com/r/linux_gaming/comments/xm2goe/help_with_overclocking_rx_6600_xt_on_unmodified/
-#######
-#### Step 1: Open this file with an editor "/etc/default/grub" no quotes.
-#### Step 2: Add this Kernel parameter "amdgpu.ppfeaturemask=0xffffffff" 
-####  no quotes on this line GRUB_CMDLINE_LINUX_DEFAULT=">add here<" no arrows.
-#### Step 3: Save and run this command install it if you don't have it 
-####  "sudo grub-mkconfig -o /boot/grub/grub.cfg" no quotes. 
-####
+You can skip this section...
+Here are instructions for turning on control of GPU clocks..
+https://www.reddit.com/r/linux_gaming/comments/xm2goe/help_with_overclocking_rx_6600_xt_on_unmodified/
+* Step 1: (sudo) Open this file with an editor - [sub for editor of choice...]
+  ```bash
+  sudo vi /etc/default/grub
+  ``` 
+* Step 2: Add this Kernel parameter
+  ```
+  amdgpu.ppfeaturemask=0xffffffff
+  ```
+  to GRUB_CMDLINE_LINUX_DEFAULT 
+* Step 3: Save and run this command install it if you don't have it -
+  ```bash
+  sudo grub-mkconfig -o /boot/grub/grub.cfg
+  ```
 
 
-### corectrl - for controlling settings...
-### https://gitlab.com/corectrl/corectrl
-### apparently it's not in the mainline packages, 
-### so we need to add a PPA for it... this of course is known
-### to have disasterous consequences if done the wrong way.
-### so the instructions for how to do this are broke.
-### thus we'll do them here. You have been warned...
+### corectrl 
+- for controlling settings...
+ https://gitlab.com/corectrl/corectrl
+ apparently it's not in the mainline packages, 
+ so we need to add a PPA for it... this of course is known
+ to have disasterous consequences if done the wrong way.
+ so the instructions for how to do this are broke.
+ thus we'll do them here. You have been warned...
+ more details here : https://gitlab.com/corectrl/corectrl/-/wikis/Setup
 
-### protect yourself...
 ```bash
+# Protection... avoid other packages from this repo.
 sudo tee --append /etc/apt/preferences.d/corectl <<EOF
 # Never prefer packages from the ernstp repository
 Package: *
@@ -187,18 +175,17 @@ Pin-Priority: 500
 EOF
 ```
 
-### Add PPA - https://launchpad.net/~ernstp/+archive/ubuntu/mesarc 
+#### Add PPA - https://launchpad.net/~ernstp/+archive/ubuntu/mesarc 
 ```bash
 sudo add-apt-repository -y ppa:ernstp/mesarc
 sudo apt update -y
 ```
-### install corectrl
+#### install corectrl
 ```bash
 sudo apt install -y corectrl
 ```
-####### more details here : https://gitlab.com/corectrl/corectrl/-/wikis/Setup
-### end corectrl
-## End performance tuning 
+#### end corectrl
+### End performance tuning 
 
 
 ## Top for video memory and usage 
@@ -229,20 +216,20 @@ echo "PYTORCH_ROCM_ARCH=gfx1100" >> ~/.profile
 sudo reboot
 ```
 
-##
 ## End of OS / base setup
-##
 
-#
+---
+
 # Conda 
-# 
-#### Conda provides virtual environments for python, so that programs
-#### with different dependencies can have different environments.
-
-####
-#### Conda - required for PyTorch...
-#### https://docs.conda.io/projects/conda/en/latest/user-guide/install/linux.html
-#### https://www.anaconda.com/download/
+- required for pytorch
+Conda provides virtual environments for python, so that programs
+with different dependencies can have different environments.
+Here is more info on managing conda :
+https://docs.conda.io/projects/conda/en/latest/user-guide/getting-started.html#
+Other notes :
+https://docs.conda.io/projects/conda/en/latest/user-guide/install/linux.html
+Download info :
+https://www.anaconda.com/download/
 
 ```bash
 cd ~/Downloads/
@@ -250,8 +237,8 @@ cd ~/Downloads/
 wget https://repo.anaconda.com/archive/Anaconda3-2023.07-1-Linux-x86_64.sh
 ```
 
-#### Note versions may have changed... 
 ```bash
+#  Note versions may have changed... 
 bash Anaconda3-2023.07-1-Linux-x86_64.sh -b
 #bash Anaconda3-2023.03-1-Linux-x86_64.sh -b 
 #bash Anaconda-latest-Linux-x86_64.sh
@@ -282,7 +269,7 @@ sudo apt install -y pip
 pip3 install --upgrade pip
 ```
 
-#### useful pip stuff to know ... 
+### useful pip stuff to know ... 
 ```bash
 ## show outdated packages...
 #pip list --outdated
@@ -292,55 +279,45 @@ pip3 install --upgrade pip
 #pip install <packagename>==<version>
 ```
 
-####
-#### here is more info on managing conda
-#### https://docs.conda.io/projects/conda/en/latest/user-guide/getting-started.html#
-
 ##
 ## End conda and pip setup.
 ##
 
+---
 
-# 
 # Stable Diffusion WebUI / Automatic1111
-# [ Radeon 6900 / 7900 Ubuntu 23.04 / ROCm / AMD ]
-# 
-####### https://github.com/AUTOMATIC1111/stable-diffusion-webui
+For [ Radeon 6900 / 7900 Ubuntu 23.04 / ROCm / AMD ]
+Website: https://github.com/AUTOMATIC1111/stable-diffusion-webui
 
 
-#### SD likes TCMalloc... 
-#### [ mentioned earlier as fresh install may require reboot ] 
+## Stable Diffusion likes TCMalloc... 
+ [ mentioned earlier as fresh install may require reboot ] 
 ```bash
 sudo apt install -y libtcmalloc-minimal4
 ```
 
-### image related packages that may come in handy...
+## image related packages that may come in handy...
 ```bash
 sudo apt install -y imagemagick ffmpeg
 ```
-
-### SD likes this...
+## SD likes this...
 ```bash
 sudo apt install -y libtcmalloc-minimal4
 ```
 
-##
-## Switch to conda environment...
-##
+## Switch to conda environment... and freshen pip
 ```bash
 conda create -y -n sd python=3.10.6
 conda activate sd
-```
 
-##
-## Make sure pip is installed and up to date...
-##
-```bash
 sudo apt install -y pip
 pip3 install --upgrade pip
 ```
 
-# pytorch repo related parts - :
+# PyTorch repo related parts :
+note : we're getting things from the nightly repos as the stable doesn't support 7900XTX. 
+6900XT works fine with stable - 5.4.2 on Ubuntu 22.04
+
 ```bash
 # pre-install 
 pip install cmake colorama filelock lit numpy Pillow Jinja2 \
@@ -358,19 +335,19 @@ pip install torch torchvision torchtext torchaudio torchdata \
 #       --index-url https://download.pytorch.org/whl/rocm5.4.2
 ```
 
-### rocm related...
+## rocm related...
 ```bash
 #pip install jaxlib-rocm
 pip install gensim tables -U 
 pip install tensorflow-rocm
 pip install cupy-rocm-4-3 cupy-rocm-5-0
 ```
-### other packages
+## other packages
 ```bash
 pip install accelerate -U
 ```
 
-### other parts
+## other parts
 ```bash
 pip install onnx
 pip install super-gradients
@@ -384,12 +361,11 @@ cd stable-diffusion-webui
 ```
 
 ## Install requisites...
-## edit requirement.txt to transformers>=
 ```bash
 pip install -r requirements.txt --extra-index-url https://download.pytorch.org/whl/nightly/rocm5.5
 ```
 
-### Edit environment settings...
+## Edit environment settings...
 ```bash
 tee --append webui-user.sh <<EOF
  ## Torch for ROCm
@@ -399,31 +375,30 @@ tee --append webui-user.sh <<EOF
 EOF
 ```
 
-###### If you keep models for SD somewhere, this is where you'd like them up...
+## If you keep models for SD somewhere, this is where you'd like them up...
+If you don't do this, it will install a default to get you going. 
+Note that these start files do include things that it needs you'll want to copy
+into the folder where you have other models ( to avoid issues ) 
 ```bash
 #mv models models.1
 #ln -s /path/to/models models 
 ```
 
 ## Run SD...
-###### note that the first time it starts it may take it a while to go and get things
-###### it's not always good about saying what it's up to. 
+ Note that the first time it starts it may take it a while to go and get things
+ it's not always good about saying what it's up to. 
 ```bash
 ./webui.sh 
 ```
 
-##
 ## End - Stable Diffusion
-##
 
-#
-#  Oobabooga - Text Generation WebUI
-#
-###
-### https://github.com/oobabooga/text-generation-webui.git
-###
+---
 
-## setup conda
+#  Oobabooga - Text Generation WebUI - ROCm 
+https://github.com/oobabooga/text-generation-webui.git
+
+## setup conda and freshen pip
 ```bash
 # make env
 conda create -y -n textgen python=3.10.9
@@ -435,10 +410,11 @@ pip3 install --upgrade pip
 ```
 
 
-### As of writing this the most recxent supported version is ROCm 5.4.2
-### to see packages available : https://download.pytorch.org/whl/rocm5.4.2/
-### nightly : https://download.pytorch.org/whl/nightly/rocm5.5/
-### 7900XTX requires nightly builds...
+Note : As of writing this the most recxent supported version is ROCm 5.4.2
+ to see packages available : https://download.pytorch.org/whl/rocm5.4.2/
+ nightly : https://download.pytorch.org/whl/nightly/rocm5.5/
+ 7900XTX requires nightly builds...
+
 ```bash
 # pre-install
 pip install cmake colorama filelock lit numpy \
@@ -453,12 +429,10 @@ pip install torch torchvision torchtext torchaudio torchdata pytorch-triton-rocm
 #       --index-url https://download.pytorch.org/whl/rocm5.4.2
 ```
 
-##
 ## bitsandbytes rocm
-##
-#### video guide : https://www.youtube.com/watch?v=2cPsvwONnL8
-#### https://git.ecker.tech/mrq/bitsandbytes-rocm
-#### https://github.com/0cc4m/bitsandbytes-rocm
+ video guide : https://www.youtube.com/watch?v=2cPsvwONnL8
+ https://git.ecker.tech/mrq/bitsandbytes-rocm
+ https://github.com/0cc4m/bitsandbytes-rocm
 ```bash
 cd
 git clone https://git.ecker.tech/mrq/bitsandbytes-rocm.git
@@ -478,15 +452,13 @@ make hip
 CUDA_VERSION=gfx1100 python setup.py install
 ``` 
 
-##### This gets bitsandbytes with AMD GPU support working.
-##
-## end bitsandbytes-rocm
-##
+### end bitsandbytes-rocm
 
+## Packages for text-generation UI
+various changes have made the default requirements.txt and dependencies make a mess
+so we're going to go and get those parts manually / independently. 
 
-###
-### base pieces to get the UI working 
-###
+### Base pieces to get the UI working 
 ```bash
 pip install gradio psutil markdown transformers accelerate datasets peft
 ```
@@ -521,10 +493,10 @@ cd text-generation-webui
 
 ### Get requirements 
 
-##
-## exllama : https://github.com/turboderp/exllama
-###### How-to : https://www.youtube.com/watch?v=gicpKGo1hW0
-###### https://www.reddit.com/r/LocalLLaMA/comments/14btvqs/7900xtx_linux_exllama_gptq/
+### exllama : https://github.com/turboderp/exllama
+Fastest module loadter... 
+ How-to : https://www.youtube.com/watch?v=gicpKGo1hW0
+ more info : https://www.reddit.com/r/LocalLLaMA/comments/14btvqs/7900xtx_linux_exllama_gptq/
 ```bash
 cd ~/text-generation-webui
 mkdir repositories
@@ -537,9 +509,9 @@ cd exllama
 pip install -r requirements.txt --extra-index-url https://download.pytorch.org/whl/nightly/rocm5.5
 ```
 
-###### exllama does have some features, like it's own webui ...
-###### we'll not use them here, but here's a few clues.
 ```bash
+### exllama does have some features, like it's own webui ...
+### we'll not use them here, but here's a few clues.
 # python test_benchmark_inference.py -d <path_to_model_files> -p -ppl
 #pip install -r requirements-web.txt
 # python webui/app.py -d <path_to_model_files>
@@ -551,25 +523,23 @@ pip install -r requirements.txt --extra-index-url https://download.pytorch.org/w
 pip install bs4
 ```
 
-### 
 ### Models 
-###
-###### They have to come from /somewhere/ so, this is where you'd 
-###### link pre-stored models into the models
-###### If you don't have some, there are tools to download them, 
-###### they're often changing so check : huggingface.co 
+They have to come from /somewhere/ so, this is where you'd 
+link pre-stored models into the models
+If you don't have some, there are tools to download them, 
+they're often changing so check : huggingface.co 
 ```bash
 # mv models models.1
 # ln -s /path/to/models models
 ```
 
-####### Optional parts for superbooga extension
+### Optional parts for superbooga extension
 ```bash
 # cd ~/text-generation-webui
 # pip install -r extensions/superbooga/requirements.txt
 ```
 
-## quick script to call program...
+### quick script to call program...
 ```bash
 tee --append run.sh <<EOF
   ## activate conda 
@@ -582,15 +552,13 @@ EOF
 chmod u+x run.sh
 ```
 
+Note we haven't called Oobabooga's requirements.txt - it is out of date, and will break things. 
+
 ## running the server...
 ```bash
 ./run.sh
 ```
 
-## 
 ## End - Oobabooga - Text-Generation-WebUI
-## 
-
-
 
 
