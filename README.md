@@ -533,12 +533,6 @@ they're often changing so check : huggingface.co
 # ln -s /path/to/models models
 ```
 
-### Optional parts for superbooga extension
-```bash
-# cd ~/text-generation-webui
-# pip install -r extensions/superbooga/requirements.txt
-```
-
 ### quick script to call program...
 ```bash
 tee --append run.sh <<EOF
@@ -546,7 +540,7 @@ tee --append run.sh <<EOF
 ## activate conda
 conda activate textgen
 ## command to run server... 
-python server.py --listen --chat --loader=exlama_hf --triton \
+python server.py --listen --chat --loader=exlama --triton \
   --auto-devices --extensions sd_api_pictures send_pictures gallery 
 conda deactivate
 EOF
