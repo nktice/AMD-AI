@@ -540,7 +540,7 @@ tee --append run.sh <<EOF
 ## activate conda
 conda activate textgen
 ## command to run server... 
-python server.py --listen --chat --loader=exlama --triton \
+python server.py --listen --chat --loader=exllama --triton \
   --auto-devices --extensions sd_api_pictures send_pictures gallery 
 conda deactivate
 EOF
