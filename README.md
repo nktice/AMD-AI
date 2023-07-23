@@ -542,12 +542,13 @@ they're often changing so check : huggingface.co
 ### quick script to call program...
 ```bash
 tee --append run.sh <<EOF
-  ## activate conda 
-  conda activate textgen
-  ## command to run server... 
-  python server.py --listen --chat --loader=exlama_hf --triton \
-	--auto-devices --extensions sd_api_pictures send_pictures gallery 
-  conda deactivate
+#!/bin/bash
+## activate conda
+conda activate textgen
+## command to run server... 
+python server.py --listen --chat --loader=exlama_hf --triton \
+  --auto-devices --extensions sd_api_pictures send_pictures gallery 
+conda deactivate
 EOF
 chmod u+x run.sh
 ```
@@ -555,8 +556,9 @@ chmod u+x run.sh
 Note we haven't called Oobabooga's requirements.txt - it is out of date, and will break things. 
 
 ## running the server...
+note that the script must be run via `source` rather than normal execution.
 ```bash
-./run.sh
+source run.sh
 ```
 
 ## End - Oobabooga - Text-Generation-WebUI
