@@ -1,7 +1,7 @@
 # AMD / Radeon 7900XTX 6900XT GPU ROCm install / setup / config 
 # Ubuntu 22.04 / 23.04  
 # Conda / PyTorch (ROCm) / EXLLAMA / BitsAndBytes-ROCm
-# Automatic1111 Stable Diffusion 
+# Automatic1111 Stable Diffusion + ComfyUI 
 # Oobabooga - Text Generation WebUI
 
 ## Install notes / instructions ##
@@ -392,6 +392,60 @@ into the folder where you have other models ( to avoid issues )
 ```
 
 ## End - Stable Diffusion
+
+## ComfyUI# ComfyUI
+https://github.com/comfyanonymous/ComfyUI
+
+## environment...
+
+```bash
+## If you want a new one...
+#conda create -n comfy -y
+#conda activate comfy
+## Reuse one from sd...
+conda activate sd
+```
+
+## git files...
+```bash
+cd
+hgit clone https://github.com/comfyanonymous/ComfyUI
+cd ComfyUI
+```
+
+## packages
+```bash
+pip install --pre torch torchvision torchaudio --index-url https://download.pytorch.org/whl/nightly/rocm5.5 -r requirements.txt
+```
+
+## setup config...
+```bash
+cp extra_model_paths.yaml.example extra_model_paths.yaml
+## set path in file
+vi extra_model_paths.yaml
+"base_path: ~/stable-diffusion/"
+```
+
+# prep models
+```bash
+mv models models.1
+ln -s /path/to/models/ models
+# a1111 uses different name for folder with models... link
+mv models/checkpoints models/checkpoints.1
+ln -s models/Stable-diffusion models/checkpoints
+```
+
+### call program...
+```bash
+# conda activate 
+python main.py
+```
+
+### ComfyUI references...
+Intro info : https://www.youtube.com/watch?v=AbB33AxrcZo
+
+## End ComfyUI
+
 
 ---
 
