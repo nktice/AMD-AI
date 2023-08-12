@@ -221,6 +221,7 @@ TheBloke_WizardLM-Uncensored-SuperCOT-StoryTelling-30B-SuperHOT-8K-GPTQ -[pass]
 `"Sally has 1 sister, as there were only 2 girls among the 5 children from the same two parents who
  had 3 boys. So, all the other females are either Sally or her mother, and there's just one 
  additional female - the mother herself."`
+ [ seed 0-10,...? pass ]
 
 TheBloke_WizardMath-13B-V1.0-GPTQ - [ fail ]
 `"The answer is: 2."`
