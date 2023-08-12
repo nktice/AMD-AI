@@ -206,6 +206,7 @@ TheBloke_WizardLM-13B-V1.0-Uncensored-GPTQ - [ mixed - fail ]
 
 TheBloke_WizardLM-30B-Uncensored-GPTQ - [ mixed .5 fail ]
 1st answer said no sisters. 2nd answer ended `"[...] Therefore, Sally has one sister."`
+[ 4k,4, 2048 tokens, Seed of 2, fails ] 
 
 TheBloke_WizardLM-33B-V1-0-Uncensored-SuperHOT-8K-GPTQ - [ mixed pass ]
 2nd answer ends `"[...] Sally has only one sister as she herself is also a girl."`
