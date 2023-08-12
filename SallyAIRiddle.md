@@ -100,6 +100,7 @@ TheBloke_WizardLM-30B-Uncensored-GPTQ - [pass/mixed]
 3 : 1
 4 : 6
 5 : 1
+[ 4k,4, 2048 tokens, Seed of 2, yeids `Sally has 1 sister.` ] 
 
 TheBloke_WizardLM-33B-V1-0-Uncensored-SuperHOT-8K-GPTQ - [fail]
 [deluded.  answers differ... ]
