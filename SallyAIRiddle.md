@@ -100,7 +100,7 @@ TheBloke_WizardLM-30B-Uncensored-GPTQ - [pass/mixed]
 3 : 1
 4 : 6
 5 : 1
-[ 4k,4, 2048 tokens, Seed of 2, yeids `Sally has 1 sister.` ] 
+[ 4k,4, 2048 tokens, Seeds of[ 4-10 ...? ], yeid `Sally has 1 sister.` ] 
 
 TheBloke_WizardLM-33B-V1-0-Uncensored-SuperHOT-8K-GPTQ - [fail]
 [deluded.  answers differ... ]
@@ -206,7 +206,7 @@ TheBloke_WizardLM-13B-V1.0-Uncensored-GPTQ - [ mixed - fail ]
 
 TheBloke_WizardLM-30B-Uncensored-GPTQ - [ mixed .5 fail ]
 1st answer said no sisters. 2nd answer ended `"[...] Therefore, Sally has one sister."`
-[ 4k,4, 2048 tokens, Seed of 2, fails ] 
+[ 4k,4, 2048 tokens, Seed of 1,2,4-7,10 ...? passes " ] 
 
 TheBloke_WizardLM-33B-V1-0-Uncensored-SuperHOT-8K-GPTQ - [ mixed pass ]
 2nd answer ends `"[...] Sally has only one sister as she herself is also a girl."`
