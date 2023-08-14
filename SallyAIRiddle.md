@@ -32,17 +32,29 @@ TheBloke_Airolima-Chronos-Grad-L2-13B-GPTQ - [ pass ]
 TheBloke_Chronolima-Airo-Grad-L2-13B-GPTQ - [fail]
 [ 2... ]
 
+TheBloke_CodeUp-Alpha-13B-HF-GPTQ - [fail]
+[ mostly answers 6, sometimes doesn't know ] 
+
 TheBloke_CodeUp-Llama-2-13B-Chat-HF-GPTQ - [fail]
 [ 6 ]
 
+TheBloke_gorilla-7B-GPTQ - [fail]
+[ Of a dozen runs, no answer was correct. ] 
+
 TheBloke_Llama-2-13B-GPTQ - [fail]
 [ deluded ]
+
+TheBloke_llama2-22B-daydreamer-v2-GPTQ - [fail]
+[ deluded, verbose ] 
 
 TheBloke_llama2_7b_chat_uncensored-GPTQ - [fail]
 [ 2 ]
 
 TheBloke_LongChat-7B-GPTQ - [fail]
 [ 0 ]
+
+TheBloke_LosslessMegaCoder-Llama2-7B-Mini-GPTQ - [fail]
+[ of a dozen tries, varies between 6 and 7, sometimes other numbers. ] 
 
 TheBloke_Luna-AI-Llama2-Uncensored-GPTQ - [fail]
 [ numbers differ / wrong ]
@@ -153,8 +165,17 @@ TheBloke_Chronoboros-33B-GPTQ - [ pass ]
 TheBloke_Chronolima-Airo-Grad-L2-13B-GPTQ - [ pass ]
 `"Sally has one sister because she is one of two girls in her family."`
 
+TheBloke_CodeUp-Alpha-13B-HF-GPTQ - [fail]
+[ out of 12 attempts, 10 were '2', and 2 were '3' ] 
+
 TheBloke_CodeUp-Llama-2-13B-Chat-HF-GPTQ - [ fail. ]
 `"Hi there! Based on the information provided, Sally has 2 sisters."`
+
+TheBloke_gorilla-7B-GPTQ - [ fail ] 
+[ Of a dozen tries, there was no correct answer. ] 
+
+TheBloke_llama2-22B-daydreamer-v2-GPTQ - [fail]
+[ From several attempts: Deluded, verbose, repititious. ] 
 
 TheBloke_Llama-2-13B-GPTQ - [ 1/2 ? ]
 `"The answer is 1. [...]"` - This was 2nd try... first was wrong.
@@ -164,6 +185,10 @@ TheBloke_llama2_7b_chat_uncensored-GPTQ - [2/3 mixed pass ... ]
 
 TheBloke_LongChat-7B-GPTQ -  [ fail ]
 Out of several tries there were different errors and wrong answers.
+
+TheBloke_LosslessMegaCoder-Llama2-7B-Mini-GPTQ - [mixes] 
+[ Does sometimes answer 1... 
+[ seed of 0-4 pass, 5 fail, ...? ]
 
 TheBloke_Luna-AI-Llama2-Uncensored-GPTQ - [ pass ]
 `"Sally has one sister."`
