@@ -101,6 +101,10 @@ TheBloke_Stable-Platypus2-13B-GPTQ - [fail]
 
 TheBloke_upstage-llama-30b-instruct-2048-GPTQ - [fail]
 
+TheBloke_vicuna-33B-GPTQ - [mixed]
+[ Consistently says it can't answer... which is better than insisting on a wrong answer. ] 
+"Based on the information provided, Sally has 3 brothers, but it is not possible to determine how many sisters she has as there is no information about her own siblings other than her brothers."
+
 TheBloke_Wizard-Vicuna-7B-Uncensored-SuperHOT-8K-GPTQ - [<mixed]
 1:"2"
 2:"4"
@@ -109,6 +113,10 @@ TheBloke_Wizard-Vicuna-7B-Uncensored-SuperHOT-8K-GPTQ - [<mixed]
 
 TheBloke_Wizard-Vicuna-30B-Uncensored-GPTQ - [fail]
 [ no sisters ]
+
+TheBloke_WizardLM-1.0-Uncensored-Llama2-13B-GPTQ - [fail]
+[ Consistantly says 6 sisters in different ways... ] 
+"Sally has 6 sisters in total."
 
 TheBloke_WizardLM-13B-V1.0-Uncensored-GPTQ - [fail]
 
@@ -234,11 +242,19 @@ TheBloke_Stable-Platypus2-13B-GPTQ - [ mixed / pass ]
 TheBloke_upstage-llama-30b-instruct-2048-GPTQ -  [ pass ]
 `"Since there are only two girls in the family, including Sally herself, Sally has one sister."`
 
+TheBloke_vicuna-33B-GPTQ - [pass]
+[ fairly consistent ] 
+"Based on the information provided, Sally has three siblings - two brothers and one sister."
+
 TheBloke_Wizard-Vicuna-7B-Uncensored-SuperHOT-8K-GPTQ - [ fail ]
 `"Sally has 1 brother and 4 sisters."`
 
 TheBloke_Wizard-Vicuna-30B-Uncensored-GPTQ - [ pass ]
 `"If Sally is a girl, she has only one sister who is also a girl, since there are only two girls in the family out of five children."`
+
+TheBloke_WizardLM-1.0-Uncensored-Llama2-13B-GPTQ - [fail]
+[ Consistent but off by 1 ] 
+"Sally has 2 sisters"
 
 TheBloke_WizardLM-13B-V1.0-Uncensored-GPTQ - [ mixed - fail ]
 `" [...] So, Sally has at least one sister out of the remaining two girls. "`
