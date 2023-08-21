@@ -46,6 +46,9 @@ TheBloke_gorilla-7B-GPTQ - [fail]
 
 TheBloke_gpt4-alpaca-lora-30B-GPTQ-4bit-128g - [fail]
 
+TheBloke_guanaco-33B-GPTQ - [mixed]
+[ correct 1/3 ?!? ] 
+
 TheBloke_Guanaco-33B-SuperHOT-8K-GPTQ - [fail]
 [ answers vary, but are incorrect... often 4 or 6. ] 
 
@@ -204,6 +207,9 @@ TheBloke_gorilla-7B-GPTQ - [ fail ]
 
 TheBloke_gpt4-alpaca-lora-30B-GPTQ-4bit-128g - [ fail ]
 [ correct once out of a dozen tries... ] 
+
+TheBloke_guanaco-33B-GPTQ - [pass]
+"Sally has one sister" [consistently!] 
 
 TheBloke_Guanaco-33B-SuperHOT-8K-GPTQ - [mixed]
 [ answers 1 about half the time out of a dozen random tests. ] 
