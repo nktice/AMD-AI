@@ -97,6 +97,9 @@ TheBloke_orca_mini_v3_7B-GPTQ - [fail]
 
 TheBloke_orca_mini_v3_13B-GPTQ - [crash] [fail]
 
+TheBloke_robin-33B-v2-GPTQ - [fail]
+[ gives wrong answer, and then goes on and on in delusion... ] 
+
 TheBloke_Samantha-13B-SuperHOT-8K-GPTQ - [fail]
 [4k/4 does produce output but it's incorrect ] 
 [8k/8 also fails ]
@@ -253,6 +256,9 @@ TheBloke_orca_mini_v3_7B-GPTQ - [ pass ]
 
 TheBloke_orca_mini_v3_13B-GPTQ - [ fail ]
 `"Sally has 2 sisters, as she is one of the 2 girls among the 5 children."`
+
+TheBloke/robin-33B-v2-GPTQ - [mixed]
+[ Starts out with correct answer but then goes on and on rambling incoherently.  ]
 
 TheBloke_Samantha-13B-SuperHOT-8K-GPTQ - [ mixes / pass ]
 `"Based on your description, there would be three siblings total two brothers and one sister."` 
