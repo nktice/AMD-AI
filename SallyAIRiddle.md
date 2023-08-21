@@ -44,6 +44,8 @@ TheBloke_GodziLLa-30B-GPTQ - [fail]
 TheBloke_gorilla-7B-GPTQ - [fail]
 [ Of a dozen runs, no answer was correct. ] 
 
+TheBloke_gpt4-alpaca-lora-30B-GPTQ-4bit-128g - [fail]
+
 TheBloke_Llama-2-13B-GPTQ - [fail]
 [ deluded ]
 
@@ -193,6 +195,9 @@ TheBloke_GodziLLa-30B-GPTQ - [ fail ]
 
 TheBloke_gorilla-7B-GPTQ - [ fail ] 
 [ Of a dozen tries, there was no correct answer. ] 
+
+TheBloke_gpt4-alpaca-lora-30B-GPTQ-4bit-128g - [ fail ]
+[ correct once out of a dozen tries... ] 
 
 TheBloke_llama2-22B-daydreamer-v2-GPTQ - [fail]
 [ From several attempts: Deluded, verbose, repititious. ] 
