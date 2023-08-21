@@ -113,6 +113,8 @@ TheBloke_Samantha-33B-SuperHOT-8K-GPTQ - [fail]
 
 TheBloke_Stable-Platypus2-13B-GPTQ - [fail]
 
+TheBloke_SuperPlatty-30B-GPTQ - [fail] 
+
 TheBloke/Tulu-30B-SuperHOT-8K-GPTQ - [fail]
 "Sally has 1 + 3 = 4 siblings in total. So she has 4 * 2 = 8 sisters - in - law."
 
@@ -270,6 +272,9 @@ TheBloke_Samantha-33B-SuperHOT-8K-GPTQ -  [ pass ]
 TheBloke_Stable-Platypus2-13B-GPTQ - [ mixed / pass ]
 `"Sally has 1 sister since she is a girl among the other 4 children who are also girls."` 
 [ sort of right, sort of wrong... ]
+
+TheBloke_SuperPlatty-30B-GPTQ - [fail]
+[false answers / confused. ] 
 
 TheBloke/Tulu-30B-SuperHOT-8K-GPTQ - [pass]
 "Sally has 1 sister as she is one of 5 children from the same two parents who had 3 boys and 2 girls."
