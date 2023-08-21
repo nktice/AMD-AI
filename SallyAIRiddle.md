@@ -285,7 +285,7 @@ TheBloke_WizardLM-Uncensored-SuperCOT-StoryTelling-30B-SuperHOT-8K-GPTQ -[pass]
 TheBloke_WizardMath-13B-V1.0-GPTQ - [ fail ]
 `"The answer is: 2."`
 
-###### - Tests performed on 2023-08-11
+###### - Initial tests performed on 2023-08-11 - see changelog for updates.
 
 
 
