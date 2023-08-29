@@ -14,6 +14,8 @@
  There may be in here extra parts that aren't needed but this works for me.
  Originally text, with comments like a shell script that I cut and paste - 2023-07 - nktice
 
+ Updates 2023-08-29 - ROCm 5.6 appears to be functioning now, so this guide is updated to refer to that... older versions may be mentioned in notes.  Oobabooga changed some command line arguments so there's changes there. 
+
 ---
 
 
@@ -75,9 +77,15 @@ sudo apt install -y amdgpu-dkms
 # ROCm repositories for jammy
 https://rocmdocs.amd.com/en/latest/deploy/linux/os-native/install.html
 whereas 5.4.2 is the stable version supported by pytorch let's us that...
-note : bitsandbytes-rocm requires 5.4.2
+note : 
+ https://git.ecker.tech/mrq/bitsandbytes-rocm.git needs 5.4.6
+whereas : 
+ https://github.com/RockeyCoss/bitsandbytes-rocm works with 5.6 
+So I've updated everything to 5.6 as it works for me. 
+
 ```bash
-echo "deb [arch=amd64 signed-by=/etc/apt/keyrings/rocm.gpg] https://repo.radeon.com/rocm/apt/5.4.2 jammy main" \
+#echo "deb [arch=amd64 signed-by=/etc/apt/keyrings/rocm.gpg] https://repo.radeon.com/rocm/apt/5.4.2 jammy main" \
+echo "deb [arch=amd64 signed-by=/etc/apt/keyrings/rocm.gpg] https://repo.radeon.com/rocm/apt/5.6 jammy main" \
     | sudo tee --append /etc/apt/sources.list.d/rocm.list
 echo -e 'Package: *\nPin: release o=repo.radeon.com\nPin-Priority: 600' \
     | sudo tee /etc/apt/preferences.d/rocm-pin-600
@@ -188,7 +196,8 @@ sudo apt install -y corectrl
 ### End performance tuning 
 
 
-## Top for video memory and usage 
+## Top for video memory and usage
+note : I have had issues with the distro version crashes with 2 GPUs, installing new version from sources works fine. 
 ```bash
 sudo apt install -y nvtop 
 ```
@@ -323,7 +332,7 @@ note : we're getting things from the nightly repos as the stable doesn't support
 pip install cmake colorama filelock lit numpy Pillow Jinja2 \
 	mpmath fsspec MarkupSafe certifi filelock networkx \
 	sympy packaging requests \
-         --index-url https://download.pytorch.org/whl/nightly/rocm5.5
+         --index-url https://download.pytorch.org/whl/nightly/rocm5.6
 #         --index-url https://download.pytorch.org/whl/rocm5.4.2
 ```
 
@@ -331,7 +340,7 @@ pip install cmake colorama filelock lit numpy Pillow Jinja2 \
 # install
 pip install torch torchvision torchtext torchaudio torchdata \
 	pytorch-triton pytorch-triton-rocm \
-         --index-url https://download.pytorch.org/whl/nightly/rocm5.5
+         --index-url https://download.pytorch.org/whl/nightly/rocm5.6
 #       --index-url https://download.pytorch.org/whl/rocm5.4.2
 ```
 
@@ -362,14 +371,14 @@ cd stable-diffusion-webui
 
 ## Install requisites...
 ```bash
-pip install -r requirements.txt --extra-index-url https://download.pytorch.org/whl/nightly/rocm5.5
+pip install -r requirements.txt --extra-index-url https://download.pytorch.org/whl/nightly/rocm5.6
 ```
 
 ## Edit environment settings...
 ```bash
 tee --append webui-user.sh <<EOF
  ## Torch for ROCm
- export TORCH_COMMAND="pip install torch torchvision --index-url https://download.pytorch.org/whl/nightly/rocm5.5"
+ export TORCH_COMMAND="pip install torch torchvision --index-url https://download.pytorch.org/whl/nightly/rocm5.6"
  ## And if you want to call this from other programs...
  export COMMANDLINE_ARGS="--api"
 EOF
@@ -415,7 +424,7 @@ cd ComfyUI
 
 ## packages
 ```bash
-pip install --pre torch torchvision torchaudio --index-url https://download.pytorch.org/whl/nightly/rocm5.5 -r requirements.txt
+pip install --pre torch torchvision torchaudio --index-url https://download.pytorch.org/whl/nightly/rocm5.6 -r requirements.txt
 ```
 
 ## setup config...
@@ -466,41 +475,44 @@ pip3 install --upgrade pip
 
 Note : As of writing this the most recxent supported version is ROCm 5.4.2
  to see packages available : https://download.pytorch.org/whl/rocm5.4.2/
- nightly : https://download.pytorch.org/whl/nightly/rocm5.5/
+ nightly : https://download.pytorch.org/whl/nightly/rocm5.6/
  7900XTX requires nightly builds...
 
 ```bash
 # pre-install
 pip install cmake colorama filelock lit numpy \
-         --index-url https://download.pytorch.org/whl/nightly/rocm5.5
+         --index-url https://download.pytorch.org/whl/nightly/rocm5.6
 #         --index-url https://download.pytorch.org/whl/rocm5.4.2
 ```
 
 ```bash
 # main pytorch parts...
 pip install torch torchvision torchtext torchaudio torchdata pytorch-triton-rocm \
-         --index-url https://download.pytorch.org/whl/nightly/rocm5.5
+         --index-url https://download.pytorch.org/whl/nightly/rocm5.6
 #       --index-url https://download.pytorch.org/whl/rocm5.4.2
 ```
 
 ## bitsandbytes rocm
  video guide : https://www.youtube.com/watch?v=2cPsvwONnL8
- https://git.ecker.tech/mrq/bitsandbytes-rocm
- https://github.com/0cc4m/bitsandbytes-rocm
+[ - depricated - https://git.ecker.tech/mrq/bitsandbytes-rocm ]
+  https://github.com/0cc4m/bitsandbytes-rocm
+Found newer version that supports ROCm 5.6 -
+https://github.com/RockeyCoss/bitsandbytes-rocm
 ```bash
 cd
-git clone https://git.ecker.tech/mrq/bitsandbytes-rocm.git
+git clone https://github.com/RockeyCoss/bitsandbytes-rocm
 cd bitsandbytes-rocm/
 ```
 
 ```bash
-BUILD_CUDA_EXT=0 pip install -r requirements.txt --extra-index-url https://download.pytorch.org/whl/nightly/rocm5.5
+BUILD_CUDA_EXT=0 pip install -r requirements.txt --extra-index-url https://download.pytorch.org/whl/nightly/rocm5.6
 ```
 
 ```bash
 make hip
 ```
 
+Note this depends on your card... gfx1030 is Radeon 6900XT, gfx1100 is Radeon 7900XTX
 ```bash
 #CUDA_VERSION=gfx1030 python setup.py install
 CUDA_VERSION=gfx1100 python setup.py install
@@ -560,7 +572,7 @@ git clone https://github.com/turboderp/exllama
 
 ```bash
 cd exllama
-pip install -r requirements.txt --extra-index-url https://download.pytorch.org/whl/nightly/rocm5.5
+pip install -r requirements.txt --extra-index-url https://download.pytorch.org/whl/nightly/rocm5.6
 ```
 
 ```bash
@@ -578,10 +590,11 @@ pip install bs4
 ```
 
 ### Models 
-They have to come from /somewhere/ so, this is where you'd 
-link pre-stored models into the models
-If you don't have some, there are tools to download them, 
-they're often changing so check : huggingface.co 
+If you're new to this - new models can be downloaded from the shell via a python script, or from a form in the interface.
+There are lots of them - http://huggingface.co 
+Generally the GPTQ models by TheBloke are likely to load.  The 30B/33B models will load on 24GB of VRAM, but may error, or run out of memory depending on usage and parameters.  
+
+If you have old models,  link pre-stored models into the models
 ```bash
 # mv models models.1
 # ln -s /path/to/models models
@@ -609,6 +622,11 @@ note that the script must be run via `source` rather than normal execution.
 ```bash
 source run.sh
 ```
+
+The exllama loader works with most GPTQ models.  This is the best choice as it is fast.   
+Some models that won't load that way will load with AutoGPTQ - but without Triton ( triton seems to break things ). 
+Also worth noting, I've had things work on one card or the other, but not on both cards, 
+loading on both cards causes LLMs to spit out gibberish.  
 
 ## End - Oobabooga - Text-Generation-WebUI
 
