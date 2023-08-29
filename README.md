@@ -587,14 +587,15 @@ they're often changing so check : huggingface.co
 # ln -s /path/to/models models
 ```
 
-### quick script to call program...
+### quick script to call program... 
+Made some changes here as Oobabooga has changed some parameters. 
 ```bash
 tee --append run.sh <<EOF
 #!/bin/bash
 ## activate conda
 conda activate textgen
 ## command to run server... 
-python server.py --listen --chat --loader=exllama --triton \
+python server.py --listen --loader=exllama  \
   --auto-devices --extensions sd_api_pictures send_pictures gallery 
 conda deactivate
 EOF
