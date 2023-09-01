@@ -32,6 +32,9 @@ TheBloke_Airolima-Chronos-Grad-L2-13B-GPTQ - [ pass ]
 TheBloke_Chronolima-Airo-Grad-L2-13B-GPTQ - [fail]
 [ 2... ]
 
+TheBloke_CodeLlama-34B-Instruct-GPTQ - [ fail ]
+[ insists there's 6 sisters. ] 
+
 TheBloke_CodeUp-Alpha-13B-HF-GPTQ - [fail]
 [ mostly answers 6, sometimes doesn't know ] 
 
@@ -197,6 +200,9 @@ TheBloke_Chronoboros-33B-GPTQ - [ pass ]
 
 TheBloke_Chronolima-Airo-Grad-L2-13B-GPTQ - [ pass ]
 `"Sally has one sister because she is one of two girls in her family."`
+
+TheBloke_CodeLlama-34B-Instruct-GPTQ - [ pass ]
+`"Sally has 1 sister."`
 
 TheBloke_CodeUp-Alpha-13B-HF-GPTQ - [fail]
 [ out of 12 attempts, 10 were '2', and 2 were '3' ] 
