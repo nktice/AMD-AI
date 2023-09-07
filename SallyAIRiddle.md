@@ -127,6 +127,9 @@ TheBloke_vicuna-33B-GPTQ - [mixed]
 [ Consistently says it can't answer... which is better than insisting on a wrong answer. ] 
 "Based on the information provided, Sally has 3 brothers, but it is not possible to determine how many sisters she has as there is no information about her own siblings other than her brothers."
 
+TheBloke_WizardLM-1.0-Uncensored-CodeLlama-34B-GPTQ - [fail]
+"Sally has 6 sisters."
+
 TheBloke_Wizard-Vicuna-7B-Uncensored-SuperHOT-8K-GPTQ - [<mixed]
 1:"2"
 2:"4"
@@ -297,6 +300,11 @@ TheBloke_Wizard-Vicuna-7B-Uncensored-SuperHOT-8K-GPTQ - [ fail ]
 
 TheBloke_Wizard-Vicuna-30B-Uncensored-GPTQ - [ pass ]
 `"If Sally is a girl, she has only one sister who is also a girl, since there are only two girls in the family out of five children."`
+
+TheBloke_WizardLM-1.0-Uncensored-CodeLlama-34B-GPTQ - [mixed / fail] 
+1 out of 3 random gave the correct answer ("Sally has 1 sister.") 
+I tried setting seeds of 0 through 10, and they all said "Sally has 6 sisters."
+
 
 TheBloke_WizardLM-1.0-Uncensored-Llama2-13B-GPTQ - [fail]
 [ Consistent but off by 1 ] 
