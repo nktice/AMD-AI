@@ -119,13 +119,13 @@ TheBloke_Stable-Platypus2-13B-GPTQ - [fail]
 TheBloke_SuperPlatty-30B-GPTQ - [fail] 
 
 TheBloke/Tulu-30B-SuperHOT-8K-GPTQ - [fail]
-"Sally has 1 + 3 = 4 siblings in total. So she has 4 * 2 = 8 sisters - in - law."
+`"Sally has 1 + 3 = 4 siblings in total. So she has 4 * 2 = 8 sisters - in - law."`
 
 TheBloke_upstage-llama-30b-instruct-2048-GPTQ - [fail]
 
 TheBloke_vicuna-33B-GPTQ - [mixed]
 [ Consistently says it can't answer... which is better than insisting on a wrong answer. ] 
-"Based on the information provided, Sally has 3 brothers, but it is not possible to determine how many sisters she has as there is no information about her own siblings other than her brothers."
+`"Based on the information provided, Sally has 3 brothers, but it is not possible to determine how many sisters she has as there is no information about her own siblings other than her brothers."`
 
 TheBloke_WizardLM-1.0-Uncensored-CodeLlama-34B-GPTQ - [fail]
 "Sally has 6 sisters."
@@ -137,11 +137,14 @@ TheBloke_Wizard-Vicuna-7B-Uncensored-SuperHOT-8K-GPTQ - [<mixed]
 [8k/8] [fail]
 
 TheBloke_Wizard-Vicuna-30B-Uncensored-GPTQ - [fail]
+Insists : `"Sally doesn't have any sisters herself, but her three brothers each have two sisters so in total she has six siblings."`
+
+TheBloke_Wizard-Vicuna-30B-Uncensored-GPTQ - [fail]
 [ no sisters ]
 
 TheBloke_WizardLM-1.0-Uncensored-Llama2-13B-GPTQ - [fail]
 [ Consistantly says 6 sisters in different ways... ] 
-"Sally has 6 sisters in total."
+`"Sally has 6 sisters in total."`
 
 TheBloke_WizardLM-13B-V1.0-Uncensored-GPTQ - [fail]
 
@@ -223,7 +226,7 @@ TheBloke_gpt4-alpaca-lora-30B-GPTQ-4bit-128g - [ fail ]
 [ correct once out of a dozen tries... ] 
 
 TheBloke_guanaco-33B-GPTQ - [pass]
-"Sally has one sister" [consistently!] 
+`"Sally has one sister"` [consistently!] 
 
 TheBloke_Guanaco-33B-SuperHOT-8K-GPTQ - [mixed]
 [ answers 1 about half the time out of a dozen random tests. ] 
@@ -286,29 +289,33 @@ TheBloke_SuperPlatty-30B-GPTQ - [fail]
 [false answers / confused. ] 
 
 TheBloke/Tulu-30B-SuperHOT-8K-GPTQ - [pass]
-"Sally has 1 sister as she is one of 5 children from the same two parents who had 3 boys and 2 girls."
+`"Sally has 1 sister as she is one of 5 children from the same two parents who had 3 boys and 2 girls."`
 
 TheBloke_upstage-llama-30b-instruct-2048-GPTQ -  [ pass ]
 `"Since there are only two girls in the family, including Sally herself, Sally has one sister."`
 
 TheBloke_vicuna-33B-GPTQ - [pass]
 [ fairly consistent ] 
-"Based on the information provided, Sally has three siblings - two brothers and one sister."
+`"Based on the information provided, Sally has three siblings - two brothers and one sister."`
 
 TheBloke_Wizard-Vicuna-7B-Uncensored-SuperHOT-8K-GPTQ - [ fail ]
 `"Sally has 1 brother and 4 sisters."`
+
+TheBloke_Wizard-Vicuna-30B-Uncensored-GPTQ - [pass]
+`"If Sally is a girl, she could be either the oldest or youngest child in the family with three older brothers and one younger brother or one of two older siblings who are also girls. Therefore, she has at least one sister."`
+
 
 TheBloke_Wizard-Vicuna-30B-Uncensored-GPTQ - [ pass ]
 `"If Sally is a girl, she has only one sister who is also a girl, since there are only two girls in the family out of five children."`
 
 TheBloke_WizardLM-1.0-Uncensored-CodeLlama-34B-GPTQ - [mixed / fail] 
-1 out of 3 random gave the correct answer ("Sally has 1 sister.") 
-I tried setting seeds of 0 through 10, and they all said "Sally has 6 sisters."
+1 out of 3 random gave the correct answer (`"Sally has 1 sister."`) 
+I tried setting seeds of 0 through 10, and they all said `"Sally has 6 sisters."`
 
 
 TheBloke_WizardLM-1.0-Uncensored-Llama2-13B-GPTQ - [fail]
 [ Consistent but off by 1 ] 
-"Sally has 2 sisters"
+`"Sally has 2 sisters"`
 
 TheBloke_WizardLM-13B-V1.0-Uncensored-GPTQ - [ mixed - fail ]
 `" [...] So, Sally has at least one sister out of the remaining two girls. "`
