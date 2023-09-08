@@ -97,7 +97,7 @@ This is lots of stuff, but comparatively small so worth including,
 as some stuff later may want as dependencies without much notice.
 ```bash
 # ROCm...
-sudo apt install -y rocm-dev rocm-libs rocm-hip-sdk rock-dkms rocm-libs \ 
+sudo apt install -y rocm-dev rocm-libs rocm-hip-sdk rocm-dkms rocm-libs \ 
 	hipsparse hipblas hipblas-dev rocblas rocblas-dev rccl rocthrust \
 	hipcub roctracer-dev rocm-opencl rocm-opencl-dev
 ```
