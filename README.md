@@ -159,9 +159,9 @@ https://www.reddit.com/r/linux_gaming/comments/xm2goe/help_with_overclocking_rx_
 
 
 ### corectrl 
-- for controlling settings...
- https://gitlab.com/corectrl/corectrl
- apparently it's not in the mainline packages, 
+project website : https://gitlab.com/corectrl/corectrl
+ for controlling and monitoring graphics hardware settings...
+ it's not in the mainline packages, 
  so we need to add a PPA for it... this of course is known
  to have disasterous consequences if done the wrong way.
  so the instructions for how to do this are broke.
