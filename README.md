@@ -208,6 +208,7 @@ sudo apt install -y radeontop rovclock
 ```
 
 ## Environmental variables...
+
 ```bash
 echo "HIP_PATH=/opt/rocm/" >> ~/.profile
 echo "HIP_PLATFORM='amd'" >> ~/.profile
@@ -219,7 +220,6 @@ echo "BUILD_CUDA_EXT=0" >> ~/.profile
 echo "PYTORCH_ROCM_ARCH=gfx1100" >> ~/.profile 
 ```
 
-
 ## and now we reboot...
 ```bash
 sudo reboot
@@ -230,13 +230,15 @@ sudo reboot
 ---
 
 # Conda 
-- required for pytorch
-Conda provides virtual environments for python, so that programs
+Required for pytorch... Conda provides virtual environments for python, so that programs
 with different dependencies can have different environments.
+
 Here is more info on managing conda :
 https://docs.conda.io/projects/conda/en/latest/user-guide/getting-started.html#
+
 Other notes :
 https://docs.conda.io/projects/conda/en/latest/user-guide/install/linux.html
+
 Download info :
 https://www.anaconda.com/download/
 
@@ -296,7 +298,8 @@ pip3 install --upgrade pip
 
 # Stable Diffusion WebUI / Automatic1111
 For [ Radeon 6900 / 7900 Ubuntu 23.04 / ROCm / AMD ]
-Website: https://github.com/AUTOMATIC1111/stable-diffusion-webui
+
+Project Website: https://github.com/AUTOMATIC1111/stable-diffusion-webui
 
 
 ## Stable Diffusion likes TCMalloc... 
@@ -308,10 +311,6 @@ sudo apt install -y libtcmalloc-minimal4
 ## image related packages that may come in handy...
 ```bash
 sudo apt install -y imagemagick ffmpeg
-```
-## SD likes this...
-```bash
-sudo apt install -y libtcmalloc-minimal4
 ```
 
 ## Switch to conda environment... and freshen pip
@@ -459,7 +458,7 @@ Intro info : https://www.youtube.com/watch?v=AbB33AxrcZo
 ---
 
 #  Oobabooga - Text Generation WebUI - ROCm 
-https://github.com/oobabooga/text-generation-webui.git
+Project Website : https://github.com/oobabooga/text-generation-webui.git
 
 ## setup conda and freshen pip
 ```bash
@@ -473,10 +472,10 @@ pip3 install --upgrade pip
 ```
 
 
-Note : As of writing this the most recxent supported version is ROCm 5.4.2
+Note : As of writing this the most recent stable supported version is ROCm 5.4.2
  to see packages available : https://download.pytorch.org/whl/rocm5.4.2/
  nightly : https://download.pytorch.org/whl/nightly/rocm5.6/
- 7900XTX requires nightly builds...
+ 7900XTX requires nightly builds... 
 
 ```bash
 # pre-install
@@ -493,8 +492,8 @@ pip install torch torchvision torchtext torchaudio torchdata pytorch-triton-rocm
 ```
 
 ## bitsandbytes rocm
- video guide : https://www.youtube.com/watch?v=2cPsvwONnL8
-[ - depricated - https://git.ecker.tech/mrq/bitsandbytes-rocm ]
+ video guide : https://www.youtube.com/watch?v=2cPsvwONnL8 
+[ - depricated - https://git.ecker.tech/mrq/bitsandbytes-rocm - requires rocm 5.4.2 ]
   https://github.com/0cc4m/bitsandbytes-rocm
 Found newer version that supports ROCm 5.6 -
 https://github.com/RockeyCoss/bitsandbytes-rocm
