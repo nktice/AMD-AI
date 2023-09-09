@@ -16,6 +16,8 @@
 
  Updates 2023-08-29 - ROCm 5.6 appears to be functioning now, so this guide is updated to refer to that... older versions may be mentioned in notes.  Oobabooga changed some command line arguments so there's changes there. 
 
+ 2023-09-09 - I had a report that this doesn't work in virtual machines (virtualbox) as the system there cannot see the hardware, it can't load drivers, etc.  Windows users may find it more helpful to try DirectML - https://rocm.docs.amd.com/en/latest/deploy/windows/quick_start.html / https://github.com/lshqqytiger/stable-diffusion-webui-directml
+
 ---
 
 
