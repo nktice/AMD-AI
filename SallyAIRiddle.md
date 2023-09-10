@@ -103,6 +103,10 @@ TheBloke_orca_mini_v3_13B-GPTQ - [crash] [fail]
 TheBloke_Phind-CodeLlama-34B-v2-GPTQ - [fail]
 `"Sally has three brothers, and each of her brothers has two sisters. This means that there are six sisters in total who are not Sally. Therefore, Sally herself must be one of these seven sisters. So, Sally has a total of eight sisters including herself."`  
 
+TheBloke_Pygmalion-2-13B-GPTQ - [mixed] 
+`"Let me think..."`
+It's not the answer, but it's not pretending that it has the answer right when it doesn't.  
+
 TheBloke_robin-33B-v2-GPTQ - [fail]
 [ gives wrong answer, and then goes on and on in delusion... ] 
 
@@ -276,6 +280,10 @@ TheBloke_orca_mini_v3_13B-GPTQ - [ fail ]
 
 TheBloke_Phind-CodeLlama-34B-v2-GPTQ - [pass]
 `"Sally has 1 sister."`
+
+TheBloke_Pygmalion-2-13B-GPTQ - [mixed] 
+`"Let me think..."`
+It's not the right answer, but it's not a wrong answer.  
 
 TheBloke/robin-33B-v2-GPTQ - [mixed]
 [ Starts out with correct answer but then goes on and on rambling incoherently.  ]
