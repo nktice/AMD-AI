@@ -18,7 +18,7 @@ https://www.reddit.com/r/linux_gaming/comments/xm2goe/help_with_overclocking_rx_
   ```bash
   sudo grub-mkconfig -o /boot/grub/grub.cfg
   ```
-
+Note : Restart is required for this to be effective. Do that when ready. 
 
 ### corectrl 
 project website : https://gitlab.com/corectrl/corectrl
@@ -55,4 +55,5 @@ sudo apt update -y
 sudo apt install -y corectrl
 ```
 #### end corectrl
+
 ### End performance tuning 
