@@ -79,6 +79,9 @@ TheBloke_LosslessMegaCoder-Llama2-7B-Mini-GPTQ - [fail]
 TheBloke_Luna-AI-Llama2-Uncensored-GPTQ - [fail]
 [ numbers differ / wrong ]
 
+TheBloke_MythoMax-L2-33B-GPTQ - [fail]
+`"None. She only one sister named Bethany."`
+
 TheBloke_OpenAssistant-Llama2-13B-Orca-8K-3319-GPTQ  - [mixed]
 3rd answer - `" Sally has one sister. "`
 [ trying at 8k/8 did not improve results - they became worse... ]
@@ -262,6 +265,9 @@ TheBloke_LosslessMegaCoder-Llama2-7B-Mini-GPTQ - [mixes]
 
 TheBloke_Luna-AI-Llama2-Uncensored-GPTQ - [ pass ]
 `"Sally has one sister."`
+
+TheBloke_MythoMax-L2-33B-GPTQ - [fail]
+With minimal temp, gave a few different random odd answers.
 
 TheBloke_OpenAssistant-Llama2-13B-Orca-8K-3319-GPTQ - [ 1/4 ? ]
 It took 4 tries to get - `"Sally has 1 sister."`
