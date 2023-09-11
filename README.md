@@ -74,7 +74,7 @@ AMDGPU DKMS
 ```bash
 sudo apt install -y amdgpu-dkms
 ```
-
+Note : This commonly produces warning message about 'Possible missing firmware' these are just wanrings and things work anyway, they can be ignored. 
 
 # ROCm repositories for jammy
 https://rocmdocs.amd.com/en/latest/deploy/linux/os-native/install.html
@@ -99,10 +99,12 @@ This is lots of stuff, but comparatively small so worth including,
 as some stuff later may want as dependencies without much notice.
 ```bash
 # ROCm...
-sudo apt install -y rocm-dev rocm-libs rocm-hip-sdk rocm-dkms rocm-libs \ 
-	hipsparse hipblas hipblas-dev rocblas rocblas-dev rccl rocthrust \
-	hipcub roctracer-dev rocm-opencl rocm-opencl-dev
+sudo apt install -y rocm-dev rocm-libs rocm-hip-sdk rocm-dkms rocm-libs
+#sudo apt install -y rocm-opencl rocm-opencl-dev
+#sudo apt install -y hipsparse hipblas hipblas-dev hipcub
+#sudo apt isntall -y rocblas rocblas-dev rccl rocthrust roctracer-dev 
 ```
+
 
 ```bash
 # ld.so.conf update 
@@ -128,8 +130,8 @@ Found : gfx1100 [ Radeon 7900 ]
 ## Add user to groups
 Of course note to change the user name to match your user. 
 ```bash
-sudo adduser n video
-sudo adduser n render
+sudo adduser `whoami` video
+sudo adduser `whoami` render
 ```
 
 ```bash
@@ -146,7 +148,7 @@ This section is optional, and as such has been moved to [performance-tuning](htt
 
 ## Top for video memory and usage
 nvtop 
-Note : I have had issues with the distro version crashes with 2 GPUs, installing new version from sources works fine. 
+Note : I have had issues with the distro version crashes with 2 GPUs, installing new version from sources works fine.  Project website : https://github.com/Syllo/nvtop 
 ```bash
 sudo apt install -y nvtop 
 ```
@@ -154,19 +156,6 @@ sudo apt install -y nvtop
 ## Radeon specific tools...
 ```bash
 sudo apt install -y radeontop rovclock
-```
-
-## Environmental variables...
-
-```bash
-echo "HIP_PATH=/opt/rocm/" >> ~/.profile
-echo "HIP_PLATFORM='amd'" >> ~/.profile
-echo "USE_ROCM=1" >> ~/.profile
-echo "BUILD_CUDA_EXT=0" >> ~/.profile
-# Radeon 6900
-#echo "PYTORCH_ROCM_ARCH=gfx1030" >> ~/.profile 
-# Radeon 7900
-echo "PYTORCH_ROCM_ARCH=gfx1100" >> ~/.profile 
 ```
 
 ## and now we reboot...
