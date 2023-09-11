@@ -183,12 +183,14 @@ https://www.anaconda.com/download/
 ```bash
 cd ~/Downloads/
 #wget https://repo.anaconda.com/archive/Anaconda3-2023.03-1-Linux-x86_64.sh
-wget https://repo.anaconda.com/archive/Anaconda3-2023.07-1-Linux-x86_64.sh
+#wget https://repo.anaconda.com/archive/Anaconda3-2023.07-1-Linux-x86_64.sh
+wget https://repo.anaconda.com/archive/Anaconda3-2023.07-2-Linux-x86_64.sh
 ```
 
 ```bash
 #  Note versions may have changed... 
-bash Anaconda3-2023.07-1-Linux-x86_64.sh -b
+bash Anaconda3-2023.07-2-Linux-x86_64.sh -b
+#bash Anaconda3-2023.07-1-Linux-x86_64.sh -b
 #bash Anaconda3-2023.03-1-Linux-x86_64.sh -b 
 #bash Anaconda-latest-Linux-x86_64.sh
 ```
@@ -255,9 +257,6 @@ sudo apt install -y imagemagick ffmpeg
 ```bash
 conda create -y -n sd python=3.10.6
 conda activate sd
-
-sudo apt install -y pip
-pip3 install --upgrade pip
 ```
 
 # PyTorch repo related parts :
@@ -318,6 +317,8 @@ tee --append webui-user.sh <<EOF
  export TORCH_COMMAND="pip install torch torchvision --index-url https://download.pytorch.org/whl/nightly/rocm5.6"
  ## And if you want to call this from other programs...
  export COMMANDLINE_ARGS="--api"
+ ## crashes with 2 cards, so to get it to run on the second card (only), unremark the following 
+ # export CUDA_VISIBLE_DEVICES="1"
 EOF
 ```
 
@@ -340,10 +341,10 @@ into the folder where you have other models ( to avoid issues )
 ## End - Stable Diffusion
 
 ## ComfyUI# ComfyUI
-https://github.com/comfyanonymous/ComfyUI
+Project website : https://github.com/comfyanonymous/ComfyUI
 
 ## environment...
-
+if it's not already active - activate the sd environment... or make a new one if you prefer...
 ```bash
 ## If you want a new one...
 #conda create -n comfy -y
@@ -355,7 +356,7 @@ conda activate sd
 ## git files...
 ```bash
 cd
-hgit clone https://github.com/comfyanonymous/ComfyUI
+git clone https://github.com/comfyanonymous/ComfyUI
 cd ComfyUI
 ```
 
@@ -373,10 +374,11 @@ vi extra_model_paths.yaml
 ```
 
 # prep models
+This will vary depending on where you've put your models and how you arrange them...
 ```bash
 mv models models.1
 ln -s /path/to/models/ models
-# a1111 uses different name for folder with models... link
+## a1111 uses different name for folder with models... link
 mv models/checkpoints models/checkpoints.1
 ln -s models/Stable-diffusion models/checkpoints
 ```
@@ -392,6 +394,10 @@ Intro info : https://www.youtube.com/watch?v=AbB33AxrcZo
 
 ## End ComfyUI
 
+To start the next section fresh, you may want to deactivate the sd conda environment. 
+```bash
+conda deactivate
+```
 
 ---
 
@@ -403,14 +409,10 @@ Project Website : https://github.com/oobabooga/text-generation-webui.git
 # make env
 conda create -y -n textgen python=3.10.9
 conda activate textgen
-
-#update pip
-sudo apt install -y pip
-pip3 install --upgrade pip
 ```
 
 
-Note : As of writing this the most recent stable supported version is ROCm 5.4.2
+Note : As of writing this (2023-09) the most recent 'stable' supported version is ROCm 5.4.2
  to see packages available : https://download.pytorch.org/whl/rocm5.4.2/
  nightly : https://download.pytorch.org/whl/nightly/rocm5.6/
  7900XTX requires nightly builds... 
@@ -424,7 +426,8 @@ pip install cmake colorama filelock lit numpy \
 
 ```bash
 # main pytorch parts...
-pip install torch torchvision torchtext torchaudio torchdata pytorch-triton-rocm \
+pip install torch torchvision torchtext torchaudio torchdata \
+	triton pytorch-triton pytorch-triton-rocm \
          --index-url https://download.pytorch.org/whl/nightly/rocm5.6
 #       --index-url https://download.pytorch.org/whl/rocm5.4.2
 ```
@@ -433,27 +436,25 @@ pip install torch torchvision torchtext torchaudio torchdata pytorch-triton-rocm
  video guide : https://www.youtube.com/watch?v=2cPsvwONnL8 
 [ - depricated - https://git.ecker.tech/mrq/bitsandbytes-rocm - requires rocm 5.4.2 ]
   https://github.com/0cc4m/bitsandbytes-rocm
+Older system with support for 5.6 : https://github.com/RockeyCoss/bitsandbytes-rocm
+Note : 2023-09-11 New version of BitsAndBytes(0.41 !) made for 5.6 
+Project website : https://github.com/arlo-phoenix/bitsandbytes-rocm-5.6
 Found newer version that supports ROCm 5.6 -
-https://github.com/RockeyCoss/bitsandbytes-rocm
+
 ```bash
 cd
-git clone https://github.com/RockeyCoss/bitsandbytes-rocm
-cd bitsandbytes-rocm/
-```
-
-```bash
+git clone https://github.com/arlo-phoenix/bitsandbytes-rocm-5.6.git
+cd bitsandbytes-rocm-5.6/
 BUILD_CUDA_EXT=0 pip install -r requirements.txt --extra-index-url https://download.pytorch.org/whl/nightly/rocm5.6
+# 7900XTX
+#make hip ROCM_TARGET=gfx1100 ROCM_HOME=/opt/rocm-5.6.0/
+# 6900XT
+#make hip ROCM_TARGET=gfx1030 ROCM_HOME=/opt/rocm-5.6.0/
+# both...
+make hip ROCM_TARGET=gfx1100,gfx1030 ROCM_HOME=/opt/rocm-5.6.0/
+pip install . --extra-index-url https://download.pytorch.org/whl/nightly/rocm5.6
 ```
 
-```bash
-make hip
-```
-
-Note this depends on your card... gfx1030 is Radeon 6900XT, gfx1100 is Radeon 7900XTX
-```bash
-#CUDA_VERSION=gfx1030 python setup.py install
-CUDA_VERSION=gfx1100 python setup.py install
-``` 
 
 ### end bitsandbytes-rocm
 
@@ -533,6 +534,7 @@ Generally the GPTQ models by TheBloke are likely to load.  The 30B/33B models wi
 
 If you have old models,  link pre-stored models into the models
 ```bash
+# cd ~/text-generation-webui
 # mv models models.1
 # ln -s /path/to/models models
 ```
