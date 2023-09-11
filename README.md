@@ -577,4 +577,16 @@ loading on both cards causes LLMs to spit out gibberish.
 
 ## End - Oobabooga - Text-Generation-WebUI
 
-
+# nvtop from source
+project website : https://github.com/Syllo/nvtop
+optional - tool for displaying gpu / memory usage info
+The package for this crashes with 2 gpu's, here it is from source.
+```bash
+sudo apt install -y libdrm-dev libsystemd-dev libudev-dev
+cd 
+git clone https://github.com/Syllo/nvtop.git
+mkdir -p nvtop/build && cd nvtop/build
+cmake .. -DNVIDIA_SUPPORT=OFF -DAMDGPU_SUPPORT=ON -DINTEL_SUPPORT=OFF
+make
+sudo make install
+```
