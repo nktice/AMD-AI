@@ -275,7 +275,7 @@ pip install cmake colorama filelock lit numpy Pillow Jinja2 \
 ```bash
 # install
 pip install torch torchvision torchtext torchaudio torchdata \
-	pytorch-triton pytorch-triton-rocm \
+	triton pytorch-triton pytorch-triton-rocm \
          --index-url https://download.pytorch.org/whl/nightly/rocm5.6
 #       --index-url https://download.pytorch.org/whl/rocm5.4.2
 ```
@@ -484,6 +484,13 @@ pip install logger
 pip install -U scikit-learn
 ```
 
+2023-09-11 : 
+Usually we get Triton from the PyTorch nightly build files (included above) 
+but I had some errors [akin to these](https://github.com/openai/triton/issues/2002) 
+and found getting it fresh from the nightly build resovled them.
+```bash
+pip install -U --index-url https://aiinfra.pkgs.visualstudio.com/PublicPackages/_packaging/Triton-Nightly/pypi/simple/ triton-nightly
+```
 
 ##
 ## Oobabooga install / text-generation-webui
@@ -511,6 +518,7 @@ git clone https://github.com/turboderp/exllama
 ```bash
 cd exllama
 pip install -r requirements.txt --extra-index-url https://download.pytorch.org/whl/nightly/rocm5.6
+cd ~/text-generation-webui
 ```
 
 ```bash
