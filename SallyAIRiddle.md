@@ -110,6 +110,9 @@ TheBloke_Pygmalion-2-13B-GPTQ - [mixed]
 `"Let me think..."`
 It's not the answer, but it's not pretending that it has the answer right when it doesn't.  
 
+TheBloke_Pygmalion-2-13B-SuperCOT-GPTQ - [fail, mixed...]
+Insisted Sally had 6 sisters, but when I followed up by asking, "What if the brothers' two sisters are the same 2 people, so there's only 2 girls in that generation?", it corrected itself and said, "Sally has 1 sister."
+
 TheBloke_robin-33B-v2-GPTQ - [fail]
 [ gives wrong answer, and then goes on and on in delusion... ] 
 
@@ -290,6 +293,9 @@ TheBloke_Phind-CodeLlama-34B-v2-GPTQ - [pass]
 TheBloke_Pygmalion-2-13B-GPTQ - [mixed] 
 `"Let me think..."`
 It's not the right answer, but it's not a wrong answer.  
+
+TheBloke_Pygmalion-2-13B-SuperCOT-GPTQ - [fail]
+insists : `"To answer this question, we should know that: Sally has 1 brother and 2 sisters."`
 
 TheBloke/robin-33B-v2-GPTQ - [mixed]
 [ Starts out with correct answer but then goes on and on rambling incoherently.  ]
