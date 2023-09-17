@@ -32,6 +32,9 @@ TheBloke_Airolima-Chronos-Grad-L2-13B-GPTQ - [ pass ]
 TheBloke_Chronolima-Airo-Grad-L2-13B-GPTQ - [fail]
 [ 2... ]
 
+TheBloke_CodeFuse-CodeLlama-34B-GPTQ - [fail] 
+`"Sally has 6 sisters."`
+
 TheBloke_CodeLlama-34B-Instruct-GPTQ - [ fail ]
 [ insists there's 6 sisters. ] 
 
@@ -131,6 +134,9 @@ TheBloke_Stable-Platypus2-13B-GPTQ - [fail]
 
 TheBloke_SuperPlatty-30B-GPTQ - [fail] 
 
+TheBloke_Synthia-34B-v1.2-GPTQ - [fail]
+`"Sally has 6 sisters."`
+
 TheBloke/Tulu-30B-SuperHOT-8K-GPTQ - [fail]
 `"Sally has 1 + 3 = 4 siblings in total. So she has 4 * 2 = 8 sisters - in - law."`
 
@@ -219,6 +225,9 @@ TheBloke_Chronoboros-33B-GPTQ - [ pass ]
 
 TheBloke_Chronolima-Airo-Grad-L2-13B-GPTQ - [ pass ]
 `"Sally has one sister because she is one of two girls in her family."`
+
+TheBloke_CodeFuse-CodeLlama-34B-GPTQ - [ pass ] 
+`"Sally has 1 sister."`
 
 TheBloke_CodeLlama-34B-Instruct-GPTQ - [ pass ]
 `"Sally has 1 sister."`
@@ -313,6 +322,9 @@ TheBloke_Stable-Platypus2-13B-GPTQ - [ mixed / pass ]
 
 TheBloke_SuperPlatty-30B-GPTQ - [fail]
 [false answers / confused. ] 
+
+TheBloke_Synthia-34B-v1.2-GPTQ - [pass]
+`"Sally has 1 sister."`
 
 TheBloke/Tulu-30B-SuperHOT-8K-GPTQ - [pass]
 `"Sally has 1 sister as she is one of 5 children from the same two parents who had 3 boys and 2 girls."`
