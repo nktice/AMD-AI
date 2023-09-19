@@ -27,7 +27,11 @@ sudo apt install -y rocm-opencl rocm-opencl-dev rocm-opencl-runtime rocm-opencl-
 make BUILD_TYPE=clblas build
 ```
 
-# here is where you'd like to link your stash of models...
+Here is where you'd like to link your stash of models...
+```bash
+# mv models models.1
+# ln -s /path/to/models models 
+```
 
 ```bash
 ./local-ai
