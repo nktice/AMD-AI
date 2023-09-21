@@ -58,6 +58,9 @@ TheBloke_guanaco-33B-GPTQ - [mixed]
 TheBloke_Guanaco-33B-SuperHOT-8K-GPTQ - [fail]
 [ answers vary, but are incorrect... often 4 or 6. ] 
 
+TheBloke_hippogriff-30b-chat-GPTQ - [fail]
+`"... Sally has 6 sisters."`
+
 TheBloke_Llama-2-13B-GPTQ - [fail]
 [ deluded ]
 
@@ -252,6 +255,9 @@ TheBloke_guanaco-33B-GPTQ - [pass]
 
 TheBloke_Guanaco-33B-SuperHOT-8K-GPTQ - [mixed]
 [ answers 1 about half the time out of a dozen random tests. ] 
+
+TheBloke_hippogriff-30b-chat-GPTQ - [pass] 
+`"Sally has 1 sister because she is one of the 2 girls in her family."`
 
 TheBloke_llama2-22B-daydreamer-v2-GPTQ - [fail]
 [ From several attempts: Deluded, verbose, repititious. ] 
