@@ -85,6 +85,11 @@ TheBloke_LosslessMegaCoder-Llama2-7B-Mini-GPTQ - [fail]
 TheBloke_Luna-AI-Llama2-Uncensored-GPTQ - [fail]
 [ numbers differ / wrong ]
 
+TheBloke_MAmmoTH-Coder-34B-GPTQ - [fail]
+`"Sally has 3 * 2 = <<3*2=6>>6 sisters.
+6"`
+
+
 TheBloke_MythoMax-L2-33B-GPTQ - [fail]
 `"None. She only one sister named Bethany."`
 
@@ -283,6 +288,9 @@ TheBloke_LosslessMegaCoder-Llama2-7B-Mini-GPTQ - [mixes]
 
 TheBloke_Luna-AI-Llama2-Uncensored-GPTQ - [ pass ]
 `"Sally has one sister."`
+
+TheBloke_MAmmoTH-Coder-34B-GPTQ - [ pass ] 
+`"Sally has 4 siblings, 3 brothers and 1 sister"`
 
 TheBloke_MythoMax-L2-33B-GPTQ - [fail]
 With minimal temp, gave a few different random odd answers.
