@@ -150,7 +150,10 @@ TheBloke/Tulu-30B-SuperHOT-8K-GPTQ - [fail]
 
 TheBloke_upstage-llama-30b-instruct-2048-GPTQ - [fail]
 
-TheBloke_vicuna-33B-GPTQ - [mixed]
+TheBloke_vicuna-33B-GPTQ 
+[new version 2023-09-26 ] [ mixed ] - Sometimes answers 1, sometimes 0, or other answers. 
+
+[ 2023-08-20 ] - [mixed]
 [ Consistently says it can't answer... which is better than insisting on a wrong answer. ] 
 `"Based on the information provided, Sally has 3 brothers, but it is not possible to determine how many sisters she has as there is no information about her own siblings other than her brothers."`
 
@@ -347,7 +350,8 @@ TheBloke_upstage-llama-30b-instruct-2048-GPTQ -  [ pass ]
 `"Since there are only two girls in the family, including Sally herself, Sally has one sister."`
 
 TheBloke_vicuna-33B-GPTQ - [pass]
-[ fairly consistent ] 
+[2023-09-29] - [pass] `"Sally has 1 sister."`
+[2023-08-20 ] - [ fairly consistent ] 
 `"Based on the information provided, Sally has three siblings - two brothers and one sister."`
 
 TheBloke_Wizard-Vicuna-7B-Uncensored-SuperHOT-8K-GPTQ - [ fail ]
