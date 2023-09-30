@@ -520,6 +520,30 @@ cd ~/text-generation-webui
 # python webui/app.py -d <path_to_model_files>
 #pip install flask waitress
 ```
+### end - exllama 
+
+### exllamav2 
+New version of the exllama loader - https://github.com/turboderp/exllamav2
+
+```bash
+cd ~/text-generation-webui
+mkdir repositories
+cd ~/text-generation-webui/repositories
+git clone https://github.com/turboderp/exllamav2
+```
+
+```bash
+cd exllamav2
+pip install -r requirements.txt --extra-index-url https://download.pytorch.org/whl/nightly/rocm5.7
+cd ~/text-generation-webui
+```
+
+If you want to test the exllamav2 - it has a test interface...
+```bash
+# python test_inference.py -h 
+```
+### end - exllamav2 
+
 
 ### image interaction related packages...
 ```bash
