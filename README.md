@@ -18,6 +18,8 @@
 
  2023-09-09 - I had a report that this doesn't work in virtual machines (virtualbox) as the system there cannot see the hardware, it can't load drivers, etc.  Windows users may find it more helpful to try DirectML - https://rocm.docs.amd.com/en/latest/deploy/windows/quick_start.html / https://github.com/lshqqytiger/stable-diffusion-webui-directml
 
+2023-09-30 - Added new version for ROCm 5.7 -> https://github.com/nktice/AMD-AI/blob/main/ROCm-5.7.md
+
 ---
 
 
