@@ -78,12 +78,7 @@ Note : This commonly produces warning message about 'Possible missing firmware' 
 
 # ROCm repositories for jammy
 https://rocmdocs.amd.com/en/latest/deploy/linux/os-native/install.html
-Whereas 5.4.2 is the stable version supported by pytorch let's us that...
-Note : 
- https://git.ecker.tech/mrq/bitsandbytes-rocm.git needs 5.4.6
-Whereas : 
- https://github.com/RockeyCoss/bitsandbytes-rocm works with 5.6 
-So I've updated everything to 5.6 as it works for me. 
+Note : 2023-09-11 Support for newer version of BitsAndBytes(0.41 !) made for 5.6 - Project website : https://github.com/arlo-phoenix/bitsandbytes-rocm-5.6
 
 ```bash
 #echo "deb [arch=amd64 signed-by=/etc/apt/keyrings/rocm.gpg] https://repo.radeon.com/rocm/apt/5.4.2 jammy main" \
