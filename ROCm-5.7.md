@@ -524,6 +524,7 @@ cd ~/text-generation-webui
 
 ### exllamav2 
 New version of the exllama loader - https://github.com/turboderp/exllamav2
+2023-09-30 - Does not appear to be working correctly with Oobabooga - but it is new, and under activate development.  
 
 ```bash
 cd ~/text-generation-webui
@@ -535,6 +536,8 @@ git clone https://github.com/turboderp/exllamav2
 ```bash
 cd exllamav2
 pip install -r requirements.txt --extra-index-url https://download.pytorch.org/whl/nightly/rocm5.7
+pip install fastparquet
+python setup.py install --user
 cd ~/text-generation-webui
 ```
 
@@ -543,6 +546,17 @@ If you want to test the exllamav2 - it has a test interface...
 # python test_inference.py -h 
 ```
 ### end - exllamav2 
+
+### flash-attention
+ExLamav2 has support for flash-attention : https://github.com/Dao-AILab/flash-attention
+There appears to be a ROCm version of the flash-attention project : https://github.com/ROCmSoftwarePlatform/flash-attention
+Alas as of 2023-09-30 I haven't got it working, and it looks like it may be missing parts.  I'm leaving notes here for future development. 
+```bash
+#cd
+#git clone https://github.com/ROCmSoftwarePlatform/flash-attention.git
+# python setup.py 
+```
+### end flash-attention
 
 
 ### image interaction related packages...
