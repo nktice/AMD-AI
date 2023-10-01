@@ -14,13 +14,16 @@
  There may be in here extra parts that aren't needed but this works for me.
  Originally text, with comments like a shell script that I cut and paste - 2023-07 - nktice
 
- Updates 2023-08-29 - ROCm 5.6 appears to be functioning now, so this guide is updated to refer to that... older versions may be mentioned in notes.  Oobabooga changed some command line arguments so there's changes there. 
 
- 2023-09-09 - I had a report that this doesn't work in virtual machines (virtualbox) as the system there cannot see the hardware, it can't load drivers, etc.  Windows users may find it more helpful to try DirectML - https://rocm.docs.amd.com/en/latest/deploy/windows/quick_start.html / https://github.com/lshqqytiger/stable-diffusion-webui-directml
+2023-09-09 - I had a report that this doesn't work in virtual machines (virtualbox) as the system there cannot see the hardware, it can't load drivers, etc.  While this is not a guide about Windows, Windows users may find it more helpful to try DirectML - https://rocm.docs.amd.com/en/latest/deploy/windows/quick_start.html / https://github.com/lshqqytiger/stable-diffusion-webui-directml
 
-2023-09-30 - Updated to use ROCm 5.7 - as it is out now, and does appear to be working.  On my first attempt, I needed a reboot to get it working. 
-I've made this a seprate file to start with as these features aren't referred to as being supported by the dependent packags. 
+2023-09-30 - Updated to use ROCm 5.7 - As it is out now, and does appear to be working much like 5.6...
+- On my first attempt, I needed a reboot to get it working... (I've since re-installed and it works as expected following this guide. ) 
+- I've made this a seprate file to start with as these features aren't referred to as being supported by the dependent packages.
+- Added notes for exllamav2 and fast-attention - they're not working yet... but exllamav2 is under active development, and worth following.  
+- I will also note issues with dual GPU loading of models that appear to load but that output gibberish has now been addressed - alas the patch has not made it to packages... here is the bug thread : https://github.com/ROCmSoftwarePlatform/rocBLAS/issues/1346
 
+  
 ---
 
 
