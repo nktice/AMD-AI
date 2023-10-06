@@ -622,3 +622,48 @@ cmake .. -DNVIDIA_SUPPORT=OFF -DAMDGPU_SUPPORT=ON -DINTEL_SUPPORT=OFF
 make
 sudo make install
 ```
+# end nvtop
+
+
+# rocm Tensorflow from sources
+2023-10-06 notes for Tensorflow from sources... this is added here as it's not essential, is more advanced configuration, and may take a while.  
+ https://github.com/ROCmSoftwarePlatform/tensorflow-upstream
+There is an issue with the pip tensorflow-rocm where it's out of date and does not support CPU features that may be worth having.  Here for example is a warning from the textgen ui - 
+
+> "I tensorflow/core/platform/cpu_feature_guard.cc:182] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
+> To enable the following instructions: AVX2 FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags"
+
+So we would like to run a new version of tensorflow that has all the features.  As it's not offered from the pip packages, we'll compile from source.
+
+## requires bazel...
+https://bazel.build/install/ubuntu
+```bash
+sudo apt install apt-transport-https curl gnupg -y
+curl -fsSL https://bazel.build/bazel-release.pub.gpg | gpg --dearmor >bazel-archive-keyring.gpg
+sudo mv bazel-archive-keyring.gpg /usr/share/keyrings
+echo "deb [arch=amd64 signed-by=/usr/share/keyrings/bazel-archive-keyring.gpg] https://storage.googleapis.com/bazel-apt stable jdk1.8" | sudo tee /etc/apt/sources.list.d/bazel.list
+sudo apt update -y
+sudo apt install -y bazel bazel-6.1.0
+```
+
+## ROCm's tensorflow
+https://github.com/ROCmSoftwarePlatform/tensorflow-upstream
+```bash
+cd
+git clone https://github.com/ROCmSoftwarePlatform/tensorflow-upstream.git
+cd tensorflow-upstream
+```
+
+There's a ./configure script that asks a few questions, run that. 
+```bash
+./configure
+./build_rocm_python3
+```
+
+That will take awhile ... but afterwards installed tensorflow in the following :
+> tf-estimator-nightly          2.14.0.dev2023080308
+
+> tf-nightly-rocm               2.15.0
+
+# end tensorflow from sources
+
