@@ -481,6 +481,12 @@ pip install logger
 pip install -U scikit-learn
 ```
 
+## torch grammar ( requirement added to Oobabooga 1.7 on 2023-10-08) 
+```bash
+pip install torch-grammar 
+```
+
+
 2023-09-11 : 
 Usually we get Triton from the PyTorch nightly build files (included above) 
 but I had some errors [akin to these](https://github.com/openai/triton/issues/2002) 
