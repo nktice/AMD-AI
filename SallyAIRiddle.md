@@ -76,6 +76,9 @@ TheBloke_Llama2-22B-Daydreamer-v3-GPTQ - [fail]
 TheBloke_llama2_7b_chat_uncensored-GPTQ - [fail]
 [ 2 ]
 
+TheBloke_llava-v1.5-13B-GPTQ - [fail]
+`"0"`
+
 TheBloke_LongChat-7B-GPTQ - [fail]
 [ 0 ]
 
@@ -288,6 +291,9 @@ TheBloke_Llama-2-13B-GPTQ - [ 1/2 ? ]
 
 TheBloke_llama2_7b_chat_uncensored-GPTQ - [2/3 mixed pass ... ]
 `"none", "1", "Sally has 1 sister - her brother's name is John."`
+
+TheBloke_llava-v1.5-13B-GPTQ - [fail]
+`"0"`
 
 TheBloke_LongChat-7B-GPTQ -  [ fail ]
 Out of several tries there were different errors and wrong answers.
