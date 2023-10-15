@@ -44,6 +44,9 @@ TheBloke_CodeUp-Alpha-13B-HF-GPTQ - [fail]
 TheBloke_CodeUp-Llama-2-13B-Chat-HF-GPTQ - [fail]
 [ 6 ]
 
+TheBloke/dolphin-2.1-mistral-7B-GPTQ - [fail]
+`"[...] She has 2 sisters.[...]"`
+
 TheBloke_GodziLLa-30B-GPTQ - [fail]
 [ various answers, does sometiems say it doesn't understand or needs more info. ] 
 
@@ -251,6 +254,9 @@ TheBloke_CodeUp-Alpha-13B-HF-GPTQ - [fail]
 
 TheBloke_CodeUp-Llama-2-13B-Chat-HF-GPTQ - [ fail. ]
 `"Hi there! Based on the information provided, Sally has 2 sisters."`
+
+TheBloke/dolphin-2.1-mistral-7B-GPTQ - [pass]
+`"[...] we can only conclude that she has at least one sister"`
 
 TheBloke_GodziLLa-30B-GPTQ - [ fail ]
 [ gets close to answering, but the breaks it with confusion about gender or other issues. ] 
