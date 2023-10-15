@@ -144,6 +144,9 @@ TheBloke_SuperPlatty-30B-GPTQ - [fail]
 
 TheBloke_Synthia-34B-v1.2-GPTQ - [fail]
 `"Sally has 6 sisters."`
+ 
+TheBloke/speechless-codellama-34b-v2.0-GPTQ - [fail]
+`"Sally has 6 sisters."`
 
 TheBloke/Tulu-30B-SuperHOT-8K-GPTQ - [fail]
 `"Sally has 1 + 3 = 4 siblings in total. So she has 4 * 2 = 8 sisters - in - law."`
@@ -341,6 +344,9 @@ TheBloke_SuperPlatty-30B-GPTQ - [fail]
 [false answers / confused. ] 
 
 TheBloke_Synthia-34B-v1.2-GPTQ - [pass]
+`"Sally has 1 sister."`
+
+TheBloke/speechless-codellama-34b-v2.0-GPTQ - [pass]
 `"Sally has 1 sister."`
 
 TheBloke/Tulu-30B-SuperHOT-8K-GPTQ - [pass]
