@@ -2,7 +2,7 @@
 
 # Question 1:
 I saw this question on a post on reddit and thought it was worth trying...
-`"Sally (a girl) has 3 brothers. Each brother has 2 sisters. How many sisters does sally have?"`
+`"Sally (a girl) has 3 brothers. Each brother has 2 sisters. How many sisters does Sally have?"`
 
 These settings appear important to get things to work so they are default:
 exllama [loader] : max_seq_len 4096, compress_pos_emb 4
@@ -92,6 +92,7 @@ TheBloke_MAmmoTH-Coder-34B-GPTQ - [fail]
 `"Sally has 3 * 2 = <<3*2=6>>6 sisters.
 6"`
 
+TheBloke/Mistral-11B-CC-Air-RP-GPTQ - [fail]
 
 TheBloke_MythoMax-L2-33B-GPTQ - [fail]
 `"None. She only one sister named Bethany."`
@@ -303,6 +304,9 @@ TheBloke_Luna-AI-Llama2-Uncensored-GPTQ - [ pass ]
 
 TheBloke_MAmmoTH-Coder-34B-GPTQ - [ pass ] 
 `"Sally has 4 siblings, 3 brothers and 1 sister"`
+
+TheBloke/Mistral-11B-CC-Air-RP-GPTQ - [fail]
+`"There are 4 girls in this family including Sally, so she has 3 sisters."`
 
 TheBloke_MythoMax-L2-33B-GPTQ - [fail]
 With minimal temp, gave a few different random odd answers.
