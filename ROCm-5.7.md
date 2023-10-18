@@ -539,7 +539,7 @@ New version of the exllama loader - https://github.com/turboderp/exllamav2
 cd ~/text-generation-webui
 mkdir repositories
 cd ~/text-generation-webui/repositories
-git clone https://github.com/turboderp/exllamav2
+git clone https://github.com/turboderp/exllamav2.git
 ```
 
 ```bash
@@ -547,6 +547,7 @@ cd exllamav2
 pip install -r requirements.txt --extra-index-url https://download.pytorch.org/whl/nightly/rocm5.7
 pip install fastparquet
 python setup.py install --user
+pip install -U . 
 cd ~/text-generation-webui
 ```
 
