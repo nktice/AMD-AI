@@ -79,6 +79,9 @@ TheBloke_llama2_7b_chat_uncensored-GPTQ - [fail]
 TheBloke_llava-v1.5-13B-GPTQ - [fail]
 `"0"`
 
+TheBloke_llemma_34b-GPTQ - [fail]
+[ gives a range of answers... ]
+
 TheBloke_LongChat-7B-GPTQ - [fail]
 [ 0 ]
 
@@ -294,6 +297,11 @@ TheBloke_llama2_7b_chat_uncensored-GPTQ - [2/3 mixed pass ... ]
 
 TheBloke_llava-v1.5-13B-GPTQ - [fail]
 `"0"`
+
+TheBloke_llemma_34b-GPTQ - [pass / mixed ] 
+Answer does include :
+`"[...] The correct answer to this question is 1. Since there are three boys and two girls in the family, we can conclude that Sally must be one of the two girls. Therefore, she only has one sister. [...]"`
+Alas it has a bunch more in the answer that is not so correct. 
 
 TheBloke_LongChat-7B-GPTQ -  [ fail ]
 Out of several tries there were different errors and wrong answers.
