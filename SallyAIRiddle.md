@@ -16,6 +16,9 @@ TheBloke_30B-Epsilon-GPTQ - [fail]
 TheBloke_Airoboros-7B-GPT4-1-4-SuperHOT-8K-GPTQ - [fail]
 "1.5", "2" ...
 
+TheBloke_Airoboros-c34B-3.1.2-GPTQ - [fail] 
+`"Sally has 6 sisters,[...]"`
+
 TheBloke_airoboros-33B-GPT4-2.0-GPTQ - [fail]
 `"None, because she herself is a girl."`
 
@@ -233,6 +236,9 @@ TheBloke_30B-Epsilon-GPTQ  -  [ pass ]
 
 TheBloke_Airoboros-7B-GPT4-1-4-SuperHOT-8K-GPTQ - [ fail ]
 `"Sally has 2 sisters. [...]"`
+
+TheBloke_Airoboros-c34B-3.1.2-GPTQ - [ pass ] 
+`"Sally has 1 sister.[...]"`
 
 TheBloke_airoboros-33B-GPT4-2.0-GPTQ - [ pass ]
 `"If Sally herself is a girl, then she has at least one sister - another girl in her family."`
