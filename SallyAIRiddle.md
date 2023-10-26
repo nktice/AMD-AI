@@ -32,6 +32,9 @@ TheBloke_Airolima-Chronos-Grad-L2-13B-GPTQ - [ pass ]
 `"Sally has 1 sister."`
 [seed 1( correct 1/3),  5(2/6 correct) ... rarely passing, and unstable. ] 
 
+TheBloke_Augmental-13B-GPTQ - [ fail ] 
+`"None [...]"` 
+
 TheBloke_Chronolima-Airo-Grad-L2-13B-GPTQ - [fail]
 [ 2... ]
 
@@ -249,6 +252,9 @@ TheBloke_airoboros-33B-GPT4-m2.0-GPTQ - [ pass ]
 TheBloke_Airolima-Chronos-Grad-L2-13B-GPTQ - [ pass ]
 `"Sally has one sister because there are only two girls in total out of five children, so she has one sister."`
 [ seed 1,2, 9(flip flops, mostly right),10 = pass ] 
+
+TheBloke_Augmental-13B-GPTQ - [ pass ] 
+`"1"`
 
 TheBloke_Chronoboros-33B-GPTQ - [ pass ]
 `"Sally has 1 sister."`
