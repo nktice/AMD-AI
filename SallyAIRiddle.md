@@ -35,6 +35,9 @@ TheBloke_Airolima-Chronos-Grad-L2-13B-GPTQ - [ pass ]
 TheBloke_Augmental-13B-GPTQ - [ fail ] 
 `"None [...]"` 
 
+TheBloke_Cat-13B-0.5-GPTQ - [ fail ] 
+`"She has no brothers![...]"` [deluded] 
+
 TheBloke_Chronolima-Airo-Grad-L2-13B-GPTQ - [fail]
 [ 2... ]
 
@@ -255,6 +258,9 @@ TheBloke_Airolima-Chronos-Grad-L2-13B-GPTQ - [ pass ]
 
 TheBloke_Augmental-13B-GPTQ - [ pass ] 
 `"1"`
+
+TheBloke_Cat-13B-0.5-GPTQ - [ fail ] 
+`"[...] Sally has two sisters."`
 
 TheBloke_Chronoboros-33B-GPTQ - [ pass ]
 `"Sally has 1 sister."`
