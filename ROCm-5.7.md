@@ -295,11 +295,6 @@ pip install onnx
 pip install super-gradients
 ```
 
-## torch grammar ( requirement added to Oobabooga 1.7 on 2023-10-08) 
-```bash
-pip install torch-grammar 
-```
-
 ## Get the files...
 ```bash
 cd
@@ -430,6 +425,11 @@ pip install cmake colorama filelock lit numpy \
 pip install torch torchvision torchtext torchaudio torchdata \
 	triton pytorch-triton pytorch-triton-rocm \
          --index-url https://download.pytorch.org/whl/nightly/rocm5.7
+```
+
+## torch grammar ( requirement added to Oobabooga 1.7 on 2023-10-08) 
+```bash
+pip install torch-grammar 
 ```
 
 ## bitsandbytes rocm
