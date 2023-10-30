@@ -401,10 +401,12 @@ conda deactivate
 #  Oobabooga - Text Generation WebUI - ROCm 
 Project Website : https://github.com/oobabooga/text-generation-webui.git
 
+2023-10-30 - New version of Oobabooga's Text Gen UI supports current version of python...
 ## setup conda and freshen pip
 ```bash
 # make env
-conda create -y -n textgen python=3.10.9
+#conda create -y -n textgen python=3.10.9
+conda create -y -n textgen python=3.11
 conda activate textgen
 ```
 
