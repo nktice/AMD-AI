@@ -1,8 +1,8 @@
 # AMD / Radeon 7900XTX 6900XT GPU ROCm install / setup / config 
 # Ubuntu 22.04 / 23.04  
-# Conda / PyTorch (ROCm) / EXLLAMA / BitsAndBytes-ROCm-5.6
-# Automatic1111 Stable Diffusion + ComfyUI 
-# Oobabooga - Text Generation WebUI
+# ROCm 5.7.2 
+# Automatic1111 Stable Diffusion + ComfyUI  ( venv ) 
+# Oobabooga - Text Generation WebUI ( conda, Exllama, BitsAndBytes-ROCm-5.6 ) 
 
 ## Install notes / instructions ##
 
@@ -23,6 +23,7 @@
 - Added notes for exllamav2 and fast-attention - they're not working yet... but exllamav2 is under active development, and worth following.  
 - I will also note issues with dual GPU loading of models that appear to load but that output gibberish has now been addressed - alas the patch has not made it to packages... here is the bug thread : https://github.com/ROCmSoftwarePlatform/rocBLAS/issues/1346
 
+2023-11-28 - Update for ROCm 5.7.2.  Revised how Stable Diffusion and ComfyUI are handled ( using venv now ).  Revise handling for Oobabooga... now uses most of their requirements_amd.txt and Flash Attention!  I will note I first attempted to do with Ubuntu 23.10 and foudn obstacles there - they integrate the video drivers, but they're not the latest and this breaks ROCm install, so we're still using 23.04 for the time being.  
   
 ---
 
@@ -87,9 +88,8 @@ https://rocmdocs.amd.com/en/latest/deploy/linux/os-native/install.html
 Note : 2023-09-11 Support for newer version of BitsAndBytes(0.41 !) made for 5.6 - Project website : https://github.com/arlo-phoenix/bitsandbytes-rocm-5.6
 
 ```bash
-#echo "deb [arch=amd64 signed-by=/etc/apt/keyrings/rocm.gpg] https://repo.radeon.com/rocm/apt/5.4.2 jammy main" \
 #echo "deb [arch=amd64 signed-by=/etc/apt/keyrings/rocm.gpg] https://repo.radeon.com/rocm/apt/5.6 jammy main" \
-echo "deb [arch=amd64 signed-by=/etc/apt/keyrings/rocm.gpg] https://repo.radeon.com/rocm/apt/5.7.1 jammy main" \
+echo "deb [arch=amd64 signed-by=/etc/apt/keyrings/rocm.gpg] https://repo.radeon.com/rocm/apt/5.7.2 jammy main" \
     | sudo tee --append /etc/apt/sources.list.d/rocm.list
 echo -e 'Package: *\nPin: release o=repo.radeon.com\nPin-Priority: 600' \
     | sudo tee /etc/apt/preferences.d/rocm-pin-600
@@ -169,155 +169,38 @@ sudo reboot
 
 ---
 
-# Conda 
-Required for pytorch... Conda provides virtual environments for python, so that programs
-with different dependencies can have different environments.
+# Stable Diffusion (Automatic1111) 
+This system is built to use its own venv ( rather than Conda )...
 
-Here is more info on managing conda :
-https://docs.conda.io/projects/conda/en/latest/user-guide/getting-started.html#
-
-Other notes :
-https://docs.conda.io/projects/conda/en/latest/user-guide/install/linux.html
-
-Download info :
-https://www.anaconda.com/download/
-
-```bash
-cd ~/Downloads/
-wget https://repo.anaconda.com/archive/Anaconda3-2023.09-0-Linux-x86_64.sh
-```
-
-```bash
-#  Note versions may have changed...
-bash Anaconda3-2023.09-0-Linux-x86_64.sh -b 
-```
-
-```bash
-cd ~
-ln -s anaconda3 conda
-
-echo "PATH=~/conda/bin:$PATH" >> ~/.profile
-source ~/.profile 
-conda update -y -n base -c defaults conda
-```
-
-```bash
-conda install -y cmake ninja
-```
-
-```bash
-conda init
-source ~/.profile 
-```
-## conda is now active...
-
-## install pip
-```bash
-sudo apt install -y pip
-pip3 install --upgrade pip
-```
-
-### useful pip stuff to know ... 
-```bash
-## show outdated packages...
-#pip list --outdated
-## check dependencies 
-#pip check
-## install specified bersion 
-#pip install <packagename>==<version>
-```
-
-##
-## End conda and pip setup.
-##
-
----
-
-# Stable Diffusion WebUI / Automatic1111
-For [ Radeon 6900 / 7900 Ubuntu 23.04 / ROCm / AMD ]
-
-Project Website: https://github.com/AUTOMATIC1111/stable-diffusion-webui
-
-
-## Stable Diffusion likes TCMalloc... 
- [ mentioned earlier as fresh install may require reboot ] 
-```bash
-sudo apt install -y libtcmalloc-minimal4
-```
-
-## image related packages that may come in handy...
-```bash
-sudo apt install -y imagemagick ffmpeg
-```
-
-## Switch to conda environment... and freshen pip
-```bash
-conda create -y -n sd python=3.10.6
-conda activate sd
-```
-
-# PyTorch repo related parts :
-note : we're getting things from the nightly repos as the stable doesn't support 7900XTX. 
-6900XT works fine with stable - 5.4.2 on Ubuntu 22.04
-
-```bash
-# pre-install 
-pip install cmake colorama filelock lit numpy Pillow Jinja2 \
-	mpmath fsspec MarkupSafe certifi filelock networkx \
-	sympy packaging requests \
-         --index-url https://download.pytorch.org/whl/nightly/rocm5.7
-#         --index-url https://download.pytorch.org/whl/nightly/rocm5.6
-```
-
-```bash
-# install
-pip install torch torchvision torchtext torchaudio torchdata \
-	triton pytorch-triton pytorch-triton-rocm \
-         --index-url https://download.pytorch.org/whl/nightly/rocm5.7
-#         --index-url https://download.pytorch.org/whl/nightly/rocm5.6
-```
-
-## rocm related...
-```bash
-#pip install jaxlib-rocm
-pip install gensim tables -U 
-pip install tensorflow-rocm
-pip install cupy-rocm-4-3 cupy-rocm-5-0
-```
-## other packages
-```bash
-pip install accelerate -U
-```
-
-## other parts
-```bash
-pip install onnx
-pip install super-gradients
-```
-
-## Get the files...
+## Download Stable Diffusion ( Automatic1111 webui ) 
+https://github.com/AUTOMATIC1111/stable-diffusion-webui
+Get the files...
 ```bash
 cd
 git clone https://github.com/AUTOMATIC1111/stable-diffusion-webui.git
 cd stable-diffusion-webui
 ```
 
-## Install requisites...
+# Requisites : 
 ```bash
-pip install -r requirements.txt --extra-index-url https://download.pytorch.org/whl/nightly/rocm5.7
+sudo apt install -y wget git python3 python3-venv libgl1 libglib2.0-0
 ```
 
 ## Edit environment settings...
 ```bash
 tee --append webui-user.sh <<EOF
  ## Torch for ROCm
- export TORCH_COMMAND="pip install torch torchvision --index-url https://download.pytorch.org/whl/nightly/rocm5.7"
+# generic import...
+# export TORCH_COMMAND="pip install torch torchvision --index-url https://download.pytorch.org/whl/nightly/rocm5.7"
+# use specific versions to avoid downloading all the nightlies... ( update dates as needed ) 
+ export TORCH_COMMAND="pip install --pre torch==2.2.0.dev20231128 torchvision==0.17.0.dev20231128+rocm5.7 --index-url https://download.pytorch.org/whl/nightly/rocm5.7"
  ## And if you want to call this from other programs...
  export COMMANDLINE_ARGS="--api"
  ## crashes with 2 cards, so to get it to run on the second card (only), unremark the following 
  # export CUDA_VISIBLE_DEVICES="1"
 EOF
 ```
+
 
 ## If you keep models for SD somewhere, this is where you'd like them up...
 If you don't do this, it will install a default to get you going. 
@@ -335,113 +218,190 @@ into the folder where you have other models ( to avoid issues )
 ./webui.sh 
 ```
 
-## End - Stable Diffusion
+The first time this is run it will install the requirements. 
 
-## ComfyUI# ComfyUI
-Project website : https://github.com/comfyanonymous/ComfyUI
-
-## environment...
-if it's not already active - activate the sd environment... or make a new one if you prefer...
+As of 2023-11-28 running that crashes, with the following error : 
+"No module named 'torchvision.transforms.functional_tensor'" 
+There's a workaround - https://github.com/AUTOMATIC1111/stable-diffusion-webui/issues/13985
 ```bash
-## If you want a new one...
-#conda create -n comfy -y
-#conda activate comfy
-## Reuse one from sd...
-conda activate sd
+sed -i 's/from torchvision.transforms.functional_tensor import rgb_to_grayscale/from torchvision.transforms.functional import rgb_to_grayscale/' venv/lib/python3.11/site-packages/basicsr/data/degradations.py
+```
+Note that if your version of Python is different, you'll want to change that.  After running this, run ./webui.sh ( again ) 
+
+## end Stable Diffusion 
+
+--- 
+
+# ComfyUI install script - variation of https://raw.githubusercontent.com/ltdrdata/ComfyUI-Manager/main/scripts/install-comfyui-venv-linux.sh 
+Includes ComfyUI-Manager
+
+Same install of packages here as for Stable Diffusion ( included here in case you're not installed SD and just want ComfyUI... ) 
+```bash
+sudo apt install -y wget git python3 python3-venv libgl1 libglib2.0-0
 ```
 
-## git files...
 ```bash
-cd
+cd 
 git clone https://github.com/comfyanonymous/ComfyUI
-cd ComfyUI
+cd ComfyUI/custom_nodes
+git clone https://github.com/ltdrdata/ComfyUI-Manager
+cd ..
+python3 -m venv venv
+source venv/bin/activate
+# pre-install torch and torchvision from nightlies - note you may want to update versions...
+python3 -m pip install --pre torch==2.2.0.dev20231128 torchvision==0.17.0.dev20231128+rocm5.7 --index-url https://download.pytorch.org/whl/nightly/rocm5.7
+python3 -m pip install -r requirements.txt  --extra-index-url https://download.pytorch.org/whl/nightly/rocm5.7
+python3 -m pip install -r custom_nodes/ComfyUI-Manager/requirements.txt --extra-index-url https://download.pytorch.org/whl/nightly/rocm5.7
 ```
 
-## packages
+Scripts for running the program...
 ```bash
-pip install --pre torch torchvision torchaudio --index-url https://download.pytorch.org/whl/nightly/rocm5.7 -r requirements.txt
+# run_gpu.sh
+tee --append run_gpu.sh <<EOF
+#!/bin/bash
+source venv/bin/activate
+python3 main.py --preview-method auto
+EOF
+chmod +x run_gpu.sh
+
+#run_cpu.sh
+tee --append run_cpu.sh <<EOF
+#!/bin/bash
+source venv/bin/activate
+python3 main.py --preview-method auto --cpu
+EOF
+chmod +x run_cpu.sh
 ```
 
-## setup config...
+Update the config file to point to Stable Diffusion (presuming it's installed...)
 ```bash
+# config file - connecto stable-diffusion-webui 
 cp extra_model_paths.yaml.example extra_model_paths.yaml
-## set path in file
-vi extra_model_paths.yaml
-"base_path: ~/stable-diffusion/"
+sed -i "s@path/to@`echo ~`@g" extra_model_paths.yaml
+# edit config file to point to your checkpoints etc 
+#vi extra_model_paths.yaml
 ```
 
-# prep models
-This will vary depending on where you've put your models and how you arrange them...
+Wrap up...
 ```bash
-mv models models.1
-ln -s /path/to/models/ models
-## a1111 uses different name for folder with models... link
-mv models/checkpoints models/checkpoints.1
-ln -s models/Stable-diffusion models/checkpoints
+# end vend if needed...
+deactivate
 ```
+## End ComfyUI install
 
-### call program...
-```bash
-# conda activate 
-python main.py
-```
-
-### ComfyUI references...
-Intro info : https://www.youtube.com/watch?v=AbB33AxrcZo
-
-## End ComfyUI
-
-To start the next section fresh, you may want to deactivate the sd conda environment. 
-```bash
-conda deactivate
-```
 
 ---
 
 #  Oobabooga - Text Generation WebUI - ROCm 
 Project Website : https://github.com/oobabooga/text-generation-webui.git
 
-2023-10-30 - New version of Oobabooga's Text Gen UI supports current version of python...
-## setup conda and freshen pip
+
+## Conda
+First we'll need Conda ... Required for pytorch... Conda provides virtual environments for python, so that programs with different dependencies can have different environments.
+Here is more info on managing conda : https://docs.conda.io/projects/conda/en/latest/user-guide/getting-started.html#
+Other notes : https://docs.conda.io/projects/conda/en/latest/user-guide/install/linux.html
+Download info : https://www.anaconda.com/download/
+
 ```bash
-# make env
-#conda create -y -n textgen python=3.10.9
-conda create -y -n textgen python=3.11
+cd ~/Downloads/
+wget https://repo.anaconda.com/archive/Anaconda3-2023.09-0-Linux-x86_64.sh
+```
+
+```bash
+#  Note versions may have changed...
+bash Anaconda3-2023.09-0-Linux-x86_64.sh -b
+```
+
+```bash
+cd ~
+ln -s anaconda3 conda
+
+echo "PATH=~/conda/bin:$PATH" >> ~/.profile
+source ~/.profile
+conda update -y -n base -c defaults conda
+```
+
+```bash
+conda install -y cmake ninja
+```
+
+```bash
+conda init
+source ~/.profile
+```
+### conda is now active...
+
+### install pip
+```bash
+sudo apt install -y pip
+pip3 install --upgrade pip
+```
+
+#### useful pip stuff to know ... 
+```bash
+## show outdated packages...
+#pip list --outdated
+## check dependencies 
+#pip check
+## install specified bersion 
+#pip install <packagename>==<version>
+```
+
+### End conda and pip setup.
+
+## Oobabooga / Textgen webui - https://github.com/oobabooga/text-generation-webui
+
+```bash
+conda create -n textgen python=3.11 -y
 conda activate textgen
 ```
 
-
-Note : As of writing this (2023-09) the most recent 'stable' supported version is ROCm 5.4.2
- to see packages available : https://download.pytorch.org/whl/rocm5.4.2/
- nightly : https://download.pytorch.org/whl/nightly/rocm5.6/
- 7900XTX requires nightly builds... 
+## PyTorch install...
 
 ```bash
-# pre-install
-pip install cmake colorama filelock lit numpy \
+# pre-install 
+pip install --pre cmake colorama filelock lit numpy Pillow Jinja2 \
+	mpmath fsspec MarkupSafe certifi filelock networkx \
+	sympy packaging requests \
          --index-url https://download.pytorch.org/whl/nightly/rocm5.7
+#         --index-url https://download.pytorch.org/whl/nightly/rocm5.6
 ```
 
+
+Here is old method that works - but tries to download things back to the start of these releases which may take a while... so it is remarked... 
 ```bash
-# main pytorch parts...
-pip install torch torchvision torchtext torchaudio torchdata \
-	triton pytorch-triton pytorch-triton-rocm \
-         --index-url https://download.pytorch.org/whl/nightly/rocm5.7
+## install
+#pip install torch torchvision torchtext torchaudio torchdata \
+#	triton pytorch-triton pytorch-triton-rocm \
+#         --index-url https://download.pytorch.org/whl/nightly/rocm5.7
 ```
+Instead of that we go and look through the files at https://download.pytorch.org/whl/nightly/rocm5.7/ (note trailing slash) and in the program directories there, we can see the individual nightly build files.  One has been chosen at the time of writing this, if you want newer, that is where you can find those details to update the file names / versions.  
 
-## torch grammar ( requirement added to Oobabooga 1.7 on 2023-10-08) 
+Here is the new version that tries to only use the latest and the work-around to make that happen...
 ```bash
-pip install torch-grammar 
+# To install without it having to install all the nightlies specify the version... 
+pip install --pre torch==2.2.0.dev20231128   --index-url https://download.pytorch.org/whl/nightly/rocm5.7
 ```
 
-## bitsandbytes rocm
+As of 2023-11-28 torchtext 0.17.0.dev20231128+cpu depends on torchdata==0.7.1 but the nightlies collection only has torchdata 0.7.0 development versions... but oddly enough it can be installed on its own separately (after torch has been installed...), so we'll do this now [ becasue if we do them together things break. ]
+```bash
+pip install torchdata==0.7.1
+```
+
+Now on to the rest of the parts... 
+```bash
+pip install --pre torch==2.2.0.dev20231128 torchvision==0.17.0.dev20231128+rocm5.7 torchtext==0.17.0.dev20231128+cpu torchaudio triton pytorch-triton pytorch-triton-rocm    --index-url https://download.pytorch.org/whl/nightly/rocm5.7
+```
+
+
+### bitsandbytes rocm 
  video guide : https://www.youtube.com/watch?v=2cPsvwONnL8 
 [ - depricated - https://git.ecker.tech/mrq/bitsandbytes-rocm - requires rocm 5.4.2 ]
   https://github.com/0cc4m/bitsandbytes-rocm
 Older system with support for 5.6 : https://github.com/RockeyCoss/bitsandbytes-rocm
 Note : 2023-09-11 New version of BitsAndBytes(0.41 !) made for 5.6 
 Project website : https://github.com/arlo-phoenix/bitsandbytes-rocm-5.6
-Found newer version that supports ROCm 5.6 -
+Found newer version that supports ROCm 5.6 - 
 
 ```bash
 cd
@@ -453,143 +413,50 @@ BUILD_CUDA_EXT=0 pip install -r requirements.txt --extra-index-url https://downl
 # 6900XT
 #make hip ROCM_TARGET=gfx1030 ROCM_HOME=/opt/rocm-5.7.0/
 # both...
-make hip ROCM_TARGET=gfx1100,gfx1030 ROCM_HOME=/opt/rocm-5.7.0/
+make hip ROCM_TARGET=gfx1100,gfx1030 ROCM_HOME=/opt/rocm-5.7.2/
 pip install . --extra-index-url https://download.pytorch.org/whl/nightly/rocm5.7
 ```
 
 
-### end bitsandbytes-rocm
-
-## Packages for text-generation UI
-various changes have made the default requirements.txt and dependencies make a mess
-so we're going to go and get those parts manually / independently. 
-
-### Base pieces to get the UI working 
-```bash
-pip install gradio psutil markdown transformers accelerate datasets peft
-```
-
-### part for the model loaders 
-```bash
-pip install gensim tables blosc2 cython
-pip install spyder python-lsp-black 
-pip install jaxlib-rocm
-# rocm version isn't up to date... make jax match the rocm version...
-pip install jax==0.4.6
-```
-
-```bash
-pip install tensorflow-rocm
-pip install cupy-rocm-4-3 cupy-rocm-5-0
-pip install loader
-pip install logger
-pip install -U scikit-learn
-```
-
-2023-09-11 : 
-Usually we get Triton from the PyTorch nightly build files (included above) 
-but I had some errors [akin to these](https://github.com/openai/triton/issues/2002) 
-and found getting it fresh from the nightly build resovled them.
+### Triton 
+2023-09-11 : Usually we get Triton from the PyTorch nightly build files (included above)  but I had some errors [akin to these](https://github.com/openai/triton/issues/2002)  and found getting it fresh from the nightly build resovled them.
 ```bash
 pip install -U --index-url https://aiinfra.pkgs.visualstudio.com/PublicPackages/_packaging/Triton-Nightly/pypi/simple/ triton-nightly
 ```
 
-##
-## Oobabooga install / text-generation-webui
-##
-###### Get files...
+### Flash-Attention 2 :
+Install may take a few mins ( takes author close to 5 as tiem of writing )...
 ```bash
 cd
-git clone https://github.com/oobabooga/text-generation-webui.git
+git clone https://github.com/ROCmSoftwarePlatform/flash-attention.git
+cd flash-attention
+pip install .
+```
+
+
+## Oobabooga / Text-generation-webui - Install webui...
+```bash
+cd
+git clone https://github.com/oobabooga/text-generation-webui
 cd text-generation-webui
 ```
 
-### Get requirements 
-
-### exllama : https://github.com/turboderp/exllama
-Fastest module loadter... 
- How-to : https://www.youtube.com/watch?v=gicpKGo1hW0
- more info : https://www.reddit.com/r/LocalLLaMA/comments/14btvqs/7900xtx_linux_exllama_gptq/
+### Oobabooga's 'requirements'
+The default bitsandbytes for AMD is out of date and doesn't support GPU.  So we installed one earlier ( may be unsupported... ) we'll run sed first to adjust that line of the requirements...
 ```bash
-cd ~/text-generation-webui
-mkdir repositories
-cd ~/text-generation-webui/repositories
-git clone https://github.com/turboderp/exllama
+sed -i "s@bitsandbytes==@bitsandbytes>=@g" requirements_amd.txt 
+pip install -r requirements_amd.txt 
 ```
 
+Exllama and Exllamav2 loaders ...
 ```bash
-cd exllama
-pip install -r requirements.txt --extra-index-url https://download.pytorch.org/whl/nightly/rocm5.7
-cd ~/text-generation-webui
+# install exllama
+git clone https://github.com/turboderp/exllama repositories/exllama
+# install exllamav2
+git clone https://github.com/turboderp/exllamav2 repositories/exllamav2
 ```
 
-```bash
-### exllama does have some features, like it's own webui ...
-### we'll not use them here, but here's a few clues.
-# python test_benchmark_inference.py -d <path_to_model_files> -p -ppl
-#pip install -r requirements-web.txt
-# python webui/app.py -d <path_to_model_files>
-#pip install flask waitress
-```
-### end - exllama 
-
-### exllamav2 
-New version of the exllama loader - https://github.com/turboderp/exllamav2
-2023-09-30 - Does not appear to be working correctly with Oobabooga - but it is new, and under activate development.  
-
-```bash
-cd ~/text-generation-webui
-mkdir repositories
-cd ~/text-generation-webui/repositories
-git clone https://github.com/turboderp/exllamav2.git
-```
-
-```bash
-cd exllamav2
-pip install -r requirements.txt --extra-index-url https://download.pytorch.org/whl/nightly/rocm5.7
-pip install fastparquet
-python setup.py install --user
-pip install -U . 
-cd ~/text-generation-webui
-```
-
-If you want to test the exllamav2 - it has a test interface...
-```bash
-# python test_inference.py -h 
-```
-### end - exllamav2 
-
-### flash-attention
-ExLamav2 has support for flash-attention : https://github.com/Dao-AILab/flash-attention
-There appears to be a ROCm version of the flash-attention project : https://github.com/ROCmSoftwarePlatform/flash-attention
-Alas as of 2023-09-30 I haven't got it working, and it looks like it may be missing parts.  I'm leaving notes here for future development. 
-```bash
-#cd
-#git clone https://github.com/ROCmSoftwarePlatform/flash-attention.git
-# python setup.py 
-```
-### end flash-attention
-
-
-### image interaction related packages...
-```bash
-pip install bs4
-```
-
-### Models 
-If you're new to this - new models can be downloaded from the shell via a python script, or from a form in the interface.
-There are lots of them - http://huggingface.co 
-Generally the GPTQ models by TheBloke are likely to load.  The 30B/33B models will load on 24GB of VRAM, but may error, or run out of memory depending on usage and parameters.  
-
-If you have old models,  link pre-stored models into the models
-```bash
-# cd ~/text-generation-webui
-# mv models models.1
-# ln -s /path/to/models models
-```
-
-### quick script to call program... 
-Made some changes here as Oobabooga has changed some parameters. 
+Let's create a script (run.sh) to run the program...
 ```bash
 tee --append run.sh <<EOF
 #!/bin/bash
@@ -603,10 +470,22 @@ EOF
 chmod u+x run.sh
 ```
 
-Note we haven't called Oobabooga's requirements.txt - it is out of date, and will break things. 
 
-## running the server...
-note that the script must be run via `source` rather than normal execution.
+Models 
+If you're new to this - new models can be downloaded from the shell via a python script, or from a form in the interface.
+There are lots of them - http://huggingface.co 
+Generally the GPTQ models by TheBloke are likely to load.  The 30B/33B models will load on 24GB of VRAM, but may error, or run out of memory depending on usage and parameters.  
+
+To get new models note the ~/text-generation-webui directory has a program " download-model.py " that is made for downloading models from HuggingFace's collection.  
+
+If you have old models,  link pre-stored models into the models
+```bash
+# cd ~/text-generation-webui
+# mv models models.1
+# ln -s /path/to/models models
+```
+
+Note that to run the script : 
 ```bash
 source run.sh
 ```
@@ -618,7 +497,10 @@ loading on both cards causes LLMs to spit out gibberish.
 
 ## End - Oobabooga - Text-Generation-WebUI
 
+---
+
 # nvtop from source
+( As one from packages crashes on 2 GPUs, while this never version from sources works fine. ) 
 project website : https://github.com/Syllo/nvtop
 optional - tool for displaying gpu / memory usage info
 The package for this crashes with 2 gpu's, here it is from source.
@@ -633,46 +515,4 @@ sudo make install
 ```
 # end nvtop
 
-
-# rocm Tensorflow from sources
-2023-10-06 notes for Tensorflow from sources... this is added here as it's not essential, is more advanced configuration, and may take a while.  
- https://github.com/ROCmSoftwarePlatform/tensorflow-upstream
-There is an issue with the pip tensorflow-rocm where it's out of date and does not support CPU features that may be worth having.  Here for example is a warning from the textgen ui - 
-
-> "I tensorflow/core/platform/cpu_feature_guard.cc:182] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
-> To enable the following instructions: AVX2 FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags"
-
-So we would like to run a new version of tensorflow that has all the features.  As it's not offered from the pip packages, we'll compile from source.
-
-## requires bazel...
-https://bazel.build/install/ubuntu
-```bash
-sudo apt install apt-transport-https curl gnupg -y
-curl -fsSL https://bazel.build/bazel-release.pub.gpg | gpg --dearmor >bazel-archive-keyring.gpg
-sudo mv bazel-archive-keyring.gpg /usr/share/keyrings
-echo "deb [arch=amd64 signed-by=/usr/share/keyrings/bazel-archive-keyring.gpg] https://storage.googleapis.com/bazel-apt stable jdk1.8" | sudo tee /etc/apt/sources.list.d/bazel.list
-sudo apt update -y
-sudo apt install -y bazel bazel-6.1.0
-```
-
-## ROCm's tensorflow
-https://github.com/ROCmSoftwarePlatform/tensorflow-upstream
-```bash
-cd
-git clone https://github.com/ROCmSoftwarePlatform/tensorflow-upstream.git
-cd tensorflow-upstream
-```
-
-There's a ./configure script that asks a few questions, run that. 
-```bash
-./configure
-./build_rocm_python3
-```
-
-That will take awhile ... but afterwards installed tensorflow in the following :
-> tf-estimator-nightly          2.14.0.dev2023080308
-
-> tf-nightly-rocm               2.15.0
-
-# end tensorflow from sources
 
