@@ -349,7 +349,8 @@ pip3 install --upgrade pip
 
 ### End conda and pip setup.
 
-## Oobabooga / Textgen webui - https://github.com/oobabooga/text-generation-webui
+## Oobabooga / Textgen webui 
+- https://github.com/oobabooga/text-generation-webui
 
 ```bash
 conda create -n textgen python=3.11 -y
