@@ -432,7 +432,7 @@ git clone https://github.com/ROCmSoftwarePlatform/flash-attention.git
 cd flash-attention
 pip install .
 ```
-
+2023-11-30 - Note it appears PyTorch for ROCm doesn't include FA support at this time... as there's a warning : "UserWarning: 1Torch was not compiled with memory efficient attention. " Further this issue is noted here : https://github.com/pytorch/pytorch/issues/112997 - So while the above runs, it isn't operating at the present time. 
 
 ## Oobabooga / Text-generation-webui - Install webui...
 ```bash
