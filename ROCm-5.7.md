@@ -497,6 +497,8 @@ loading on both cards causes LLMs to spit out gibberish.
 
 ## End - Oobabooga - Text-Generation-WebUI
 
+2023-11-30 - It appears the bug with multiple GPUs is not resolved yet... and as such loading models across GPUs outputs gibberish.  https://github.com/ROCmSoftwarePlatform/rocBLAS/issues/1346#issuecomment-1741851573
+
 ---
 
 # nvtop from source
