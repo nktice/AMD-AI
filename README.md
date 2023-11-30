@@ -356,26 +356,21 @@ pip install torch torchvision torchtext torchaudio torchdata  \
 
 
 ### bitsandbytes rocm 
- video guide : https://www.youtube.com/watch?v=2cPsvwONnL8 
-[ - depricated - https://git.ecker.tech/mrq/bitsandbytes-rocm - requires rocm 5.4.2 ]
-  https://github.com/0cc4m/bitsandbytes-rocm
-Older system with support for 5.6 : https://github.com/RockeyCoss/bitsandbytes-rocm
-Note : 2023-09-11 New version of BitsAndBytes(0.41 !) made for 5.6 
+2023-09-11 New version of BitsAndBytes(0.41 !) made for 5.6 
 Project website : https://github.com/arlo-phoenix/bitsandbytes-rocm-5.6
-Found newer version that supports ROCm 5.6 - 
 
 ```bash
 cd
 git clone https://github.com/arlo-phoenix/bitsandbytes-rocm-5.6.git
 cd bitsandbytes-rocm-5.6/
-BUILD_CUDA_EXT=0 pip install -r requirements.txt --extra-index-url https://download.pytorch.org/whl/nightly/rocm5.7
+BUILD_CUDA_EXT=0 pip install -r requirements.txt --extra-index-url https://download.pytorch.org/whl/rocm5.6
 # 7900XTX
 #make hip ROCM_TARGET=gfx1100 ROCM_HOME=/opt/rocm-5.7.0/
 # 6900XT
 #make hip ROCM_TARGET=gfx1030 ROCM_HOME=/opt/rocm-5.7.0/
 # both...
 make hip ROCM_TARGET=gfx1100,gfx1030 ROCM_HOME=/opt/rocm-5.6.1/
-pip install . --extra-index-url https://download.pytorch.org/whl/nightly/rocm5.7
+pip install . --extra-index-url https://download.pytorch.org/whl/rocm5.6
 ```
 
 
