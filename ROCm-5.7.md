@@ -232,7 +232,8 @@ Note that if your version of Python is different, you'll want to change that.  A
 
 --- 
 
-# ComfyUI install script - variation of https://raw.githubusercontent.com/ltdrdata/ComfyUI-Manager/main/scripts/install-comfyui-venv-linux.sh 
+# ComfyUI install script 
+- variation of https://raw.githubusercontent.com/ltdrdata/ComfyUI-Manager/main/scripts/install-comfyui-venv-linux.sh 
 Includes ComfyUI-Manager
 
 Same install of packages here as for Stable Diffusion ( included here in case you're not installed SD and just want ComfyUI... ) 
