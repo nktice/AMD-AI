@@ -253,6 +253,9 @@ source venv/bin/activate
 python3 -m pip install --pre torch==2.2.0.dev20231128 torchvision==0.17.0.dev20231128+rocm5.7 --index-url https://download.pytorch.org/whl/nightly/rocm5.7
 python3 -m pip install -r requirements.txt  --extra-index-url https://download.pytorch.org/whl/nightly/rocm5.7
 python3 -m pip install -r custom_nodes/ComfyUI-Manager/requirements.txt --extra-index-url https://download.pytorch.org/whl/nightly/rocm5.7
+
+# end vend if needed...
+deactivate
 ```
 
 Scripts for running the program...
@@ -283,11 +286,6 @@ sed -i "s@path/to@`echo ~`@g" extra_model_paths.yaml
 #vi extra_model_paths.yaml
 ```
 
-Wrap up...
-```bash
-# end vend if needed...
-deactivate
-```
 ## End ComfyUI install
 
 
