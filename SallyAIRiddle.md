@@ -120,6 +120,10 @@ TheBloke_OpenAssistant-Llama2-13B-Orca-8K-3319-GPTQ  - [mixed]
 3rd answer - `" Sally has one sister. "`
 [ trying at 8k/8 did not improve results - they became worse... ]
 
+TheBloke_OpenHermes-2.5-Mistral-7B-GPTQ - [pass] 
+`"She has 1 sister."`
+
+
 TheBloke_orca_mini_v2_7B-GPTQ - [mixed]
 1:`"Sally has half as many siblings as her brothers, since each of her brothers has two sisters and
  she has none. Therefore, she has one sister."`
@@ -354,6 +358,9 @@ TheBloke_NeuralHermes-2.5-Mistral-7B-GPTQ - [pass]
 
 TheBloke_OpenAssistant-Llama2-13B-Orca-8K-3319-GPTQ - [ 1/4 ? ]
 It took 4 tries to get - `"Sally has 1 sister."`
+
+TheBloke_OpenHermes-2.5-Mistral-7B-GPTQ - [pass]
+`"Sally has 1 sister."`
 
 TheBloke_orca_mini_v2_13b-GPTQ -  [ pass ]
 `"Sally has 1 sister."`
