@@ -108,6 +108,9 @@ TheBloke_MAmmoTH-Coder-34B-GPTQ - [fail]
 
 TheBloke/Mistral-11B-CC-Air-RP-GPTQ - [fail]
 
+TheBloke_mistral_7b_norobots-GPTQ - [pass]
+`" Sally has 1 sister. "`
+
 TheBloke_MythoMax-L2-33B-GPTQ - [fail]
 `"None. She only one sister named Bethany."`
 
@@ -349,6 +352,9 @@ TheBloke_MAmmoTH-Coder-34B-GPTQ - [ pass ]
 
 TheBloke/Mistral-11B-CC-Air-RP-GPTQ - [fail]
 `"There are 4 girls in this family including Sally, so she has 3 sisters."`
+
+TheBloke_mistral_7b_norobots-GPTQ - [fail]
+`"None. There are no sisters for Sally because she is not a sister to any of her brothers or sisters. She is only a daughter."`
 
 TheBloke_MythoMax-L2-33B-GPTQ - [fail]
 With minimal temp, gave a few different random odd answers.
