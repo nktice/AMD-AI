@@ -104,13 +104,17 @@ TheBloke_Luna-AI-Llama2-Uncensored-GPTQ - [fail]
 [ numbers differ / wrong ]
 
 TheBloke_MAmmoTH-Coder-34B-GPTQ - [fail]
-`"Sally has 3 * 2 = <<3*2=6>>6 sisters.
-6"`
+`"Sally has 3 * 2 = <<3*2=6>>6 sisters.6"`
 
 TheBloke/Mistral-11B-CC-Air-RP-GPTQ - [fail]
 
 TheBloke_MythoMax-L2-33B-GPTQ - [fail]
 `"None. She only one sister named Bethany."`
+
+TheBloke_NeuralHermes-2.5-Mistral-7B-GPTQ - [partial] 
+this is pretty close... 
+`" She has 2 sisters.
+[...] reasoning: The question states that Sally is a girl and she has 3 brothers, so we know there are at least two girls in the family - Sally and one other sister. Since each of her three brothers also have 2 sisters, it means they all share these same two sisters. Therefore, Sally must be one of those two sisters."`
 
 TheBloke_OpenAssistant-Llama2-13B-Orca-8K-3319-GPTQ  - [mixed]
 3rd answer - `" Sally has one sister. "`
@@ -344,6 +348,9 @@ TheBloke/Mistral-11B-CC-Air-RP-GPTQ - [fail]
 
 TheBloke_MythoMax-L2-33B-GPTQ - [fail]
 With minimal temp, gave a few different random odd answers.
+
+TheBloke_NeuralHermes-2.5-Mistral-7B-GPTQ - [pass]
+`" She has 1 sister."`
 
 TheBloke_OpenAssistant-Llama2-13B-Orca-8K-3319-GPTQ - [ 1/4 ? ]
 It took 4 tries to get - `"Sally has 1 sister."`
