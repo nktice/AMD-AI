@@ -133,6 +133,8 @@ TheBloke_orca_mini_v3_7B-GPTQ - [fail]
 
 TheBloke_orca_mini_v3_13B-GPTQ - [crash] [fail]
 
+TheBloke_Orca-2-13B-GPTQ - [fail] 
+
 TheBloke_Phind-CodeLlama-34B-v2-GPTQ - [fail]
 `"Sally has three brothers, and each of her brothers has two sisters. This means that there are six sisters in total who are not Sally. Therefore, Sally herself must be one of these seven sisters. So, Sally has a total of eight sisters including herself."`  
 
@@ -357,6 +359,9 @@ TheBloke_orca_mini_v3_7B-GPTQ - [ pass ]
 
 TheBloke_orca_mini_v3_13B-GPTQ - [ fail ]
 `"Sally has 2 sisters, as she is one of the 2 girls among the 5 children."`
+
+TheBloke_Orca-2-13B-GPTQ - [ pass ] 
+`"Sally has only one sister because she is the other girl in the family."`
 
 TheBloke_Phind-CodeLlama-34B-v2-GPTQ - [pass]
 `"Sally has 1 sister."`
