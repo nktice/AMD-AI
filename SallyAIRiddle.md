@@ -114,6 +114,9 @@ TheBloke_mistral_7b_norobots-GPTQ - [pass]
 TheBloke_MythoMax-L2-33B-GPTQ - [fail]
 `"None. She only one sister named Bethany."`
 
+TheBloke_Nethena-20B-Glued-GPTQ - [fail]
+says there's 4 sisters. 
+
 TheBloke_NeuralHermes-2.5-Mistral-7B-GPTQ - [partial] 
 this is pretty close... 
 `" She has 2 sisters.
@@ -357,6 +360,9 @@ TheBloke_mistral_7b_norobots-GPTQ - [fail]
 
 TheBloke_MythoMax-L2-33B-GPTQ - [fail]
 With minimal temp, gave a few different random odd answers.
+
+TheBloke_Nethena-20B-Glued-GPTQ - [pass]
+`"1"`
 
 TheBloke_NeuralHermes-2.5-Mistral-7B-GPTQ - [pass]
 `" She has 1 sister."`
