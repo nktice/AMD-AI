@@ -130,6 +130,8 @@ TheBloke_OpenAssistant-Llama2-13B-Orca-8K-3319-GPTQ  - [mixed]
 TheBloke_OpenHermes-2.5-Mistral-7B-GPTQ - [pass] 
 `"She has 1 sister."`
 
+TheBloke_OpenHermes-2.5-neural-chat-v3-3-Slerp-GPTQ - [fail]
+thinks there's 6 sisters... answers 5. 
 
 TheBloke_orca_mini_v2_7B-GPTQ - [mixed]
 1:`"Sally has half as many siblings as her brothers, since each of her brothers has two sisters and
@@ -164,15 +166,8 @@ TheBloke_robin-33B-v2-GPTQ - [fail]
 [ gives wrong answer, and then goes on and on in delusion... ] 
 
 TheBloke_Samantha-13B-SuperHOT-8K-GPTQ - [fail]
-[4k/4 does produce output but it's incorrect ] 
-[8k/8 also fails ]
 
 TheBloke_Samantha-33B-SuperHOT-8K-GPTQ - [fail]
-[4k/4 does produce output but it's incorrect ] 
-[8k/8 crash ]
-[8k/8 out of memory. ]
-[8k/8 gpu_split 12,16 - loads but errors... ]
-[8k/8 gpu_split 10,16 - no errors, but produces garbage. ]
 
 TheBloke_Stable-Platypus2-13B-GPTQ - [fail]
 
@@ -374,6 +369,9 @@ It took 4 tries to get - `"Sally has 1 sister."`
 
 TheBloke_OpenHermes-2.5-Mistral-7B-GPTQ - [pass]
 `"Sally has 1 sister."`
+
+TheBloke_OpenHermes-2.5-neural-chat-v3-3-Slerp-GPTQ - [pass]
+`"Sally has 1 sister."` 
 
 TheBloke_orca_mini_v2_13b-GPTQ -  [ pass ]
 `"Sally has 1 sister."`
