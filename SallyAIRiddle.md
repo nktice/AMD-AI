@@ -132,6 +132,9 @@ TheBloke_NeuralOrca-7B-v1-GPTQ - [partial]
 `"[...] 
 Explanation: The question states that Sally has 3 brothers, and each of her brothers has 2 sisters. Since Sally is one of the two sisters for each brother, she must also be a sister to herself. Therefore, Sally has only 1 more sister besides herself, making it a total of 2 sisters."`
 
+TheBloke_neural-chat-7B-v3-3-GPTQ - [ fail ] 
+hasn't figured out that the sisters are shared - assuming there's 6. 
+
 TheBloke_OpenAssistant-Llama2-13B-Orca-8K-3319-GPTQ  - [mixed]
 3rd answer - `" Sally has one sister. "`
 [ trying at 8k/8 did not improve results - they became worse... ]
@@ -381,6 +384,9 @@ TheBloke_NeuralHermes-2.5-Mistral-7B-GPTQ - [pass]
 
 TheBloke_NeuralOrca-7B-v1-GPTQ - [pass] 
 `"Sally has 1 sister."`
+
+TheBloke_neural-chat-7B-v3-3-GPTQ - [pass]
+`"The answer is: 1"`
 
 TheBloke_OpenAssistant-Llama2-13B-Orca-8K-3319-GPTQ - [ 1/4 ? ]
 It took 4 tries to get - `"Sally has 1 sister."`
