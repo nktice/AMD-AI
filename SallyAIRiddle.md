@@ -7,6 +7,9 @@ I saw this question on a post on reddit and thought it was worth trying...
 These settings appear important to get things to work so they are default:
 exllama [loader] : max_seq_len 4096, compress_pos_emb 4
 
+TheBloke_Amber-GPTQ - [2x+fail]
+gives bogus URL... extra double fail for not even trying and lying about it. 
+
 TheBloke_13B-Legerdemain-L2-GPTQ - [fail]
 [deluded hallucinations.]
 
@@ -251,6 +254,9 @@ As some systems had trouble with the previous question, I simplified it...
 
 These settings appear important to get things to work so they are default:
 exllama [loader] : max_seq_len 4096, compress_pos_emb 4
+
+TheBloke_Amber-GPTQ - [pass]
+`"She has 1 Sister"`
 
 TheBloke_13B-Legerdemain-L2-GPTQ - [ fail ]
 `"Two. She has an older sister named Laura and a younger sister named Jenny."`
