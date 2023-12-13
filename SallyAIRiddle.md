@@ -145,6 +145,11 @@ TheBloke_OpenHermes-2.5-Mistral-7B-GPTQ - [pass]
 TheBloke_OpenHermes-2.5-neural-chat-v3-3-Slerp-GPTQ - [fail]
 thinks there's 6 sisters... answers 5. 
 
+TheBloke_OpenZephyrChat-GPTQ - [pass]
+When asked to explain answer, does give the correct answer, but does prattle on afterwards. 
+`"Sally has 1 sister."`
+
+
 TheBloke_orca_mini_v2_7B-GPTQ - [mixed]
 1:`"Sally has half as many siblings as her brothers, since each of her brothers has two sisters and
  she has none. Therefore, she has one sister."`
@@ -396,6 +401,10 @@ TheBloke_OpenHermes-2.5-Mistral-7B-GPTQ - [pass]
 
 TheBloke_OpenHermes-2.5-neural-chat-v3-3-Slerp-GPTQ - [pass]
 `"Sally has 1 sister."` 
+
+TheBloke_OpenZephyrChat-GPTQ - [pass]
+gives correct answer, but does prattle on...
+`"Sally has only one sister."`
 
 TheBloke_orca_mini_v2_13b-GPTQ -  [ pass ]
 `"Sally has 1 sister."`
