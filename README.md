@@ -14,6 +14,7 @@
 
 2023-11-30 - Rewrite of this document to include updates... ROCm 5.6.1,  Stable Diffusion and ComfyUI sections rewritten for venv,  Textgen webui section updated to use more of the project requirements as designed.  Overall greatly simplified.  
 
+2023-12-13 - Added supplement for those who want to use Mixtral models ( uses llama.cpp ) - https://github.com/nktice/AMD-AI/blob/main/Mixtral.md
 ---
 
 
