@@ -1,4 +1,4 @@
-# Mixtral on oobabooga [ ROCM ]
+# Mixtral on Oobabooga [ ROCm ]
 Mixtral is a model from Mistral AI - more info here : https://www.youtube.com/watch?v=WjiX3lCnwUI
 2023-12-13 - As of writing there is not standard support for loading it built
  into Oobabooga, but there is a workaround...
