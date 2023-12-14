@@ -119,6 +119,11 @@ TheBloke_Mistral-7B-Instruct-v0.2-GPTQ - [close...]
 TheBloke_mistral_7b_norobots-GPTQ - [pass]
 `" Sally has 1 sister. "`
 
+TheBloke_Mixtral-8x7B-Instruct-v0.1-GGUF - [fail]
+starts out great, and then falls on its face... 
+`" Sally has one sister, herself. The other two girls are her brothers’ sisters but not hers because they aren't related by blood to each other or their parents. [...]"` 
+
+
 TheBloke_Mixtral-SlimOrca-8x7B-GGUF - [fail]
 `"Sally has no sisters because she is a girl, not a boy. She cannot be one of her own brothers' sisters."`
 
@@ -386,6 +391,9 @@ TheBloke_Mistral-7B-Instruct-v0.2-GPTQ - [pass]
 
 TheBloke_mistral_7b_norobots-GPTQ - [fail]
 `"None. There are no sisters for Sally because she is not a sister to any of her brothers or sisters. She is only a daughter."`
+
+TheBloke_Mixtral-8x7B-Instruct-v0.1-GGUF - [pass]
+`"1 sister - her other female sibling."`
 
 TheBloke_Mixtral-SlimOrca-8x7B-GGUF - [pass]
 `"1 sister"` 
