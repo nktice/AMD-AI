@@ -208,6 +208,9 @@ TheBloke_SuperPlatty-30B-GPTQ - [fail]
 
 TheBloke_Synthia-34B-v1.2-GPTQ - [fail]
 `"Sally has 6 sisters."`
+
+TheBloke_Synthia-MoE-v3-Mixtral-8x7B-GGUF - [fail]
+`"4 sisters (excluding herself)"`
  
 TheBloke/speechless-codellama-34b-v2.0-GPTQ - [fail]
 `"Sally has 6 sisters."`
@@ -478,6 +481,9 @@ TheBloke_SuperPlatty-30B-GPTQ - [fail]
 
 TheBloke_Synthia-34B-v1.2-GPTQ - [pass]
 `"Sally has 1 sister."`
+
+TheBloke_Synthia-MoE-v3-Mixtral-8x7B-GGUF - [pass]
+`"1 sister because she has only one actual biological sister which is her own self since they are all from the same two parents."`
 
 TheBloke/speechless-codellama-34b-v2.0-GPTQ - [pass]
 `"Sally has 1 sister."`
