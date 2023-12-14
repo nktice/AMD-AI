@@ -1,4 +1,6 @@
 # AI test riddle Sally - and 'Simple Sally'
+2023-12-13- the Mixtral models (GGUF) have been loaded with llama.cpp configured following the guide here : https://github.com/nktice/AMD-AI/blob/main/Mixtral.md
+
 
 # Question 1:
 I saw this question on a post on reddit and thought it was worth trying...
@@ -116,6 +118,10 @@ TheBloke_Mistral-7B-Instruct-v0.2-GPTQ - [close...]
 
 TheBloke_mistral_7b_norobots-GPTQ - [pass]
 `" Sally has 1 sister. "`
+
+TheBloke_Mixtral-SlimOrca-8x7B-GGUF - [fail]
+`"Sally has no sisters because she is a girl, not a boy. She cannot be one of her own brothers' sisters."`
+
 
 TheBloke_MythoMax-L2-33B-GPTQ - [fail]
 `"None. She only one sister named Bethany."`
@@ -377,6 +383,9 @@ TheBloke_Mistral-7B-Instruct-v0.2-GPTQ - [pass]
 
 TheBloke_mistral_7b_norobots-GPTQ - [fail]
 `"None. There are no sisters for Sally because she is not a sister to any of her brothers or sisters. She is only a daughter."`
+
+TheBloke_Mixtral-SlimOrca-8x7B-GGUF - [pass]
+`"1 sister"` 
 
 TheBloke_MythoMax-L2-33B-GPTQ - [fail]
 With minimal temp, gave a few different random odd answers.
