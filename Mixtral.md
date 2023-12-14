@@ -24,9 +24,9 @@ pip uninstall llama_cpp_python
 pip uninstall llama_cpp_python_cuda
 ```
 
-Get llama.cpp from
+Get llama.cpp from : 
 https://github.com/ggerganov/llama.cpp
-
+Includes instructions for how to install it - so if you're looking for how to compile for other architectures, that's where to look.  
 
 ```bash
 # Go to repositories folder
@@ -40,6 +40,7 @@ mv llama.cpp llama.cpp.1
 git clone --branch=mixtral https://github.com/ggerganov/llama.cpp.git
 # cd make llama.cpp for ROCm
 cd llama.cpp
+# note that it's this line that you'd change for other architectures... 
 make LLAMA_HIPBLAS=1
 # install
 cd ../..
