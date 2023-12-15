@@ -129,12 +129,15 @@ starts out great, and then falls on its face...
 TheBloke_Mixtral-8x7B-v0.1-GGUF - [pass]
 `"1 sister, because she is one of the two girls in her family and each boy only has one other sister besides herself! [...] "`
 
+TheBloke_Mixtral-8x7B-MoE-RP-Story-GGUF - [fail]
+ `"Factual answer: 0
+Correct answer: 3"` 
+
 TheBloke_Mixtral-SlimOrca-8x7B-GGUF - [fail]
 `"Sally has no sisters because she is a girl, not a boy. She cannot be one of her own brothers' sisters."`
 
 TheBloke_mixtralnt-4x7b-test-GGUF - [fail]
 `" 3 brothers x 2 sisters = 6 sisters "`
-
 
 TheBloke_MythoMax-L2-33B-GPTQ - [fail]
 `"None. She only one sister named Bethany."`
@@ -405,6 +408,9 @@ TheBloke_mistral_7b_norobots-GPTQ - [fail]
 
 TheBloke_Mixtral-8x7B-Instruct-v0.1-GGUF - [pass]
 `"1 sister - her other female sibling."`
+
+TheBloke_Mixtral-8x7B-MoE-RP-Story-GGU - [pass]
+`"Sally has 1 sister."`
 
 TheBloke_Mixtral-8x7B-v0.1-GGUF - [pass]
 `"1 sister – her other female sibling!"`
