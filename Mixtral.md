@@ -58,8 +58,10 @@ Using this you can now use the mixtral _GGUF_ models with Oobabooga ( use llama.
 cpp loader ) ...
 I've tested with these ( with Sally Riddle answers... https://github.com/nktice/AMD-AI/blob/main/SallyAIRiddle.md ) : 
 - https://huggingface.co/TheBloke/Mixtral-8x7B-v0.1-GGUF [ pass / pass ]
+- https://huggingface.co/TheBloke/dolphin-2.5-mixtral-8x7b-GGUF [ pass / pass ]
 - https://huggingface.co/TheBloke/Mixtral-8x7B-Instruct-v0.1-GGUF [ fail / pass ]  
 - https://huggingface.co/TheBloke/mixtralnt-4x7b-test-GGUF  [ fail / pass ]
 - https://huggingface.co/TheBloke/Mixtral-SlimOrca-8x7B-GGUF [ fail / pass ]
-- https://huggingface.co/TheBloke/Synthia-MoE-v3-Mixtral-8x7B-GGUF [ fail / pass ] 
+- https://huggingface.co/TheBloke/Synthia-MoE-v3-Mixtral-8x7B-GGUF [ fail / pass ]
+- https://huggingface.co/TheBloke/Mixtral-8x7B-MoE-RP-Story-GGUF [ fail / pass ]
 
