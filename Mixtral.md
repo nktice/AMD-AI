@@ -37,7 +37,7 @@ cd llama-cpp-python/vendor
 # move old llama.cpp,
 mv llama.cpp llama.cpp.1
 # then clone Mixtral branch into vendor
-git clone --branch=mixtral https://github.com/ggerganov/llama.cpp.git
+git clone https://github.com/ggerganov/llama.cpp.git
 # cd make llama.cpp for ROCm
 cd llama.cpp
 # note that it's this line that you'd change for other architectures... 
