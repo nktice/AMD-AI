@@ -61,6 +61,11 @@ TheBloke_CodeUp-Llama-2-13B-Chat-HF-GPTQ - [fail]
 TheBloke/dolphin-2.1-mistral-7B-GPTQ - [fail]
 `"[...] She has 2 sisters.[...]"`
 
+TheBloke_dolphin-2.5-mixtral-8x7b-GGUF - [pass]
+`"Factual answer: 1
+Explanation: The factual answer is that Sally only has one sister, herself. She doesn't count as a "sister" to her own self in this context. So the number of siblings she has (3 brothers and 1 sister) equals the total number of sisters each brother has combined (2)."`
+
+
 TheBloke_GodziLLa-30B-GPTQ - [fail]
 [ various answers, does sometiems say it doesn't understand or needs more info. ] 
 
@@ -339,6 +344,9 @@ TheBloke_CodeUp-Llama-2-13B-Chat-HF-GPTQ - [ fail. ]
 
 TheBloke/dolphin-2.1-mistral-7B-GPTQ - [pass]
 `"[...] we can only conclude that she has at least one sister"`
+
+TheBloke_dolphin-2.5-mixtral-8x7b-GGUF - [pass]
+`"Sally has 1 sister."`
 
 TheBloke_GodziLLa-30B-GPTQ - [ fail ]
 [ gets close to answering, but the breaks it with confusion about gender or other issues. ] 
