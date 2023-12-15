@@ -116,6 +116,9 @@ TheBloke/Mistral-11B-CC-Air-RP-GPTQ - [fail]
 TheBloke_Mistral-7B-Instruct-v0.2-GPTQ - [close...]
 `"[...] So when we say "Sally's brothers each have 2 sisters," we mean that in total there are 2 sisters in the family [...]"`
 
+TheBloke/Mistral-7B-Instruct-v0.2-DARE-GPTQ - [fail] 
+ answer varies, out of several attempts it answered 3, and 6... 
+
 TheBloke_mistral_7b_norobots-GPTQ - [pass]
 `" Sally has 1 sister. "`
 
@@ -392,6 +395,9 @@ TheBloke/Mistral-11B-CC-Air-RP-GPTQ - [fail]
 `"There are 4 girls in this family including Sally, so she has 3 sisters."`
 
 TheBloke_Mistral-7B-Instruct-v0.2-GPTQ - [pass]
+`"Sally has 1 sister."`
+
+TheBloke_Mistral-7B-Instruct-v0.2-DARE-GPTQ - [pass]
 `"Sally has 1 sister."`
 
 TheBloke_mistral_7b_norobots-GPTQ - [fail]
