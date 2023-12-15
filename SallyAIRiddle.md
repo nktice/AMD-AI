@@ -166,6 +166,9 @@ TheBloke_OpenAssistant-Llama2-13B-Orca-8K-3319-GPTQ  - [mixed]
 3rd answer - `" Sally has one sister. "`
 [ trying at 8k/8 did not improve results - they became worse... ]
 
+TheBloke_openbuddy-mixtral-8x7b-v15.1-GGUF - [pass]
+`"Factual answer: None, because there is no information given about how many siblings each of her brothers' two sisters are related to or not. The problem as stated cannot be solved with the available data. However, if we assume that all three brothers and their respective 2 sisters form a single family unit (which may or may not be true), then Sally would have at least one sister who is also part of her immediate family - but this assumption has no basis in factual information provided by the question itself."`
+
 TheBloke_OpenHermes-2.5-Mistral-7B-GPTQ - [pass] 
 `"She has 1 sister."`
 
@@ -446,6 +449,9 @@ TheBloke_neural-chat-7B-v3-3-GPTQ - [pass]
 
 TheBloke_OpenAssistant-Llama2-13B-Orca-8K-3319-GPTQ - [ 1/4 ? ]
 It took 4 tries to get - `"Sally has 1 sister."`
+
+TheBloke_openbuddy-mixtral-8x7b-v15.1-GGUF - [pass]
+`"One sister."`
 
 TheBloke_OpenHermes-2.5-Mistral-7B-GPTQ - [pass]
 `"Sally has 1 sister."`
