@@ -1,6 +1,6 @@
 # AMD / Radeon 7900XTX 6900XT GPU ROCm install / setup / config 
 # Ubuntu 22.04 / 23.04  
-# ROCm 5.7.2 
+# ROCm 5.7.3
 # Automatic1111 Stable Diffusion + ComfyUI  ( venv ) 
 # Oobabooga - Text Generation WebUI ( conda, Exllama, BitsAndBytes-ROCm-5.6 ) 
 
@@ -28,6 +28,8 @@
 2023-12-13 - Added supplement for those who want to use Mixtral models ( uses llama.cpp ) - https://github.com/nktice/AMD-AI/blob/main/Mixtral.md
 
 2023-12-18 - ROCm 6.0 is out, so there's an updated guide for that here - https://github.com/nktice/AMD-AI/blob/main/ROCm6.0.md
+
+2023-12-18 - This document has been updated for ROCm 5.7.3 
 
 -----
 
@@ -93,7 +95,7 @@ Note : 2023-09-11 Support for newer version of BitsAndBytes(0.41 !) made for 5.6
 
 ```bash
 #echo "deb [arch=amd64 signed-by=/etc/apt/keyrings/rocm.gpg] https://repo.radeon.com/rocm/apt/5.6 jammy main" \
-echo "deb [arch=amd64 signed-by=/etc/apt/keyrings/rocm.gpg] https://repo.radeon.com/rocm/apt/5.7.2 jammy main" \
+echo "deb [arch=amd64 signed-by=/etc/apt/keyrings/rocm.gpg] https://repo.radeon.com/rocm/apt/5.7.3 jammy main" \
     | sudo tee --append /etc/apt/sources.list.d/rocm.list
 echo -e 'Package: *\nPin: release o=repo.radeon.com\nPin-Priority: 600' \
     | sudo tee /etc/apt/preferences.d/rocm-pin-600
@@ -197,7 +199,7 @@ tee --append webui-user.sh <<EOF
 # generic import...
 # export TORCH_COMMAND="pip install torch torchvision --index-url https://download.pytorch.org/whl/nightly/rocm5.7"
 # use specific versions to avoid downloading all the nightlies... ( update dates as needed ) 
- export TORCH_COMMAND="pip install --pre torch==2.2.0.dev20231128 torchvision==0.17.0.dev20231128+rocm5.7 --index-url https://download.pytorch.org/whl/nightly/rocm5.7"
+ export TORCH_COMMAND="pip install --pre torch==2.3.0.dev20231218 torchvision==0.18.0.dev20231218+rocm5.7 --index-url https://download.pytorch.org/whl/nightly/rocm5.7"
  ## And if you want to call this from other programs...
  export COMMANDLINE_ARGS="--api"
  ## crashes with 2 cards, so to get it to run on the second card (only), unremark the following 
@@ -254,7 +256,7 @@ cd ..
 python3 -m venv venv
 source venv/bin/activate
 # pre-install torch and torchvision from nightlies - note you may want to update versions...
-python3 -m pip install --pre torch==2.2.0.dev20231128 torchvision==0.17.0.dev20231128+rocm5.7 --index-url https://download.pytorch.org/whl/nightly/rocm5.7
+python3 -m pip install --pre torch==2.3.0.dev20231218 torchvision==0.18.0.dev20231128+rocm5.7 --index-url https://download.pytorch.org/whl/nightly/rocm5.7
 python3 -m pip install -r requirements.txt  --extra-index-url https://download.pytorch.org/whl/nightly/rocm5.7
 python3 -m pip install -r custom_nodes/ComfyUI-Manager/requirements.txt --extra-index-url https://download.pytorch.org/whl/nightly/rocm5.7
 
@@ -368,7 +370,6 @@ pip install --pre cmake colorama filelock lit numpy Pillow Jinja2 \
 	mpmath fsspec MarkupSafe certifi filelock networkx \
 	sympy packaging requests \
          --index-url https://download.pytorch.org/whl/nightly/rocm5.7
-#         --index-url https://download.pytorch.org/whl/nightly/rocm5.6
 ```
 
 
@@ -383,18 +384,7 @@ Instead of that we go and look through the files at https://download.pytorch.org
 
 Here is the new version that tries to only use the latest and the work-around to make that happen...
 ```bash
-# To install without it having to install all the nightlies specify the version... 
-pip install --pre torch==2.2.0.dev20231128   --index-url https://download.pytorch.org/whl/nightly/rocm5.7
-```
-
-As of 2023-11-28 torchtext 0.17.0.dev20231128+cpu depends on torchdata==0.7.1 but the nightlies collection only has torchdata 0.7.0 development versions... but oddly enough it can be installed on its own separately (after torch has been installed...), so we'll do this now [ becasue if we do them together things break. ]
-```bash
-pip install torchdata==0.7.1
-```
-
-Now on to the rest of the parts... 
-```bash
-pip install --pre torch==2.2.0.dev20231128 torchvision==0.17.0.dev20231128+rocm5.7 torchtext==0.17.0.dev20231128+cpu torchaudio triton pytorch-triton pytorch-triton-rocm    --index-url https://download.pytorch.org/whl/nightly/rocm5.7
+pip install --pre torch==2.3.0.dev20231218 torchvision==0.18.0.dev20231218+rocm5.7 torchtext==0.17.0.dev20231218+cpu torchaudio triton pytorch-triton pytorch-triton-rocm    --index-url https://download.pytorch.org/whl/nightly/rocm5.7
 ```
 
 
@@ -413,28 +403,30 @@ git clone https://github.com/arlo-phoenix/bitsandbytes-rocm-5.6.git
 cd bitsandbytes-rocm-5.6/
 BUILD_CUDA_EXT=0 pip install -r requirements.txt --extra-index-url https://download.pytorch.org/whl/nightly/rocm5.7
 # 7900XTX
-#make hip ROCM_TARGET=gfx1100 ROCM_HOME=/opt/rocm-5.7.0/
+#make hip ROCM_TARGET=gfx1100 ROCM_HOME=/opt/rocm-5.7.3/
 # 6900XT
-#make hip ROCM_TARGET=gfx1030 ROCM_HOME=/opt/rocm-5.7.0/
+#make hip ROCM_TARGET=gfx1030 ROCM_HOME=/opt/rocm-5.7.3/
 # both...
-make hip ROCM_TARGET=gfx1100,gfx1030 ROCM_HOME=/opt/rocm-5.7.2/
+make hip ROCM_TARGET=gfx1100,gfx1030 ROCM_HOME=/opt/rocm-5.7.3/
 pip install . --extra-index-url https://download.pytorch.org/whl/nightly/rocm5.7
 ```
 
 
 ### Triton 
 2023-09-11 : Usually we get Triton from the PyTorch nightly build files (included above)  but I had some errors [akin to these](https://github.com/openai/triton/issues/2002)  and found getting it fresh from the nightly build resovled them.
+2023-12-18 : It appears that this issue has been resolved, so this line is remarked for now - in case there are issues with Triton and it needs to be called from nightlies again I'll leave this here. 
 ```bash
-pip install -U --index-url https://aiinfra.pkgs.visualstudio.com/PublicPackages/_packaging/Triton-Nightly/pypi/simple/ triton-nightly
+#pip install -U --index-url https://aiinfra.pkgs.visualstudio.com/PublicPackages/_packaging/Triton-Nightly/pypi/simple/ triton-nightly
 ```
 
 ### Flash-Attention 2 :
 Install may take a few mins ( takes author close to 5 as tiem of writing )...
+It appears this may work with ROCm 5.7.3 and ExLlamav2 ( at least it doesn't complain about it being missing when it is installed ) .
 ```bash
 cd
 git clone https://github.com/ROCmSoftwarePlatform/flash-attention.git
 cd flash-attention
-pip install .
+pip install . --index-url https://download.pytorch.org/whl/nightly/rocm5.7
 ```
 2023-11-30 - Note it appears PyTorch for ROCm doesn't include FA support at this time... as there's a warning : "UserWarning: 1Torch was not compiled with memory efficient attention. " Further this issue is noted here : https://github.com/pytorch/pytorch/issues/112997 - So while the above runs, it isn't operating at the present time. 
 
@@ -453,9 +445,10 @@ pip install -r requirements_amd.txt
 ```
 
 Exllama and Exllamav2 loaders ...
+It appears ExLlama isn't being maintained and the emphasis is now on ExLlamav2... v2 has been updated to support Mixture of Experts (MoE such as Mixtral ). 
 ```bash
 # install exllama
-git clone https://github.com/turboderp/exllama repositories/exllama
+#git clone https://github.com/turboderp/exllama repositories/exllama
 # install exllamav2
 git clone https://github.com/turboderp/exllamav2 repositories/exllamav2
 ```
@@ -467,8 +460,7 @@ tee --append run.sh <<EOF
 ## activate conda
 conda activate textgen
 ## command to run server... 
-python server.py --listen --loader=exllama  \
-  --auto-devices --extensions sd_api_pictures send_pictures gallery 
+python server.py --listen  --extensions sd_api_pictures send_pictures gallery 
 conda deactivate
 EOF
 chmod u+x run.sh
