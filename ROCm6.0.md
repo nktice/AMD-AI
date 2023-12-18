@@ -380,11 +380,6 @@ Here is the new version that tries to only use the latest and the work-around to
 pip install --pre torch==2.3.0.dev20231217   --index-url https://download.pytorch.org/whl/nightly/rocm5.7
 ```
 
-As of 2023-11-28 torchtext 0.17.0.dev20231128+cpu depends on torchdata==0.7.1 but the nightlies collection only has torchdata 0.7.0 development versions... but oddly enough it can be installed on its own separately (after torch has been installed...), so we'll do this now [ becasue if we do them together things break. ]
-```bash
-#pip install torchdata==0.7.1
-```
-
 Now on to the rest of the parts... 
 ```bash
 pip install --pre torch==2.3.0.dev20231217 torchvision==0.18.0.dev20231217+rocm5.7 torchtext==0.17.0.dev20231217+cpu torchaudio triton pytorch-triton pytorch-triton-rocm    --index-url https://download.pytorch.org/whl/nightly/rocm5.7
