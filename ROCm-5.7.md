@@ -224,19 +224,9 @@ into the folder where you have other models ( to avoid issues )
 ./webui.sh 
 ```
 
-The first time this is run it will install the requirements. 
-
-As of 2023-11-28 running that crashes, with the following error : 
-"No module named 'torchvision.transforms.functional_tensor'" 
-There's a workaround - https://github.com/AUTOMATIC1111/stable-diffusion-webui/issues/13985
-```bash
-sed -i 's/from torchvision.transforms.functional_tensor import rgb_to_grayscale/from torchvision.transforms.functional import rgb_to_grayscale/' venv/lib/python3.11/site-packages/basicsr/data/degradations.py
-```
-Note that if your version of Python is different, you'll want to change that.  After running this, run ./webui.sh ( again ) 
-
 ## end Stable Diffusion 
 
---- 
+-------
 
 # ComfyUI install script 
 - variation of https://raw.githubusercontent.com/ltdrdata/ComfyUI-Manager/main/scripts/install-comfyui-venv-linux.sh 
@@ -256,7 +246,7 @@ cd ..
 python3 -m venv venv
 source venv/bin/activate
 # pre-install torch and torchvision from nightlies - note you may want to update versions...
-python3 -m pip install --pre torch==2.3.0.dev20231218 torchvision==0.18.0.dev20231128+rocm5.7 --index-url https://download.pytorch.org/whl/nightly/rocm5.7
+python3 -m pip install --pre torch==2.3.0.dev20231218 torchvision==0.18.0.dev20231218+rocm5.7 --index-url https://download.pytorch.org/whl/nightly/rocm5.7
 python3 -m pip install -r requirements.txt  --extra-index-url https://download.pytorch.org/whl/nightly/rocm5.7
 python3 -m pip install -r custom_nodes/ComfyUI-Manager/requirements.txt --extra-index-url https://download.pytorch.org/whl/nightly/rocm5.7
 
@@ -372,7 +362,6 @@ pip install --pre cmake colorama filelock lit numpy Pillow Jinja2 \
          --index-url https://download.pytorch.org/whl/nightly/rocm5.7
 ```
 
-
 Here is old method that works - but tries to download things back to the start of these releases which may take a while... so it is remarked... 
 ```bash
 ## install
@@ -389,13 +378,8 @@ pip install --pre torch==2.3.0.dev20231218 torchvision==0.18.0.dev20231218+rocm5
 
 
 ### bitsandbytes rocm 
- video guide : https://www.youtube.com/watch?v=2cPsvwONnL8 
-[ - depricated - https://git.ecker.tech/mrq/bitsandbytes-rocm - requires rocm 5.4.2 ]
-  https://github.com/0cc4m/bitsandbytes-rocm
-Older system with support for 5.6 : https://github.com/RockeyCoss/bitsandbytes-rocm
-Note : 2023-09-11 New version of BitsAndBytes(0.41 !) made for 5.6 
+2023-09-11 - New version of BitsAndBytes(0.41 !) made for 5.6 
 Project website : https://github.com/arlo-phoenix/bitsandbytes-rocm-5.6
-Found newer version that supports ROCm 5.6 - 
 
 ```bash
 cd
@@ -420,15 +404,16 @@ pip install . --extra-index-url https://download.pytorch.org/whl/nightly/rocm5.7
 ```
 
 ### Flash-Attention 2 :
-Install may take a few mins ( takes author close to 5 as tiem of writing )...
+Install may take a few mins ( takes author close to 5mins on an AMD 5950x CPU as tiem of writing )... 
 It appears this may work with ROCm 5.7.3 and ExLlamav2 ( at least it doesn't complain about it being missing when it is installed ) .
 ```bash
 cd
 git clone https://github.com/ROCmSoftwarePlatform/flash-attention.git
 cd flash-attention
-pip install . --index-url https://download.pytorch.org/whl/nightly/rocm5.7
+pip install . --extra-index-url https://download.pytorch.org/whl/nightly/rocm5.7
 ```
-2023-11-30 - Note it appears PyTorch for ROCm doesn't include FA support at this time... as there's a warning : "UserWarning: 1Torch was not compiled with memory efficient attention. " Further this issue is noted here : https://github.com/pytorch/pytorch/issues/112997 - So while the above runs, it isn't operating at the present time. 
+2023-12-18 - This does appear to work with 5.7.3 and exllamav2.
+Note that flash attention has been under development and may not work with some versions / configurations.  
 
 ## Oobabooga / Text-generation-webui - Install webui...
 ```bash
@@ -486,7 +471,8 @@ Note that to run the script :
 source run.sh
 ```
 
-The exllama loader works with most GPTQ models.  This is the best choice as it is fast.   
+It does download some things the first time it runs. 
+The exllamav2 loader works with most GPTQ models.  This is the best choice as it is fast.   
 Some models that won't load that way will load with AutoGPTQ - but without Triton ( triton seems to break things ). 
 Also worth noting, I've had things work on one card or the other, but not on both cards, 
 loading on both cards causes LLMs to spit out gibberish.  
