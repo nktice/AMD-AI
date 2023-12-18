@@ -1,10 +1,12 @@
 # Mixtral on Oobabooga [ ROCm ]
 Mixtral is a model from Mistral AI - more info here : https://www.youtube.com/watch?v=WjiX3lCnwUI
 
+2023-12-18 - It appears that exllamav2 and Oobabooga have integrated functionality to support Mixtral and its Mixture of Experts (MoE) arrangements.  As such the following is optional, and may be out of date, it is however left here as it may be of interest and benefit.  
+
+
 ## AutoGPTQ
 2023-12-15 - AutoGPTQ has added support for Mixtral models ( GPTQ only ) 
 Here is the github page for AutoGPTQ where there's more details. https://github.com/PanQiWei/AutoGPTQ - If you need other architectures that's the place to look for what to do...
-
 
 Activate conda environment
 ```bash
