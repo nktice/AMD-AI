@@ -15,7 +15,10 @@
 2023-11-30 - Rewrite of this document to include updates... ROCm 5.6.1,  Stable Diffusion and ComfyUI sections rewritten for venv,  Textgen webui section updated to use more of the project requirements as designed.  Overall greatly simplified.  
 
 2023-12-13 - Added supplement for those who want to use Mixtral models ( uses llama.cpp ) - https://github.com/nktice/AMD-AI/blob/main/Mixtral.md
----
+
+2023-12-18 - ROCm 6.0 is out, so there's an updated guide for that here - https://github.com/nktice/AMD-AI/blob/main/ROCm6.0.md
+
+-----
 
 
 # Ubuntu 22.04 / 23.04 - Base system install 
