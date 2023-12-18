@@ -18,6 +18,8 @@
 
 2023-12-18 - ROCm 6.0 is out, so there's an updated guide for that here - https://github.com/nktice/AMD-AI/blob/main/ROCm6.0.md
 
+2023-12-18 - Update this document ( for ROCm 5.6.1 ) as it is the current 'stable' version supported by PyTorch.  Test showed it was able to load the modest Mixtral variant TheBloke_mixtralnt-4x7b-test-GPTQ using ExLlamav2 - takes ~18GB out of VRAM to hold this model.  
+
 -----
 
 
@@ -81,8 +83,7 @@ https://rocmdocs.amd.com/en/latest/deploy/linux/os-native/install.html
 Note : 2023-09-11 Support for newer version of BitsAndBytes(0.41 !) made for 5.6 - Project website : https://github.com/arlo-phoenix/bitsandbytes-rocm-5.6
 
 ```bash
-#echo "deb [arch=amd64 signed-by=/etc/apt/keyrings/rocm.gpg] https://repo.radeon.com/rocm/apt/5.4.2 jammy main" \
-echo "deb [arch=amd64 signed-by=/etc/apt/keyrings/rocm.gpg] https://repo.radeon.com/rocm/apt/5.6 jammy main" \
+echo "deb [arch=amd64 signed-by=/etc/apt/keyrings/rocm.gpg] https://repo.radeon.com/rocm/apt/5.6.1 jammy main" \
     | sudo tee --append /etc/apt/sources.list.d/rocm.list
 echo -e 'Package: *\nPin: release o=repo.radeon.com\nPin-Priority: 600' \
     | sudo tee /etc/apt/preferences.d/rocm-pin-600
@@ -184,7 +185,7 @@ sudo apt install -y wget git python3 python3-venv libgl1 libglib2.0-0
 tee --append webui-user.sh <<EOF
  ## Torch for ROCm
 # generic import...
-export TORCH_COMMAND="pip install torch torchvision --index-url https://download.pytorch.org/whl/nightly/rocm5.6"
+export TORCH_COMMAND="pip install torch torchvision --index-url https://download.pytorch.org/whl/rocm5.6"
  ## And if you want to call this from other programs...
  export COMMANDLINE_ARGS="--api"
  ## crashes with 2 cards, so to get it to run on the second card (only), unremark the following 
@@ -203,8 +204,7 @@ into the folder where you have other models ( to avoid issues )
 ```
 
 ## Run SD...
- Note that the first time it starts it may take it a while to go and get things
- it's not always good about saying what it's up to. 
+Note that the first time it starts it may take it a while to go and get things it's not always good about saying what it's up to. 
 ```bash
 ./webui.sh 
 ```
@@ -266,6 +266,8 @@ sed -i "s@path/to@`echo ~`@g" extra_model_paths.yaml
 # edit config file to point to your checkpoints etc 
 #vi extra_model_paths.yaml
 ```
+
+Now you can call ComfyUI through the script created above.
 
 ## End ComfyUI install
 
@@ -369,9 +371,9 @@ git clone https://github.com/arlo-phoenix/bitsandbytes-rocm-5.6.git
 cd bitsandbytes-rocm-5.6/
 BUILD_CUDA_EXT=0 pip install -r requirements.txt --extra-index-url https://download.pytorch.org/whl/rocm5.6
 # 7900XTX
-#make hip ROCM_TARGET=gfx1100 ROCM_HOME=/opt/rocm-5.7.0/
+#make hip ROCM_TARGET=gfx1100 ROCM_HOME=/opt/rocm-5.6.1/
 # 6900XT
-#make hip ROCM_TARGET=gfx1030 ROCM_HOME=/opt/rocm-5.7.0/
+#make hip ROCM_TARGET=gfx1030 ROCM_HOME=/opt/rocm-5.6.1/
 # both...
 make hip ROCM_TARGET=gfx1100,gfx1030 ROCM_HOME=/opt/rocm-5.6.1/
 pip install . --extra-index-url https://download.pytorch.org/whl/rocm5.6
@@ -404,9 +406,10 @@ pip install -r requirements_amd.txt
 ```
 
 Exllama and Exllamav2 loaders ...
+exllama isn't being maintained, but exllamav2 is...
 ```bash
 # install exllama
-git clone https://github.com/turboderp/exllama repositories/exllama
+#git clone https://github.com/turboderp/exllama repositories/exllama
 # install exllamav2
 git clone https://github.com/turboderp/exllamav2 repositories/exllamav2
 ```
@@ -418,8 +421,7 @@ tee --append run.sh <<EOF
 ## activate conda
 conda activate textgen
 ## command to run server... 
-python server.py --listen --loader=exllama  \
-  --auto-devices --extensions sd_api_pictures send_pictures gallery 
+python server.py --listen --extensions sd_api_pictures send_pictures gallery 
 conda deactivate
 EOF
 chmod u+x run.sh
@@ -440,12 +442,13 @@ If you have old models,  link pre-stored models into the models
 # ln -s /path/to/models models
 ```
 
-Note that to run the script : 
+And here's the command to start the interface... note that it takes some time to download components the first time it runs. 
 ```bash
 source run.sh
 ```
 
-The exllama loader works with most GPTQ models.  This is the best choice as it is fast.   
+
+The exllamav2 loader works with most GPTQ models.  This is the best choice as it is fast.   
 Some models that won't load that way will load with AutoGPTQ - but without Triton ( triton seems to break things ). 
 Also worth noting, I've had things work on one card or the other, but not on both cards, 
 loading on both cards causes LLMs to spit out gibberish.  
@@ -461,7 +464,7 @@ project website : https://github.com/Syllo/nvtop
 optional - tool for displaying gpu / memory usage info
 The package for this crashes with 2 gpu's, here it is from source.
 ```bash
-sudo apt install -y libdrm-dev libsystemd-dev libudev-dev
+sudo apt install -y libdrm-dev libsystemd-dev libudev-dev cmake
 cd 
 git clone https://github.com/Syllo/nvtop.git
 mkdir -p nvtop/build && cd nvtop/build
