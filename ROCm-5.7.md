@@ -26,7 +26,10 @@
 2023-11-28 - Update for ROCm 5.7.2.  Revised how Stable Diffusion and ComfyUI are handled ( using venv now ).  Revise handling for Oobabooga... now uses most of their requirements_amd.txt and Flash Attention!  I will note I first attempted to do with Ubuntu 23.10 and foudn obstacles there - they integrate the video drivers, but they're not the latest and this breaks ROCm install, so we're still using 23.04 for the time being.  
 
 2023-12-13 - Added supplement for those who want to use Mixtral models ( uses llama.cpp ) - https://github.com/nktice/AMD-AI/blob/main/Mixtral.md
----
+
+2023-12-18 - ROCm 6.0 is out, so there's an updated guide for that here - https://github.com/nktice/AMD-AI/blob/main/ROCm6.0.md
+
+-----
 
 
 # Ubuntu 22.04 / 23.04 - Base system install 
