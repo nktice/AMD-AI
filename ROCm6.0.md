@@ -28,7 +28,7 @@
 2023-12-13 - Added supplement for those who want to use Mixtral models ( uses llama.cpp ) - https://github.com/nktice/AMD-AI/blob/main/Mixtral.md
 
 2023-12-18 - ROCm 6.0 is out - so this is an update of the 5.7.2 guide to work with AMD's new drivers.  Note that most components still reference the 5.x verions, as systems like PyTorch haven't been written specificly for ROCm 6.x yet. 
-This version is an initial draft, with updates after I got things working - but I haven't re-installed from this alone yet... I'll remove this note once I've completed that step. 
+
 
 ---
 
@@ -225,13 +225,6 @@ into the folder where you have other models ( to avoid issues )
 
 The first time this is run it will install the requirements. 
 
-As of 2023-11-28 running that crashes, with the following error : 
-"No module named 'torchvision.transforms.functional_tensor'" 
-There's a workaround - https://github.com/AUTOMATIC1111/stable-diffusion-webui/issues/13985
-```bash
-sed -i 's/from torchvision.transforms.functional_tensor import rgb_to_grayscale/from torchvision.transforms.functional import rgb_to_grayscale/' venv/lib/python3.11/site-packages/basicsr/data/degradations.py
-```
-Note that if your version of Python is different, you'll want to change that.  After running this, run ./webui.sh ( again ) 
 
 ## end Stable Diffusion 
 
@@ -399,13 +392,8 @@ pip install --pre torch==2.3.0.dev20231217 torchvision==0.18.0.dev20231217+rocm5
 
 
 ### bitsandbytes rocm 
- video guide : https://www.youtube.com/watch?v=2cPsvwONnL8 
-[ - depricated - https://git.ecker.tech/mrq/bitsandbytes-rocm - requires rocm 5.4.2 ]
-  https://github.com/0cc4m/bitsandbytes-rocm
-Older system with support for 5.6 : https://github.com/RockeyCoss/bitsandbytes-rocm
-Note : 2023-09-11 New version of BitsAndBytes(0.41 !) made for 5.6 
+2023-09-11 - New version of BitsAndBytes(0.41 !) made for ROCm 5.6 
 Project website : https://github.com/arlo-phoenix/bitsandbytes-rocm-5.6
-Found newer version that supports ROCm 5.6 - 
 
 ```bash
 cd
@@ -424,8 +412,9 @@ pip install . --extra-index-url https://download.pytorch.org/whl/nightly/rocm5.7
 
 ### Triton 
 2023-09-11 : Usually we get Triton from the PyTorch nightly build files (included above)  but I had some errors [akin to these](https://github.com/openai/triton/issues/2002)  and found getting it fresh from the nightly build resovled them.
+2023-12.17 : The issue appears to have been resolved, so I'm remarking this out, but leaving it here in case there are issues with Triton that may call for installing the nightly again.  
 ```bash
-pip install -U --index-url https://aiinfra.pkgs.visualstudio.com/PublicPackages/_packaging/Triton-Nightly/pypi/simple/ triton-nightly
+#pip install -U --index-url https://aiinfra.pkgs.visualstudio.com/PublicPackages/_packaging/Triton-Nightly/pypi/simple/ triton-nightly
 ```
 
 ### Flash-Attention 2 :
@@ -462,7 +451,7 @@ Exllama and Exllamav2 loaders ...
 git clone https://github.com/turboderp/exllamav2 repositories/exllamav2
 ```
 
-This supplement has details on how to load the Auto-GPTQ and llama.cpp loaders, written to support their updates for Mixtral. -
+This supplement has details on how to load the Auto-GPTQ and llama.cpp loaders, written to support their updates for Mixtral -
 https://github.com/nktice/AMD-AI/blob/main/Mixtral.md
 
 
@@ -473,8 +462,7 @@ tee --append run.sh <<EOF
 ## activate conda
 conda activate textgen
 ## command to run server... 
-python server.py --listen --loader=exllama  \
-  --auto-devices --extensions sd_api_pictures send_pictures gallery 
+python server.py --listen --extensions sd_api_pictures send_pictures gallery 
 conda deactivate
 EOF
 chmod u+x run.sh
@@ -500,7 +488,7 @@ Note that to run the script :
 source run.sh
 ```
 
-The exllama loader works with most GPTQ models.  This is the best choice as it is fast.   
+The exllama loader works with most GPTQ models; It's the best choice as it is fast.   
 Some models that won't load that way will load with AutoGPTQ - but without Triton ( triton seems to break things ). 
 Also worth noting, I've had things work on one card or the other, but not on both cards, 
 loading on both cards causes LLMs to spit out gibberish.  
