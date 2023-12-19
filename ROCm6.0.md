@@ -1,27 +1,16 @@
 # AMD / Radeon 7900XTX 6900XT GPU ROCm install / setup / config 
-# Ubuntu 22.04 / 23.04  
+# Ubuntu 22.04 / 23.04 / 23.10
 # ROCm 6.0 
 # Automatic1111 Stable Diffusion + ComfyUI  ( venv ) 
 # Oobabooga - Text Generation WebUI ( conda, Exllama, BitsAndBytes-ROCm-5.6 ) 
 
 ## Install notes / instructions ##
 
- I have composed this collection of instructions as they are my notes.
- I use to setup my own Linux system with AMD parts.
- I've gone over these doing many re-installs to get them all right.
- This is what I had hoped to find when I had search for install instructions -
- so I'm sharing them in the hopes that they save time for other people. 
- There may be in here extra parts that aren't needed but this works for me.
- Originally text, with comments like a shell script that I cut and paste - 2023-07 - nktice
-
+2023-07 - I have composed this collection of instructions as they are my notes, from varied efforts at a configuration that is consistent.  I've gone over these doing many re-installs to get them all right. This is what I had hoped to find when I had search for install instructions - so I'm sharing them in the hopes that they save time for other people. There may be in here extra parts that aren't needed but this works for me.  Originally text, with comments like a shell script that I cut and paste.
 
 2023-09-09 - I had a report that this doesn't work in virtual machines (virtualbox) as the system there cannot see the hardware, it can't load drivers, etc.  While this is not a guide about Windows, Windows users may find it more helpful to try DirectML - https://rocm.docs.amd.com/en/latest/deploy/windows/quick_start.html / https://github.com/lshqqytiger/stable-diffusion-webui-directml
 
-2023-09-30 - Updated to use ROCm 5.7 - As it is out now, and does appear to be working much like 5.6...
-- On my first attempt, I needed a reboot to get it working... (I've since re-installed and it works as expected following this guide. ) 
-- I've made this a seprate file to start with as these features aren't referred to as being supported by the dependent packages.
-- Added notes for exllamav2 and fast-attention - they're not working yet... but exllamav2 is under active development, and worth following.  
-- I will also note issues with dual GPU loading of models that appear to load but that output gibberish has now been addressed - alas the patch has not made it to packages... here is the bug thread : https://github.com/ROCmSoftwarePlatform/rocBLAS/issues/1346
+2023-09-30 - Updated to use ROCm 5.7 - As it is out now, and does appear to be working much like 5.6...  - On my first attempt, I needed a reboot to get it working... (I've since re-installed and it works as expected following this guide. )  - I've made this a seprate file to start with as these features aren't referred to as being supported by the dependent packages. - Added notes for exllamav2 and fast-attention - they're not working yet... but exllamav2 is under active development, and worth following.   - I will also note issues with dual GPU loading of models that appear to load but that output gibberish has now been addressed - alas the patch has not made it to packages... here is the bug thread : https://github.com/ROCmSoftwarePlatform/rocBLAS/issues/1346
 
 2023-11-28 - Update for ROCm 5.7.2.  Revised how Stable Diffusion and ComfyUI are handled ( using venv now ).  Revise handling for Oobabooga... now uses most of their requirements_amd.txt and Flash Attention!  I will note I first attempted to do with Ubuntu 23.10 and foudn obstacles there - they integrate the video drivers, but they're not the latest and this breaks ROCm install, so we're still using 23.04 for the time being.  
 
@@ -29,8 +18,10 @@
 
 2023-12-18 - ROCm 6.0 is out - so this is an update of the 5.7.2 guide to work with AMD's new drivers.  Note that most components still reference the 5.x verions, as systems like PyTorch haven't been written specificly for ROCm 6.x yet. 
 
+2023-12-18 - Update after testing with Ubuntu 23.10.  With the addition of one command, these instructions appear to work with Ubuntu's new release.  
 
----
+
+--------
 
 
 # Ubuntu 22.04 / 23.04 - Base system install 
@@ -93,7 +84,6 @@ https://rocmdocs.amd.com/en/latest/deploy/linux/os-native/install.html
 Note : 2023-09-11 Support for newer version of BitsAndBytes(0.41 !) made for 5.6 - Project website : https://github.com/arlo-phoenix/bitsandbytes-rocm-5.6
 
 ```bash
-#echo "deb [arch=amd64 signed-by=/etc/apt/keyrings/rocm.gpg] https://repo.radeon.com/rocm/apt/5.7.2 jammy main" \
 echo "deb [arch=amd64 signed-by=/etc/apt/keyrings/rocm.gpg] https://repo.radeon.com/rocm/apt/6.0/ jammy main" \
     | sudo tee --append /etc/apt/sources.list.d/rocm.list
 echo -e 'Package: *\nPin: release o=repo.radeon.com\nPin-Priority: 600' \
@@ -172,7 +162,7 @@ sudo reboot
 
 ## End of OS / base setup
 
----
+--------
 
 # Stable Diffusion (Automatic1111) 
 This system is built to use its own venv ( rather than Conda )...
@@ -198,7 +188,7 @@ tee --append webui-user.sh <<EOF
 # generic import...
 # export TORCH_COMMAND="pip install torch torchvision --index-url https://download.pytorch.org/whl/nightly/rocm5.7"
 # use specific versions to avoid downloading all the nightlies... ( update dates as needed ) 
- export TORCH_COMMAND="pip install --pre torch==2.3.0.dev20231217 torchvision==0.18.0.dev20231217+rocm5.7 --index-url https://download.pytorch.org/whl/nightly/rocm5.7"
+ export TORCH_COMMAND="pip install --pre torch==2.3.0.dev20231218 torchvision==0.18.0.dev20231218+rocm5.7 --index-url https://download.pytorch.org/whl/nightly/rocm5.7"
  ## And if you want to call this from other programs...
  export COMMANDLINE_ARGS="--api"
  ## crashes with 2 cards, so to get it to run on the second card (only), unremark the following 
@@ -248,7 +238,7 @@ cd ..
 python3 -m venv venv
 source venv/bin/activate
 # pre-install torch and torchvision from nightlies - note you may want to update versions...
-python3 -m pip install --pre torch==2.3.0.dev20231217 torchvision==0.18.0.dev20231217+rocm5.7 --index-url https://download.pytorch.org/whl/nightly/rocm5.7
+python3 -m pip install --pre torch==2.3.0.dev20231218 torchvision==0.18.0.dev20231218+rocm5.7 --index-url https://download.pytorch.org/whl/nightly/rocm5.7
 python3 -m pip install -r requirements.txt  --extra-index-url https://download.pytorch.org/whl/nightly/rocm5.7
 python3 -m pip install -r custom_nodes/ComfyUI-Manager/requirements.txt --extra-index-url https://download.pytorch.org/whl/nightly/rocm5.7
 
@@ -374,15 +364,9 @@ Here is old method that works - but tries to download things back to the start o
 ```
 Instead of that we go and look through the files at https://download.pytorch.org/whl/nightly/rocm5.7/ (note trailing slash) and in the program directories there, we can see the individual nightly build files.  One has been chosen at the time of writing this, if you want newer, that is where you can find those details to update the file names / versions.  
 
-Here is the new version that tries to only use the latest and the work-around to make that happen...
+Here we refer to specific nightly versions to keep things simple. 
 ```bash
-# To install without it having to install all the nightlies specify the version... 
-pip install --pre torch==2.3.0.dev20231217   --index-url https://download.pytorch.org/whl/nightly/rocm5.7
-```
-
-Now on to the rest of the parts... 
-```bash
-pip install --pre torch==2.3.0.dev20231217 torchvision==0.18.0.dev20231217+rocm5.7 torchtext==0.17.0.dev20231217+cpu torchaudio triton pytorch-triton pytorch-triton-rocm    --index-url https://download.pytorch.org/whl/nightly/rocm5.7
+pip install --pre torch==2.3.0.dev20231218 torchvision==0.18.0.dev20231218+rocm5.7 torchtext==0.17.0.dev20231218+cpu torchaudio triton pytorch-triton pytorch-triton-rocm    --index-url https://download.pytorch.org/whl/nightly/rocm5.7
 ```
 
 
@@ -438,16 +422,23 @@ pip install -r requirements_amd.txt
 ```
 
 Exllama and Exllamav2 loaders ...
-2023-12-17 - Bad news, new versions break loading with exllama and it's not been updated.  Good news, exllamav2 has been updated and does work, including support for Mixtral and MoE ( Mixture of Experts ) models.  
+2023-12-17 - Bad news, ROCm 6.0 appears to break loading with exllama and it's not been updated....  Good news, exllamav2 has been updated and does work, including support for Mixtral and MoE ( Mixture of Experts ) models.  
 ```bash
 # install exllama
-#git clone https://github.com/turboderp/exllama repositories/exllama
+git clone https://github.com/turboderp/exllama repositories/exllama
 # install exllamav2
 git clone https://github.com/turboderp/exllamav2 repositories/exllamav2
 ```
 
-This supplement has details on how to load the Auto-GPTQ and llama.cpp loaders, written to support their updates for Mixtral -
+This line resolves issues with Ubuntu 23.10 - otherwise exllamav2 has issues about missing GLIBCXX_3.4.32. 
+```bash
+conda install -c conda-forge gcc=12.1.0
+```
+
+
+This supplement has more details on how to load the Auto-GPTQ and llama.cpp loaders, written to support their updates for Mixtral -
 https://github.com/nktice/AMD-AI/blob/main/Mixtral.md
+
 
 
 Let's create a script (run.sh) to run the program...
@@ -483,16 +474,14 @@ Note that to run the script :
 source run.sh
 ```
 
-The exllama loader works with most GPTQ models; It's the best choice as it is fast.   
+The exllamav2 loader works with most GPTQ models; It's the best choice as it is fast.   
 Some models that won't load that way will load with AutoGPTQ - but without Triton ( triton seems to break things ). 
-Also worth noting, I've had things work on one card or the other, but not on both cards, 
-loading on both cards causes LLMs to spit out gibberish.  
+2023-11-30 - I've had things work on one card or the other, but not on both cards, 
+loading on both cards causes LLMs to spit out gibberish.   It appears the bug with multiple GPUs is not resolved yet... and as such loading models across GPUs outputs gibberish.  https://github.com/ROCmSoftwarePlatform/rocBLAS/issues/1346#issuecomment-1741851573
 
 ## End - Oobabooga - Text-Generation-WebUI
 
-2023-11-30 - It appears the bug with multiple GPUs is not resolved yet... and as such loading models across GPUs outputs gibberish.  https://github.com/ROCmSoftwarePlatform/rocBLAS/issues/1346#issuecomment-1741851573
-
----
+-------
 
 # nvtop from source
 ( As one from packages crashes on 2 GPUs, while this never version from sources works fine. ) 
