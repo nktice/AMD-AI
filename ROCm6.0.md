@@ -99,7 +99,7 @@ as some stuff later may want as dependencies without much notice.
 sudo apt install -y rocm-dev rocm-libs rocm-hip-sdk rocm-dkms rocm-libs
 #sudo apt install -y rocm-opencl rocm-opencl-dev
 #sudo apt install -y hipsparse hipblas hipblas-dev hipcub
-#sudo apt isntall -y rocblas rocblas-dev rccl rocthrust roctracer-dev 
+#sudo apt install -y rocblas rocblas-dev rccl rocthrust roctracer-dev 
 ```
 
 
@@ -289,20 +289,27 @@ Here is more info on managing conda : https://docs.conda.io/projects/conda/en/la
 Other notes : https://docs.conda.io/projects/conda/en/latest/user-guide/install/linux.html
 Download info : https://www.anaconda.com/download/
 
+
+Anaconda ( if you prefer this to miniconda below ) 
+```bash
+#cd ~/Downloads/
+#wget https://repo.anaconda.com/archive/Anaconda3-2023.09-0-Linux-x86_64.sh
+#bash Anaconda3-2023.09-0-Linux-x86_64.sh -b
+#cd ~
+#ln -s anaconda3 conda
+```
+
+Miniconda ( if you prefer this to Anaconda above... ) 
+[ https://docs.conda.io/projects/miniconda/en/latest/ ] 
 ```bash
 cd ~/Downloads/
-wget https://repo.anaconda.com/archive/Anaconda3-2023.09-0-Linux-x86_64.sh
-```
-
-```bash
-#  Note versions may have changed...
-bash Anaconda3-2023.09-0-Linux-x86_64.sh -b
-```
-
-```bash
+wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
+bash Miniconda3-latest-Linux-x86_64.sh
 cd ~
-ln -s anaconda3 conda
+ln -s miniconda3 conda
+```
 
+```bash
 echo "PATH=~/conda/bin:$PATH" >> ~/.profile
 source ~/.profile
 conda update -y -n base -c defaults conda
@@ -425,9 +432,13 @@ Exllama and Exllamav2 loaders ...
 2023-12-17 - Bad news, ROCm 6.0 appears to break loading with exllama and it's not been updated....  Good news, exllamav2 has been updated and does work, including support for Mixtral and MoE ( Mixture of Experts ) models.  
 ```bash
 # install exllama
-git clone https://github.com/turboderp/exllama repositories/exllama
+#git clone https://github.com/turboderp/exllama repositories/exllama
 # install exllamav2
 git clone https://github.com/turboderp/exllamav2 repositories/exllamav2
+cd exllamav2
+pip install .   --index-url https://download.pytorch.org/whl/nightly/rocm5.7
+cd ../..
+
 ```
 
 This line resolves issues with Ubuntu 23.10 - otherwise exllamav2 has issues about missing GLIBCXX_3.4.32. 
