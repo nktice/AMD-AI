@@ -435,7 +435,7 @@ Exllama and Exllamav2 loaders ...
 #git clone https://github.com/turboderp/exllama repositories/exllama
 # install exllamav2
 git clone https://github.com/turboderp/exllamav2 repositories/exllamav2
-cd exllamav2
+cd repositories/exllamav2
 pip install .   --index-url https://download.pytorch.org/whl/nightly/rocm5.7
 cd ../..
 
