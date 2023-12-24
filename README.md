@@ -20,6 +20,8 @@
 
 2023-12-18 - Update this document ( for ROCm 5.6.1 ) as it is the current 'stable' version supported by PyTorch.  Test showed it was able to load the modest Mixtral variant TheBloke_mixtralnt-4x7b-test-GPTQ using ExLlamav2 - takes ~18GB out of VRAM to hold this model.  
 
+2023-12-23 - Update to use miniconda instead of anaconda.  Exllamav2 improved details.  Looks like FA2 works.  Minor revisions.
+
 -----
 
 
@@ -96,9 +98,6 @@ as some stuff later may want as dependencies without much notice.
 ```bash
 # ROCm...
 sudo apt install -y rocm-dev rocm-libs rocm-hip-sdk rocm-dkms rocm-libs
-#sudo apt install -y rocm-opencl rocm-opencl-dev
-#sudo apt install -y hipsparse hipblas hipblas-dev hipcub
-#sudo apt isntall -y rocblas rocblas-dev rccl rocthrust roctracer-dev 
 ```
 
 
@@ -283,20 +282,28 @@ Here is more info on managing conda : https://docs.conda.io/projects/conda/en/la
 Other notes : https://docs.conda.io/projects/conda/en/latest/user-guide/install/linux.html
 Download info : https://www.anaconda.com/download/
 
+
+
+Anaconda ( if you prefer this to miniconda below ) 
+```bash
+#cd ~/Downloads/
+#wget https://repo.anaconda.com/archive/Anaconda3-2023.09-0-Linux-x86_64.sh
+#bash Anaconda3-2023.09-0-Linux-x86_64.sh -b
+#cd ~
+#ln -s anaconda3 conda
+```
+
+Miniconda ( if you prefer this to Anaconda above... ) 
+[ https://docs.conda.io/projects/miniconda/en/latest/ ] 
 ```bash
 cd ~/Downloads/
-wget https://repo.anaconda.com/archive/Anaconda3-2023.09-0-Linux-x86_64.sh
-```
-
-```bash
-#  Note versions may have changed...
-bash Anaconda3-2023.09-0-Linux-x86_64.sh -b
-```
-
-```bash
+wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
+bash Miniconda3-latest-Linux-x86_64.sh -b
 cd ~
-ln -s anaconda3 conda
+ln -s miniconda3 conda
+```
 
+```bash
 echo "PATH=~/conda/bin:$PATH" >> ~/.profile
 source ~/.profile
 conda update -y -n base -c defaults conda
@@ -348,11 +355,6 @@ pip install --pre cmake colorama filelock lit numpy Pillow Jinja2 \
          --index-url https://download.pytorch.org/whl/rocm5.6
 ```
 
-2023-09-11 : Usually we get Triton from the PyTorch nightly build files (included above)  but I had some errors [akin to these](https://github.com/openai/triton/issues/2002)  and found getting it fresh from the nightly build resovled them.
-```bash
-pip install -U --index-url https://aiinfra.pkgs.visualstudio.com/PublicPackages/_packaging/Triton-Nightly/pypi/simple/ triton-nightly
-```
-
 ```bash
 # install
 pip install torch torchvision torchtext torchaudio torchdata  \
@@ -389,7 +391,7 @@ cd flash-attention
 pip install .
 ```
 2023-11-30 - Note it appears PyTorch for ROCm doesn't include FA support at this time... as there's a warning : "UserWarning: 1Torch was not compiled with memory efficient attention. " Further this issue is noted here : https://github.com/pytorch/pytorch/issues/112997 - So while the above runs, it isn't operating at the present time. 
-
+2023-12-23 - FA2 appears to be working.  YMMV. 
 
 ## Oobabooga / Text-generation-webui - Install webui...
 ```bash
@@ -407,11 +409,15 @@ pip install -r requirements_amd.txt
 
 Exllama and Exllamav2 loaders ...
 exllama isn't being maintained, but exllamav2 is...
+2023-12-23 - After many tests, it appears that the exllamav2 that's installed above gives an error, so we're compiling and reinstalling exllama here as when we do that it does work.  
 ```bash
 # install exllama
 #git clone https://github.com/turboderp/exllama repositories/exllama
 # install exllamav2
 git clone https://github.com/turboderp/exllamav2 repositories/exllamav2
+cd repositories/exllamav2
+pip install .   --index-url https://download.pytorch.org/whl/nightly/rocm5.7
+cd ../..
 ```
 
 Let's create a script (run.sh) to run the program...
@@ -420,8 +426,10 @@ tee --append run.sh <<EOF
 #!/bin/bash
 ## activate conda
 conda activate textgen
-## command to run server... 
-python server.py --listen --extensions sd_api_pictures send_pictures gallery 
+## command to run server...
+# python server.py
+# preferred configuration... note that --listen makes it accessible on the local network.
+python server.py --listen --extensions sd_api_pictures send_pictures gallery
 conda deactivate
 EOF
 chmod u+x run.sh
