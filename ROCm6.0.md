@@ -4,7 +4,7 @@
 # Automatic1111 Stable Diffusion + ComfyUI  ( venv ) 
 # Oobabooga - Text Generation WebUI ( conda, Exllama, BitsAndBytes-ROCm-5.6 ) 
 
-## Install notes / instructions ##
+## Install notes / instructions / changelog ##
 
 2023-07 - I have composed this collection of instructions as they are my notes, from varied efforts at a configuration that is consistent.  I've gone over these doing many re-installs to get them all right. This is what I had hoped to find when I had search for install instructions - so I'm sharing them in the hopes that they save time for other people. There may be in here extra parts that aren't needed but this works for me.  Originally text, with comments like a shell script that I cut and paste.
 
@@ -20,6 +20,7 @@
 
 2023-12-18 - Update after testing with Ubuntu 23.10.  With the addition of one command, these instructions appear to work with Ubuntu's new release.  
 
+2023-12-23 - Update dates on nightlies, minor revisions. 
 
 --------
 
@@ -97,9 +98,6 @@ as some stuff later may want as dependencies without much notice.
 ```bash
 # ROCm...
 sudo apt install -y rocm-dev rocm-libs rocm-hip-sdk rocm-dkms rocm-libs
-#sudo apt install -y rocm-opencl rocm-opencl-dev
-#sudo apt install -y hipsparse hipblas hipblas-dev hipcub
-#sudo apt install -y rocblas rocblas-dev rccl rocthrust roctracer-dev 
 ```
 
 
@@ -188,7 +186,7 @@ tee --append webui-user.sh <<EOF
 # generic import...
 # export TORCH_COMMAND="pip install torch torchvision --index-url https://download.pytorch.org/whl/nightly/rocm5.7"
 # use specific versions to avoid downloading all the nightlies... ( update dates as needed ) 
- export TORCH_COMMAND="pip install --pre torch==2.3.0.dev20231218 torchvision==0.18.0.dev20231218+rocm5.7 --index-url https://download.pytorch.org/whl/nightly/rocm5.7"
+ export TORCH_COMMAND="pip install --pre torch==2.3.0.dev20231223 torchvision==0.18.0.dev20231223+rocm5.7 --index-url https://download.pytorch.org/whl/nightly/rocm5.7"
  ## And if you want to call this from other programs...
  export COMMANDLINE_ARGS="--api"
  ## crashes with 2 cards, so to get it to run on the second card (only), unremark the following 
@@ -238,7 +236,7 @@ cd ..
 python3 -m venv venv
 source venv/bin/activate
 # pre-install torch and torchvision from nightlies - note you may want to update versions...
-python3 -m pip install --pre torch==2.3.0.dev20231218 torchvision==0.18.0.dev20231218+rocm5.7 --index-url https://download.pytorch.org/whl/nightly/rocm5.7
+python3 -m pip install --pre torch==2.3.0.dev20231223 torchvision==0.18.0.dev20231223+rocm5.7 --index-url https://download.pytorch.org/whl/nightly/rocm5.7
 python3 -m pip install -r requirements.txt  --extra-index-url https://download.pytorch.org/whl/nightly/rocm5.7
 python3 -m pip install -r custom_nodes/ComfyUI-Manager/requirements.txt --extra-index-url https://download.pytorch.org/whl/nightly/rocm5.7
 
@@ -373,7 +371,9 @@ Instead of that we go and look through the files at https://download.pytorch.org
 
 Here we refer to specific nightly versions to keep things simple. 
 ```bash
-pip install --pre torch==2.3.0.dev20231218 torchvision==0.18.0.dev20231218+rocm5.7 torchtext==0.17.0.dev20231218+cpu torchaudio triton pytorch-triton pytorch-triton-rocm    --index-url https://download.pytorch.org/whl/nightly/rocm5.7
+pip install --pre torch==2.3.0.dev20231223 torchvision==0.18.0.dev20231223+rocm5.7 \
+  torchtext==0.17.0.dev202312238+cpu torchaudio triton pytorch-triton pytorch-triton-rocm \
+  --index-url https://download.pytorch.org/whl/nightly/rocm5.7
 ```
 
 
@@ -430,6 +430,7 @@ pip install -r requirements_amd.txt
 
 Exllama and Exllamav2 loaders ...
 2023-12-17 - Bad news, ROCm 6.0 appears to break loading with exllama and it's not been updated....  Good news, exllamav2 has been updated and does work, including support for Mixtral and MoE ( Mixture of Experts ) models.  
+2023-12-23 - After many tests, it appears that the exllamav2 that's installed above gives an error, so we're compiling and reinstalling exllama here as when we do that it does work.  
 ```bash
 # install exllama
 #git clone https://github.com/turboderp/exllama repositories/exllama
@@ -438,7 +439,6 @@ git clone https://github.com/turboderp/exllamav2 repositories/exllamav2
 cd repositories/exllamav2
 pip install .   --index-url https://download.pytorch.org/whl/nightly/rocm5.7
 cd ../..
-
 ```
 
 This line resolves issues with Ubuntu 23.10 - otherwise exllamav2 has issues about missing GLIBCXX_3.4.32. 
