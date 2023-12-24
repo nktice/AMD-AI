@@ -31,6 +31,8 @@
 
 2023-12-18 - This document has been updated for ROCm 5.7.3 
 
+2023-12-23 - Update to default to using miniconda ( with minor revisions so that the instructions are there for full anaconda too for those who want it ).  Updated date for nightlies.  Exllamav2 commands corrected.  I'll note that this was tested on Ubuntu 23.10.1 and there are parts that work ( Stable Diffusion, ComfyUI ) alas Oobabooga has issues ( exllamav2 errors out, as does flash-attention 2... ) so 23.10.1 is not recommended at this time.  Exllamav2 does work with 23.10.1 with ROCm 6.0 ( URL above ).  
+
 -----
 
 
@@ -108,9 +110,6 @@ as some stuff later may want as dependencies without much notice.
 ```bash
 # ROCm...
 sudo apt install -y rocm-dev rocm-libs rocm-hip-sdk rocm-dkms rocm-libs
-#sudo apt install -y rocm-opencl rocm-opencl-dev
-#sudo apt install -y hipsparse hipblas hipblas-dev hipcub
-#sudo apt isntall -y rocblas rocblas-dev rccl rocthrust roctracer-dev 
 ```
 
 
@@ -246,7 +245,7 @@ cd ..
 python3 -m venv venv
 source venv/bin/activate
 # pre-install torch and torchvision from nightlies - note you may want to update versions...
-python3 -m pip install --pre torch==2.3.0.dev20231218 torchvision==0.18.0.dev20231218+rocm5.7 --index-url https://download.pytorch.org/whl/nightly/rocm5.7
+python3 -m pip install --pre torch==2.3.0.dev20231223 torchvision==0.18.0.dev20231223+rocm5.7 --index-url https://download.pytorch.org/whl/nightly/rocm5.7
 python3 -m pip install -r requirements.txt  --extra-index-url https://download.pytorch.org/whl/nightly/rocm5.7
 python3 -m pip install -r custom_nodes/ComfyUI-Manager/requirements.txt --extra-index-url https://download.pytorch.org/whl/nightly/rocm5.7
 
@@ -297,20 +296,26 @@ Here is more info on managing conda : https://docs.conda.io/projects/conda/en/la
 Other notes : https://docs.conda.io/projects/conda/en/latest/user-guide/install/linux.html
 Download info : https://www.anaconda.com/download/
 
+Anaconda ( if you prefer this to miniconda below ) 
+```bash
+#cd ~/Downloads/
+#wget https://repo.anaconda.com/archive/Anaconda3-2023.09-0-Linux-x86_64.sh
+#bash Anaconda3-2023.09-0-Linux-x86_64.sh -b
+#cd ~
+#ln -s anaconda3 conda
+```
+
+Miniconda ( if you prefer this to Anaconda above... ) 
+[ https://docs.conda.io/projects/miniconda/en/latest/ ] 
 ```bash
 cd ~/Downloads/
-wget https://repo.anaconda.com/archive/Anaconda3-2023.09-0-Linux-x86_64.sh
-```
-
-```bash
-#  Note versions may have changed...
-bash Anaconda3-2023.09-0-Linux-x86_64.sh -b
-```
-
-```bash
+wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
+bash Miniconda3-latest-Linux-x86_64.sh -b
 cd ~
-ln -s anaconda3 conda
+ln -s miniconda3 conda
+```
 
+```bash
 echo "PATH=~/conda/bin:$PATH" >> ~/.profile
 source ~/.profile
 conda update -y -n base -c defaults conda
@@ -373,7 +378,9 @@ Instead of that we go and look through the files at https://download.pytorch.org
 
 Here is the new version that tries to only use the latest and the work-around to make that happen...
 ```bash
-pip install --pre torch==2.3.0.dev20231218 torchvision==0.18.0.dev20231218+rocm5.7 torchtext==0.17.0.dev20231218+cpu torchaudio triton pytorch-triton pytorch-triton-rocm    --index-url https://download.pytorch.org/whl/nightly/rocm5.7
+pip install --pre torch==2.3.0.dev20231218 torchvision==0.18.0.dev20231218+rocm5.7 \
+  torchtext==0.17.0.dev20231218+cpu torchaudio triton pytorch-triton pytorch-triton-rocm \
+  --index-url https://download.pytorch.org/whl/nightly/rocm5.7
 ```
 
 
@@ -431,11 +438,15 @@ pip install -r requirements_amd.txt
 
 Exllama and Exllamav2 loaders ...
 It appears ExLlama isn't being maintained and the emphasis is now on ExLlamav2... v2 has been updated to support Mixture of Experts (MoE such as Mixtral ). 
+2023-12-23 - After many tests, it appears that the exllamav2 that's installed above gives an error, so we're compiling and reinstalling exllama here as when we do that it does work.  
 ```bash
 # install exllama
 #git clone https://github.com/turboderp/exllama repositories/exllama
 # install exllamav2
 git clone https://github.com/turboderp/exllamav2 repositories/exllamav2
+cd repositories/exllamav2
+pip install .   --index-url https://download.pytorch.org/whl/nightly/rocm5.7
+cd ../..
 ```
 
 Let's create a script (run.sh) to run the program...
