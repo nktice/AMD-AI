@@ -82,7 +82,6 @@ Note : This commonly produces warning message about 'Possible missing firmware' 
 
 # ROCm repositories for jammy
 https://rocmdocs.amd.com/en/latest/deploy/linux/os-native/install.html
-Note : 2023-09-11 Support for newer version of BitsAndBytes(0.41 !) made for 5.6 - Project website : https://github.com/arlo-phoenix/bitsandbytes-rocm-5.6
 
 ```bash
 echo "deb [arch=amd64 signed-by=/etc/apt/keyrings/rocm.gpg] https://repo.radeon.com/rocm/apt/5.6.1 jammy main" \
@@ -383,7 +382,7 @@ pip install . --extra-index-url https://download.pytorch.org/whl/rocm5.6
 
 
 ### Flash-Attention 2 :
-Install may take a few mins ( takes author close to 5 as tiem of writing )...
+Install may take a few mins ( takes author close to 5 at time of writing )...
 ```bash
 cd
 git clone https://github.com/ROCmSoftwarePlatform/flash-attention.git
@@ -410,14 +409,15 @@ pip install -r requirements_amd.txt
 Exllama and Exllamav2 loaders ...
 exllama isn't being maintained, but exllamav2 is...
 2023-12-23 - After many tests, it appears that the exllamav2 that's installed above gives an error, so we're compiling and reinstalling exllama here as when we do that it does work.  
+2024-01-18 - exllamav2 isn't compiling... - thankfully the package that comes with Oobabooga appears to be working. 
 ```bash
-# install exllama
-#git clone https://github.com/turboderp/exllama repositories/exllama
+## install exllama
+##git clone https://github.com/turboderp/exllama repositories/exllama
 # install exllamav2
-git clone https://github.com/turboderp/exllamav2 repositories/exllamav2
-cd repositories/exllamav2
-pip install .   --index-url https://download.pytorch.org/whl/nightly/rocm5.7
-cd ../..
+#git clone https://github.com/turboderp/exllamav2 repositories/exllamav2
+#cd repositories/exllamav2
+#pip install .   --extra-index-url https://download.pytorch.org/whl/rocm5.6
+#cd ../..
 ```
 
 Let's create a script (run.sh) to run the program...
