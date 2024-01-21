@@ -412,6 +412,7 @@ exllama isn't being maintained, but exllamav2 is...
 2024-01-19 - Something has broken and exllamav2 won't compile directly from checkout, 
 The package version for 5.6 may be functional.  However, for those who want to compile the latest, or for their hardware, 
 I've added a line to reset the checkout to the last known good / compiling version 0.0.11
+2024-01-20 - Thanks to TurboDerp for fixing the exllamav2 code to play nice with HIP... workaround no longer needed, so I've remarked it out incase it's helpful in the future. 
 ```bash
 ## install exllama
 ##git clone https://github.com/turboderp/exllama repositories/exllama
@@ -419,7 +420,7 @@ I've added a line to reset the checkout to the last known good / compiling versi
 git clone https://github.com/turboderp/exllamav2 repositories/exllamav2
 cd repositories/exllamav2
 # Force collection back to base 0.0.11 
-git reset --hard a4ecea6
+# git reset --hard a4ecea6
 pip install .   
 cd ../..
 ```
