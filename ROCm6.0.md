@@ -22,6 +22,8 @@
 
 2023-12-23 - Update dates on nightlies, minor revisions. 
 
+2024-01-20 - Update versions, flash attention 2 appears to be working now, issue with exllamav2 loading appears resolved.  There are now nightlies made for 6.0 drivers - changes to use those. 
+
 --------
 
 
@@ -82,7 +84,6 @@ Note : This commonly produces warning message about 'Possible missing firmware' 
 
 # ROCm repositories for jammy
 https://rocmdocs.amd.com/en/latest/deploy/linux/os-native/install.html
-Note : 2023-09-11 Support for newer version of BitsAndBytes(0.41 !) made for 5.6 - Project website : https://github.com/arlo-phoenix/bitsandbytes-rocm-5.6
 
 ```bash
 echo "deb [arch=amd64 signed-by=/etc/apt/keyrings/rocm.gpg] https://repo.radeon.com/rocm/apt/6.0/ jammy main" \
@@ -184,9 +185,9 @@ sudo apt install -y wget git python3 python3-venv libgl1 libglib2.0-0
 tee --append webui-user.sh <<EOF
  ## Torch for ROCm
 # generic import...
-# export TORCH_COMMAND="pip install torch torchvision --index-url https://download.pytorch.org/whl/nightly/rocm5.7"
+# export TORCH_COMMAND="pip install torch torchvision --index-url https://download.pytorch.org/whl/nightly"
 # use specific versions to avoid downloading all the nightlies... ( update dates as needed ) 
- export TORCH_COMMAND="pip install --pre torch==2.3.0.dev20231223 torchvision==0.18.0.dev20231223+rocm5.7 --index-url https://download.pytorch.org/whl/nightly/rocm5.7"
+ export TORCH_COMMAND="pip install --pre torch==2.3.0.dev20240118+rocm6.0  torchvision==0.18.0.dev20240118+rocm5.7 --index-url https://download.pytorch.org/whl/nightly"
  ## And if you want to call this from other programs...
  export COMMANDLINE_ARGS="--api"
  ## crashes with 2 cards, so to get it to run on the second card (only), unremark the following 
@@ -236,9 +237,9 @@ cd ..
 python3 -m venv venv
 source venv/bin/activate
 # pre-install torch and torchvision from nightlies - note you may want to update versions...
-python3 -m pip install --pre torch==2.3.0.dev20231223 torchvision==0.18.0.dev20231223+rocm5.7 --index-url https://download.pytorch.org/whl/nightly/rocm5.7
-python3 -m pip install -r requirements.txt  --extra-index-url https://download.pytorch.org/whl/nightly/rocm5.7
-python3 -m pip install -r custom_nodes/ComfyUI-Manager/requirements.txt --extra-index-url https://download.pytorch.org/whl/nightly/rocm5.7
+python3 -m pip install --pre torch==2.3.0.dev20240118+rocm6.0 torchvision==0.18.0.dev20240118+rocm5.7 --index-url https://download.pytorch.org/whl/nightly
+python3 -m pip install -r requirements.txt  --extra-index-url https://download.pytorch.org/whl/nightly
+python3 -m pip install -r custom_nodes/ComfyUI-Manager/requirements.txt --extra-index-url https://download.pytorch.org/whl/nightly
 
 # end vend if needed...
 deactivate
@@ -356,7 +357,7 @@ conda activate textgen
 pip install --pre cmake colorama filelock lit numpy Pillow Jinja2 \
 	mpmath fsspec MarkupSafe certifi filelock networkx \
 	sympy packaging requests \
-         --index-url https://download.pytorch.org/whl/nightly/rocm5.7
+         --index-url https://download.pytorch.org/whl/nightly
 ```
 
 
@@ -371,9 +372,9 @@ Instead of that we go and look through the files at https://download.pytorch.org
 
 Here we refer to specific nightly versions to keep things simple. 
 ```bash
-pip install --pre torch==2.3.0.dev20231223 torchvision==0.18.0.dev20231223+rocm5.7 \
-  torchtext==0.17.0.dev202312238+cpu torchaudio triton pytorch-triton pytorch-triton-rocm \
-  --index-url https://download.pytorch.org/whl/nightly/rocm5.7
+pip install --pre torch==2.3.0.dev20240118+rocm6.0 torchvision==0.18.0.dev20240118+rocm5.7 \
+  torchtext==0.17.0.dev20240118+cpu torchaudio triton pytorch-triton pytorch-triton-rocm \
+  --index-url https://download.pytorch.org/whl/nightly
 ```
 
 
@@ -385,14 +386,14 @@ Project website : https://github.com/arlo-phoenix/bitsandbytes-rocm-5.6
 cd
 git clone https://github.com/arlo-phoenix/bitsandbytes-rocm-5.6.git
 cd bitsandbytes-rocm-5.6/
-BUILD_CUDA_EXT=0 pip install -r requirements.txt --extra-index-url https://download.pytorch.org/whl/nightly/rocm5.7
+BUILD_CUDA_EXT=0 pip install -r requirements.txt --extra-index-url https://download.pytorch.org/whl/nightly
 # 7900XTX
 #make hip ROCM_TARGET=gfx1100 ROCM_HOME=/opt/rocm-6.0.0/
 # 6900XT
 #make hip ROCM_TARGET=gfx1030 ROCM_HOME=/opt/rocm-6.0.0/
 # both...
 make hip ROCM_TARGET=gfx1100,gfx1030 ROCM_HOME=/opt/rocm-6.0.0/
-pip install . --extra-index-url https://download.pytorch.org/whl/nightly/rocm5.7
+pip install . --extra-index-url https://download.pytorch.org/whl/nightly
 ```
 
 
@@ -404,15 +405,14 @@ pip install . --extra-index-url https://download.pytorch.org/whl/nightly/rocm5.7
 ```
 
 ### Flash-Attention 2 :
-Install may take a few mins ( takes author close to 5 as tiem of writing )...
-2023-12-17 - It appears Flash Attention is related to issues with new ( ROCm 6.0 ) versions 
+Install may take a few mins ( takes author close to 5 minutes at time of writing )...
+2024-01-18 - FA2 appears to be working now...
 ```bash
-#cd
-#git clone https://github.com/ROCmSoftwarePlatform/flash-attention.git
-#cd flash-attention
-#pip install . 
+cd
+git clone https://github.com/ROCmSoftwarePlatform/flash-attention.git
+cd flash-attention
+pip install . 
 ```
-2023-11-30 - Note it appears PyTorch for ROCm doesn't include FA support at this time... as there's a warning : "UserWarning: 1Torch was not compiled with memory efficient attention. " Further this issue is noted here : https://github.com/pytorch/pytorch/issues/112997 - So while the above runs, it isn't operating at the present time. 
 
 ## Oobabooga / Text-generation-webui - Install webui...
 ```bash
@@ -430,14 +430,14 @@ pip install -r requirements_amd.txt
 
 Exllama and Exllamav2 loaders ...
 2023-12-17 - Bad news, ROCm 6.0 appears to break loading with exllama and it's not been updated....  Good news, exllamav2 has been updated and does work, including support for Mixtral and MoE ( Mixture of Experts ) models.  
-2023-12-23 - After many tests, it appears that the exllamav2 that's installed above gives an error, so we're compiling and reinstalling exllama here as when we do that it does work.  
+2024-01-20 - Thanks to TurboDerp for fixing 0.0.11-> latest the code so that it works with HIP! 
 ```bash
 # install exllama
 #git clone https://github.com/turboderp/exllama repositories/exllama
 # install exllamav2
 git clone https://github.com/turboderp/exllamav2 repositories/exllamav2
 cd repositories/exllamav2
-pip install .   --index-url https://download.pytorch.org/whl/nightly/rocm5.7
+pip install .   --index-url https://download.pytorch.org/whl/nightly
 cd ../..
 ```
 
