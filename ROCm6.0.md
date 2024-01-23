@@ -482,13 +482,16 @@ If you have old models,  link pre-stored models into the models
 
 Note that to run the script : 
 ```bash
+# conda activate textgen
 source run.sh
 ```
 
 The exllamav2 loader works with most GPTQ models; It's the best choice as it is fast.   
 Some models that won't load that way will load with AutoGPTQ - but without Triton ( triton seems to break things ). 
+
 2023-11-30 - I've had things work on one card or the other, but not on both cards, 
-loading on both cards causes LLMs to spit out gibberish.   It appears the bug with multiple GPUs is not resolved yet... and as such loading models across GPUs outputs gibberish.  https://github.com/ROCmSoftwarePlatform/rocBLAS/issues/1346#issuecomment-1741851573
+loading on both cards causes LLMs to spit out gibberish.   It appears the bug with multiple GPUs is not resolved yet... and as such loading models across GPUs outputs gibberish.  https://github.com/ROCmSoftwarePlatform/rocBLAS/issues/1346#issuecomment-1741851573 - 
+2024-01-22 - I can now report that I can load models using both cards and it is responsive.  It appears that this issue has been resolved now.  
 
 ## End - Oobabooga - Text-Generation-WebUI
 
