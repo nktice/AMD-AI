@@ -1,26 +1,39 @@
 # AMD / Radeon 7900XTX 6900XT GPU ROCm install / setup / config 
 # Ubuntu 22.04 / 23.04  
-# AMD ROCm 5.6.1 
-# Automatic1111 Stable Diffusion + ComfyUI ( venv ) 
-# Oobabooga - Text Generation WebUI ( Conda / PyTorch (ROCm) / BitsAndBytes-ROCm ( 0.41.1 ) / ExLlama + ExLlamav2 ) 
+# ROCm 5.7.3
+# Automatic1111 Stable Diffusion + ComfyUI  ( venv ) 
+# Oobabooga - Text Generation WebUI ( conda, Exllama, BitsAndBytes-ROCm-5.6 ) 
 
 ## Install notes / instructions ##
-2023-07 - I have composed this collection of instructions as they are my notes.  I use to setup my own Linux system with AMD parts. I've gone over these doing many re-installs to get them all right.  This is what I had hoped to find when I had search for install instructions -  so I'm sharing them in the hopes that they save time for other people.   There may be in here extra parts that aren't needed but this works for me.  Originally text, with comments like a shell script that I cut and paste 
 
-2023-09-09 - I had a report that this doesn't work in virtual machines (virtualbox) as the system there cannot see the hardware, it can't load drivers, etc.  Windows users may find it more helpful to try DirectML - https://rocm.docs.amd.com/en/latest/deploy/windows/quick_start.html / https://github.com/lshqqytiger/stable-diffusion-webui-directml
+ I have composed this collection of instructions as they are my notes.
+ I use to setup my own Linux system with AMD parts.
+ I've gone over these doing many re-installs to get them all right.
+ This is what I had hoped to find when I had search for install instructions -
+ so I'm sharing them in the hopes that they save time for other people. 
+ There may be in here extra parts that aren't needed but this works for me.
+ Originally text, with comments like a shell script that I cut and paste - 2023-07 - nktice
 
-2023-09-30 - Added new version for ROCm 5.7 -> https://github.com/nktice/AMD-AI/blob/main/ROCm-5.7.md  
-2023-11-30 - Updated for ROCm 5.7.2 and PyTorch from Nightlies, and simplification of process -> https://github.com/nktice/AMD-AI/blob/main/ROCm-5.7.md  
 
-2023-11-30 - Rewrite of this document to include updates... ROCm 5.6.1,  Stable Diffusion and ComfyUI sections rewritten for venv,  Textgen webui section updated to use more of the project requirements as designed.  Overall greatly simplified.  
+2023-09-09 - I had a report that this doesn't work in virtual machines (virtualbox) as the system there cannot see the hardware, it can't load drivers, etc.  While this is not a guide about Windows, Windows users may find it more helpful to try DirectML - https://rocm.docs.amd.com/en/latest/deploy/windows/quick_start.html / https://github.com/lshqqytiger/stable-diffusion-webui-directml
+
+2023-09-30 - Updated to use ROCm 5.7 - As it is out now, and does appear to be working much like 5.6...
+- On my first attempt, I needed a reboot to get it working... (I've since re-installed and it works as expected following this guide. ) 
+- I've made this a seprate file to start with as these features aren't referred to as being supported by the dependent packages.
+- Added notes for exllamav2 and fast-attention - they're not working yet... but exllamav2 is under active development, and worth following.  
+- I will also note issues with dual GPU loading of models that appear to load but that output gibberish has now been addressed - alas the patch has not made it to packages... here is the bug thread : https://github.com/ROCmSoftwarePlatform/rocBLAS/issues/1346
+
+2023-11-28 - Update for ROCm 5.7.2.  Revised how Stable Diffusion and ComfyUI are handled ( using venv now ).  Revise handling for Oobabooga... now uses most of their requirements_amd.txt and Flash Attention!  I will note I first attempted to do with Ubuntu 23.10 and foudn obstacles there - they integrate the video drivers, but they're not the latest and this breaks ROCm install, so we're still using 23.04 for the time being.  
 
 2023-12-13 - Added supplement for those who want to use Mixtral models ( uses llama.cpp ) - https://github.com/nktice/AMD-AI/blob/main/Mixtral.md
 
 2023-12-18 - ROCm 6.0 is out, so there's an updated guide for that here - https://github.com/nktice/AMD-AI/blob/main/ROCm6.0.md
 
-2023-12-18 - Update this document ( for ROCm 5.6.1 ) as it is the current 'stable' version supported by PyTorch.  Test showed it was able to load the modest Mixtral variant TheBloke_mixtralnt-4x7b-test-GPTQ using ExLlamav2 - takes ~18GB out of VRAM to hold this model.  
+2023-12-18 - This document has been updated for ROCm 5.7.3 
 
-2023-12-23 - Update to use miniconda instead of anaconda.  Exllamav2 improved details.  Looks like FA2 works.  Minor revisions.
+2023-12-23 - Update to default to using miniconda ( with minor revisions so that the instructions are there for full anaconda too for those who want it ).  Updated date for nightlies.  Exllamav2 commands corrected.  I'll note that this was tested on Ubuntu 23.10.1 and there are parts that work ( Stable Diffusion, ComfyUI ) alas Oobabooga has issues ( exllamav2 errors out, as does flash-attention 2... ) so 23.10.1 is not recommended at this time.  Exllamav2 does work with 23.10.1 with ROCm 6.0 ( URL above ).  
+
+2023-03-06 - Updates becauase ROCm 5.7 is the current stable version supported by PyTorch, as such I'm making those instructions the main instructions offered here.  They were in a separate file, those contents are still there in case someone links to it, and for posterity once things move on.   Minor updates here to refer to the latest versions of some files. 
 
 -----
 
@@ -84,7 +97,8 @@ Note : This commonly produces warning message about 'Possible missing firmware' 
 https://rocmdocs.amd.com/en/latest/deploy/linux/os-native/install.html
 
 ```bash
-echo "deb [arch=amd64 signed-by=/etc/apt/keyrings/rocm.gpg] https://repo.radeon.com/rocm/apt/5.6.1 jammy main" \
+#echo "deb [arch=amd64 signed-by=/etc/apt/keyrings/rocm.gpg] https://repo.radeon.com/rocm/apt/5.7.3 jammy main" \
+echo "deb [arch=amd64 signed-by=/etc/apt/keyrings/rocm.gpg] https://repo.radeon.com/rocm/apt/5.7.3 jammy main" \
     | sudo tee --append /etc/apt/sources.list.d/rocm.list
 echo -e 'Package: *\nPin: release o=repo.radeon.com\nPin-Priority: 600' \
     | sudo tee /etc/apt/preferences.d/rocm-pin-600
@@ -142,7 +156,7 @@ This section is optional, and as such has been moved to [performance-tuning](htt
 
 ## Top for video memory and usage
 nvtop 
-Note : I have had issues with the distro version crashes with 2 GPUs, installing new version from sources works fine.  Project website : https://github.com/Syllo/nvtop 
+Note : I have had issues with the distro version crashes with 2 GPUs, installing new version from sources works fine.  Instructions for that are included at the bottom, as they depend on things installed between here and there.   Project website : https://github.com/Syllo/nvtop 
 ```bash
 sudo apt install -y nvtop 
 ```
@@ -183,7 +197,9 @@ sudo apt install -y wget git python3 python3-venv libgl1 libglib2.0-0
 tee --append webui-user.sh <<EOF
  ## Torch for ROCm
 # generic import...
-export TORCH_COMMAND="pip install torch torchvision --index-url https://download.pytorch.org/whl/rocm5.6"
+# export TORCH_COMMAND="pip install torch torchvision --index-url https://download.pytorch.org/whl/nightly/rocm5.7"
+# use specific versions to avoid downloading all the nightlies... ( update dates as needed ) 
+ export TORCH_COMMAND="pip install --pre torch==2.3.0.dev20240306 torchvision==0.18.0.dev20240306+rocm5.7 --index-url https://download.pytorch.org/whl/nightly/rocm5.7"
  ## And if you want to call this from other programs...
  export COMMANDLINE_ARGS="--api"
  ## crashes with 2 cards, so to get it to run on the second card (only), unremark the following 
@@ -202,14 +218,15 @@ into the folder where you have other models ( to avoid issues )
 ```
 
 ## Run SD...
-Note that the first time it starts it may take it a while to go and get things it's not always good about saying what it's up to. 
+ Note that the first time it starts it may take it a while to go and get things
+ it's not always good about saying what it's up to. 
 ```bash
 ./webui.sh 
 ```
 
 ## end Stable Diffusion 
 
---- 
+-------
 
 # ComfyUI install script 
 - variation of https://raw.githubusercontent.com/ltdrdata/ComfyUI-Manager/main/scripts/install-comfyui-venv-linux.sh 
@@ -229,9 +246,9 @@ cd ..
 python3 -m venv venv
 source venv/bin/activate
 # pre-install torch and torchvision from nightlies - note you may want to update versions...
-python3 -m pip install --pre torch torchvision --index-url https://download.pytorch.org/whl/rocm5.6
-python3 -m pip install -r requirements.txt  --extra-index-url https://download.pytorch.org/whl/rocm5.6
-python3 -m pip install -r custom_nodes/ComfyUI-Manager/requirements.txt --extra-index-url https://download.pytorch.org/whl/rocm5.6
+python3 -m pip install --pre torch==2.3.0.dev20240306 torchvision==0.18.0.dev20230306+rocm5.7 --index-url https://download.pytorch.org/whl/nightly/rocm5.7
+python3 -m pip install -r requirements.txt  --extra-index-url https://download.pytorch.org/whl/nightly/rocm5.7
+python3 -m pip install -r custom_nodes/ComfyUI-Manager/requirements.txt --extra-index-url https://download.pytorch.org/whl/nightly/rocm5.7
 
 # end vend if needed...
 deactivate
@@ -265,9 +282,8 @@ sed -i "s@path/to@`echo ~`@g" extra_model_paths.yaml
 #vi extra_model_paths.yaml
 ```
 
-Now you can call ComfyUI through the script created above.
-
 ## End ComfyUI install
+
 
 ---
 
@@ -280,8 +296,6 @@ First we'll need Conda ... Required for pytorch... Conda provides virtual enviro
 Here is more info on managing conda : https://docs.conda.io/projects/conda/en/latest/user-guide/getting-started.html#
 Other notes : https://docs.conda.io/projects/conda/en/latest/user-guide/install/linux.html
 Download info : https://www.anaconda.com/download/
-
-
 
 Anaconda ( if you prefer this to miniconda below ) 
 ```bash
@@ -351,46 +365,63 @@ conda activate textgen
 pip install --pre cmake colorama filelock lit numpy Pillow Jinja2 \
 	mpmath fsspec MarkupSafe certifi filelock networkx \
 	sympy packaging requests \
-         --index-url https://download.pytorch.org/whl/rocm5.6
+         --index-url https://download.pytorch.org/whl/nightly/rocm5.7
 ```
 
+Here is old method that works - but tries to download things back to the start of these releases which may take a while... so it is remarked... 
 ```bash
-# install
-pip install torch torchvision torchtext torchaudio torchdata  \
- --index-url https://download.pytorch.org/whl/rocm5.6     
+## install
+#pip install torch torchvision torchtext torchaudio torchdata \
+#	triton pytorch-triton pytorch-triton-rocm \
+#         --index-url https://download.pytorch.org/whl/nightly/rocm5.7
 ```
+Instead of that we go and look through the files at https://download.pytorch.org/whl/nightly/rocm5.7/ (note trailing slash) and in the program directories there, we can see the individual nightly build files.  One has been chosen at the time of writing this, if you want newer, that is where you can find those details to update the file names / versions.  
 
+Here is the new version that tries to only use the latest and the work-around to make that happen...
+```bash
+pip install --pre torch==2.3.0.dev20240306 torchvision==0.18.0.dev20240306+rocm5.7 \
+  torchtext==0.17.0.dev20240306+cpu torchaudio triton pytorch-triton pytorch-triton-rocm \
+  --index-url https://download.pytorch.org/whl/nightly/rocm5.7
+```
 
 
 ### bitsandbytes rocm 
-2023-09-11 New version of BitsAndBytes(0.41 !) made for 5.6 
+2023-09-11 - New version of BitsAndBytes(0.41 !) made for 5.6 
 Project website : https://github.com/arlo-phoenix/bitsandbytes-rocm-5.6
 
 ```bash
 cd
 git clone https://github.com/arlo-phoenix/bitsandbytes-rocm-5.6.git
 cd bitsandbytes-rocm-5.6/
-BUILD_CUDA_EXT=0 pip install -r requirements.txt --extra-index-url https://download.pytorch.org/whl/rocm5.6
+BUILD_CUDA_EXT=0 pip install -r requirements.txt --extra-index-url https://download.pytorch.org/whl/nightly/rocm5.7
 # 7900XTX
-#make hip ROCM_TARGET=gfx1100 ROCM_HOME=/opt/rocm-5.6.1/
+#make hip ROCM_TARGET=gfx1100 ROCM_HOME=/opt/rocm-5.7.3/
 # 6900XT
-#make hip ROCM_TARGET=gfx1030 ROCM_HOME=/opt/rocm-5.6.1/
+#make hip ROCM_TARGET=gfx1030 ROCM_HOME=/opt/rocm-5.7.3/
 # both...
-make hip ROCM_TARGET=gfx1100,gfx1030 ROCM_HOME=/opt/rocm-5.6.1/
-pip install . --extra-index-url https://download.pytorch.org/whl/rocm5.6
+make hip ROCM_TARGET=gfx1100,gfx1030 ROCM_HOME=/opt/rocm-5.7.3/
+pip install . --extra-index-url https://download.pytorch.org/whl/nightly/rocm5.7
 ```
 
 
+### Triton 
+2023-09-11 : Usually we get Triton from the PyTorch nightly build files (included above)  but I had some errors [akin to these](https://github.com/openai/triton/issues/2002)  and found getting it fresh from the nightly build resovled them.
+2023-12-18 : It appears that this issue has been resolved, so this line is remarked for now - in case there are issues with Triton and it needs to be called from nightlies again I'll leave this here. 
+```bash
+#pip install -U --index-url https://aiinfra.pkgs.visualstudio.com/PublicPackages/_packaging/Triton-Nightly/pypi/simple/ triton-nightly
+```
+
 ### Flash-Attention 2 :
-Install may take a few mins ( takes author close to 5 minutes at time of writing )...
+Install may take a few mins ( takes author close to 5mins on an AMD 5950x CPU as tiem of writing )... 
+It appears this may work with ROCm 5.7.3 and ExLlamav2 ( at least it doesn't complain about it being missing when it is installed ) .
 ```bash
 cd
 git clone https://github.com/ROCmSoftwarePlatform/flash-attention.git
 cd flash-attention
-pip install .
+pip install . --extra-index-url https://download.pytorch.org/whl/nightly/rocm5.7
 ```
-2023-11-30 - Note it appears PyTorch for ROCm doesn't include FA support at this time... as there's a warning : "UserWarning: 1Torch was not compiled with memory efficient attention. " Further this issue is noted here : https://github.com/pytorch/pytorch/issues/112997 - So while the above runs, it isn't operating at the present time. 
-2023-12-23 - FA2 appears to be working.  YMMV. 
+2023-12-18 - This does appear to work with 5.7.3 and exllamav2.
+Note that flash attention has been under development and may not work with some versions / configurations.  
 
 ## Oobabooga / Text-generation-webui - Install webui...
 ```bash
@@ -407,21 +438,19 @@ pip install -r requirements_amd.txt
 ```
 
 Exllama and Exllamav2 loaders ...
-exllama isn't being maintained, but exllamav2 is...
+It appears ExLlama isn't being maintained and the emphasis is now on ExLlamav2... v2 has been updated to support Mixture of Experts (MoE such as Mixtral ). 
 2023-12-23 - After many tests, it appears that the exllamav2 that's installed above gives an error, so we're compiling and reinstalling exllama here as when we do that it does work.  
-2024-01-19 - Something has broken and exllamav2 won't compile directly from checkout, 
-The package version for 5.6 may be functional.  However, for those who want to compile the latest, or for their hardware, 
-I've added a line to reset the checkout to the last known good / compiling version 0.0.11
-2024-01-20 - Thanks to TurboDerp for fixing the exllamav2 code to play nice with HIP... workaround no longer needed, so I've remarked it out incase it's helpful in the future. 
+2024-01-18 - Something has broken and exllamav2 won't compile so I've added a line to reset the checkout to the last known good / compiling version 0.0.11 
+2024-01-20 - Thanks to TurboDerp for resolving issue with exllamav2 so it plays nice with HIP.  Remarked out workaround, in case such is useful in future. 
 ```bash
-## install exllama
-##git clone https://github.com/turboderp/exllama repositories/exllama
+# install exllama
+#git clone https://github.com/turboderp/exllama repositories/exllama
 # install exllamav2
 git clone https://github.com/turboderp/exllamav2 repositories/exllamav2
 cd repositories/exllamav2
 # Force collection back to base 0.0.11 
 # git reset --hard a4ecea6
-pip install .   
+pip install .   --index-url https://download.pytorch.org/whl/nightly/rocm5.7
 cd ../..
 ```
 
@@ -431,10 +460,8 @@ tee --append run.sh <<EOF
 #!/bin/bash
 ## activate conda
 conda activate textgen
-## command to run server...
-# python server.py
-# preferred configuration... note that --listen makes it accessible on the local network.
-python server.py --listen --extensions sd_api_pictures send_pictures gallery
+## command to run server... 
+python server.py --listen  --extensions sd_api_pictures send_pictures gallery 
 conda deactivate
 EOF
 chmod u+x run.sh
@@ -455,12 +482,12 @@ If you have old models,  link pre-stored models into the models
 # ln -s /path/to/models models
 ```
 
-And here's the command to start the interface... note that it takes some time to download components the first time it runs. 
+Note that to run the script : 
 ```bash
 source run.sh
 ```
 
-
+It does download some things the first time it runs. 
 The exllamav2 loader works with most GPTQ models.  This is the best choice as it is fast.   
 Some models that won't load that way will load with AutoGPTQ - but without Triton ( triton seems to break things ). 
 Also worth noting, I've had things work on one card or the other, but not on both cards, 
@@ -468,6 +495,7 @@ loading on both cards causes LLMs to spit out gibberish.
 
 ## End - Oobabooga - Text-Generation-WebUI
 
+2023-11-30 - It appears the bug with multiple GPUs is not resolved yet... and as such loading models across GPUs outputs gibberish.  https://github.com/ROCmSoftwarePlatform/rocBLAS/issues/1346#issuecomment-1741851573
 
 ---
 
@@ -477,7 +505,7 @@ project website : https://github.com/Syllo/nvtop
 optional - tool for displaying gpu / memory usage info
 The package for this crashes with 2 gpu's, here it is from source.
 ```bash
-sudo apt install -y libdrm-dev libsystemd-dev libudev-dev cmake
+sudo apt install -y libdrm-dev libsystemd-dev libudev-dev
 cd 
 git clone https://github.com/Syllo/nvtop.git
 mkdir -p nvtop/build && cd nvtop/build
@@ -486,4 +514,5 @@ make
 sudo make install
 ```
 # end nvtop
+
 
