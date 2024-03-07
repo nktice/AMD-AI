@@ -33,7 +33,7 @@
 
 2023-12-23 - Update to default to using miniconda ( with minor revisions so that the instructions are there for full anaconda too for those who want it ).  Updated date for nightlies.  Exllamav2 commands corrected.  I'll note that this was tested on Ubuntu 23.10.1 and there are parts that work ( Stable Diffusion, ComfyUI ) alas Oobabooga has issues ( exllamav2 errors out, as does flash-attention 2... ) so 23.10.1 is not recommended at this time.  Exllamav2 does work with 23.10.1 with ROCm 6.0 ( URL above ).  
 
-2023-03-06 - Updates becauase ROCm 5.7 is the current stable version supported by PyTorch, as such I'm making those instructions the main instructions offered here.  They were in a separate file, those contents are still there in case someone links to it, and for posterity once things move on.   Minor updates here to refer to the latest versions of some files. 
+2024-03-06 - Updates becauase ROCm 5.7 is the current stable version supported by PyTorch, as such I'm making those instructions the main instructions offered here.  They were in a separate file, those contents are still there in case someone links to it, and for posterity once things move on.   Minor updates here to refer to the latest versions of some files. 
 
 -----
 
