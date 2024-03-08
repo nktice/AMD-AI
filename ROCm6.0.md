@@ -24,7 +24,7 @@
 
 2024-01-20 - Update versions, flash attention 2 appears to be working now, issue with exllamav2 loading appears resolved.  There are now nightlies made for 6.0 drivers - changes to use those. 
 
-2024-03-06 - Update for ROCm 6.0.2 
+2024-03-06 - Update for ROCm 6.0.2 - Tested with Ubuntu 23.04 and 23.10.1 and all components function as expected - including multi-architecture GPU loading.   24.04 does not appear to be working with amdgpu-dkms at this time. 
 
 --------
 
