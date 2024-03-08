@@ -35,7 +35,7 @@
 
 2024-03-06 - Updates becauase ROCm 5.7 is the current stable version supported by PyTorch, as such I'm making those instructions the main instructions offered here.  They were in a separate file, those contents are still there in case someone links to it, and for posterity once things move on.   Minor updates here to refer to the latest versions of some files. 
 
-2024-03-07 - This page updated to call standard stable default versions ( rather than development versions... )  Mostly functional with Ubuntu 23.10.1 ( Flash Attention 2 does not compile ).  Ubuntu 24.04 does not yet work with amdgpu-dkms 
+2024-03-07 - This page updated to call standard stable default versions ( rather than development versions... )  Mostly functional with Ubuntu 23.10.1 ( Flash Attention 2 does not compile ).  Ubuntu 24.04 does not yet work with amdgpu-dkms.  Note that ROCm 5.7 series still has the issue where loading across multiple GPUs with different architectures will appear to work, but outputs gibberish. 
 
 -----
 
