@@ -35,6 +35,8 @@
 
 2024-03-06 - Updates becauase ROCm 5.7 is the current stable version supported by PyTorch, as such I'm making those instructions the main instructions offered here.  They were in a separate file, those contents are still there in case someone links to it, and for posterity once things move on.   Minor updates here to refer to the latest versions of some files. 
 
+2024-03-07 - This page updated to call standard stable default versions ( rather than development versions... )  Mostly functional with Ubuntu 23.10.1 ( Flash Attention 2 does not compile ).  Ubuntu 24.04 does not yet work with amdgpu-dkms 
+
 -----
 
 
@@ -199,7 +201,7 @@ tee --append webui-user.sh <<EOF
 # generic import...
 # export TORCH_COMMAND="pip install torch torchvision --index-url https://download.pytorch.org/whl/nightly/rocm5.7"
 # use specific versions to avoid downloading all the nightlies... ( update dates as needed ) 
- export TORCH_COMMAND="pip install --pre torch==2.3.0.dev20240306 torchvision==0.18.0.dev20240306+rocm5.7 --index-url https://download.pytorch.org/whl/nightly/rocm5.7"
+ export TORCH_COMMAND="pip install --pre torch torchvision --index-url https://download.pytorch.org/whl/rocm5.7"
  ## And if you want to call this from other programs...
  export COMMANDLINE_ARGS="--api"
  ## crashes with 2 cards, so to get it to run on the second card (only), unremark the following 
@@ -246,9 +248,9 @@ cd ..
 python3 -m venv venv
 source venv/bin/activate
 # pre-install torch and torchvision from nightlies - note you may want to update versions...
-python3 -m pip install --pre torch==2.3.0.dev20240306 torchvision==0.18.0.dev20230306+rocm5.7 --index-url https://download.pytorch.org/whl/nightly/rocm5.7
-python3 -m pip install -r requirements.txt  --extra-index-url https://download.pytorch.org/whl/nightly/rocm5.7
-python3 -m pip install -r custom_nodes/ComfyUI-Manager/requirements.txt --extra-index-url https://download.pytorch.org/whl/nightly/rocm5.7
+python3 -m pip install --pre torch torchvision --index-url https://download.pytorch.org/whl/rocm5.7
+python3 -m pip install -r requirements.txt  --extra-index-url https://download.pytorch.org/whl/rocm5.7
+python3 -m pip install -r custom_nodes/ComfyUI-Manager/requirements.txt --extra-index-url https://download.pytorch.org/whl/rocm5.7
 
 # end vend if needed...
 deactivate
@@ -365,23 +367,12 @@ conda activate textgen
 pip install --pre cmake colorama filelock lit numpy Pillow Jinja2 \
 	mpmath fsspec MarkupSafe certifi filelock networkx \
 	sympy packaging requests \
-         --index-url https://download.pytorch.org/whl/nightly/rocm5.7
+         --index-url https://download.pytorch.org/whl/rocm5.7
 ```
 
-Here is old method that works - but tries to download things back to the start of these releases which may take a while... so it is remarked... 
 ```bash
-## install
-#pip install torch torchvision torchtext torchaudio torchdata \
-#	triton pytorch-triton pytorch-triton-rocm \
-#         --index-url https://download.pytorch.org/whl/nightly/rocm5.7
-```
-Instead of that we go and look through the files at https://download.pytorch.org/whl/nightly/rocm5.7/ (note trailing slash) and in the program directories there, we can see the individual nightly build files.  One has been chosen at the time of writing this, if you want newer, that is where you can find those details to update the file names / versions.  
-
-Here is the new version that tries to only use the latest and the work-around to make that happen...
-```bash
-pip install --pre torch==2.3.0.dev20240306 torchvision==0.18.0.dev20240306+rocm5.7 \
-  torchtext==0.17.0.dev20240306+cpu torchaudio triton pytorch-triton pytorch-triton-rocm \
-  --index-url https://download.pytorch.org/whl/nightly/rocm5.7
+pip install --pre torch torchvision torchtext torchaudio triton pytorch-triton-rocm \
+  --index-url https://download.pytorch.org/whl/rocm5.7
 ```
 
 
@@ -393,7 +384,7 @@ Project website : https://github.com/arlo-phoenix/bitsandbytes-rocm-5.6
 cd
 git clone https://github.com/arlo-phoenix/bitsandbytes-rocm-5.6.git
 cd bitsandbytes-rocm-5.6/
-BUILD_CUDA_EXT=0 pip install -r requirements.txt --extra-index-url https://download.pytorch.org/whl/nightly/rocm5.7
+BUILD_CUDA_EXT=0 pip install -r requirements.txt --extra-index-url https://download.pytorch.org/whl/rocm5.7
 # 7900XTX
 #make hip ROCM_TARGET=gfx1100 ROCM_HOME=/opt/rocm-5.7.3/
 # 6900XT
@@ -404,24 +395,18 @@ pip install . --extra-index-url https://download.pytorch.org/whl/nightly/rocm5.7
 ```
 
 
-### Triton 
-2023-09-11 : Usually we get Triton from the PyTorch nightly build files (included above)  but I had some errors [akin to these](https://github.com/openai/triton/issues/2002)  and found getting it fresh from the nightly build resovled them.
-2023-12-18 : It appears that this issue has been resolved, so this line is remarked for now - in case there are issues with Triton and it needs to be called from nightlies again I'll leave this here. 
-```bash
-#pip install -U --index-url https://aiinfra.pkgs.visualstudio.com/PublicPackages/_packaging/Triton-Nightly/pypi/simple/ triton-nightly
-```
-
 ### Flash-Attention 2 :
 Install may take a few mins ( takes author close to 5mins on an AMD 5950x CPU as tiem of writing )... 
 It appears this may work with ROCm 5.7.3 and ExLlamav2 ( at least it doesn't complain about it being missing when it is installed ) .
+2024-03-07 - As of checking this does not compile on Ubuntu 23.10.1 - Thankfully it's optional and things are functional without it. 
+
 ```bash
 cd
 git clone https://github.com/ROCmSoftwarePlatform/flash-attention.git
 cd flash-attention
-pip install . --extra-index-url https://download.pytorch.org/whl/nightly/rocm5.7
+pip install . --extra-index-url https://download.pytorch.org/whl/rocm5.7
 ```
-2023-12-18 - This does appear to work with 5.7.3 and exllamav2.
-Note that flash attention has been under development and may not work with some versions / configurations.  
+
 
 ## Oobabooga / Text-generation-webui - Install webui...
 ```bash
@@ -450,7 +435,7 @@ git clone https://github.com/turboderp/exllamav2 repositories/exllamav2
 cd repositories/exllamav2
 # Force collection back to base 0.0.11 
 # git reset --hard a4ecea6
-pip install .   --index-url https://download.pytorch.org/whl/nightly/rocm5.7
+pip install .   --index-url https://download.pytorch.org/whl/rocm5.7
 cd ../..
 ```
 
@@ -495,7 +480,6 @@ loading on both cards causes LLMs to spit out gibberish.
 
 ## End - Oobabooga - Text-Generation-WebUI
 
-2023-11-30 - It appears the bug with multiple GPUs is not resolved yet... and as such loading models across GPUs outputs gibberish.  https://github.com/ROCmSoftwarePlatform/rocBLAS/issues/1346#issuecomment-1741851573
 
 ---
 
