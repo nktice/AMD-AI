@@ -12,7 +12,12 @@ LLMs... ( no particular order... )
 - Code Llama - https://huggingface.co/codellama
 - Zain ul Abideen - https://huggingface.co/abideen - Model merger / quantizations ... NexoNimbus  DareVox 
 - Cognitive Computations - https://erichartford.com/ - https://huggingface.co/cognitivecomputations - source of Dolphin ( and other ) models...
-- 
+
+Some published models aren't in Safetensors formats and need conversion if they are to work in Oobabooga's UI and other systems.  Here are some links to the related instructions to do conversions...
+- PyTorch to Safetensors conversion - https://github.com/Silver267/pytorch-to-safetensor-converter
+- Exllamav2's converter - https://github.com/turboderp/exllamav2/blob/master/doc/convert.md
+
+-----
 
 Stable Diffusion / ComfyUI  checkpoints...
 - Civit.ai / https://civitai.com/
