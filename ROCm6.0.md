@@ -182,7 +182,9 @@ cd stable-diffusion-webui
 # Requisites : 
 ```bash
 sudo apt install -y wget git python3 python3-venv libgl1 libglib2.0-0
+python3 -m venv venv
 ```
+2024-03-30 - Started getting errors saying that it couldn't run venv, so I've added the last line to initialize it manually. 
 
 ## Edit environment settings...
 ```bash
