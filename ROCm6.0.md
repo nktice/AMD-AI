@@ -26,6 +26,8 @@
 
 2024-03-06 - Update for ROCm 6.0.2 - Tested with Ubuntu 23.04 and 23.10.1 and all components function as expected - including multi-architecture GPU loading.   24.04 does not appear to be working with amdgpu-dkms at this time. 
 
+2024-03-30 - Update for ROCm 6.0.3, and nightlies for PyTorch 2.4..., torchvision-0.19... , etc. 
+
 --------
 
 
@@ -88,7 +90,7 @@ Note : This commonly produces warning message about 'Possible missing firmware' 
 https://rocmdocs.amd.com/en/latest/deploy/linux/os-native/install.html
 
 ```bash
-echo "deb [arch=amd64 signed-by=/etc/apt/keyrings/rocm.gpg] https://repo.radeon.com/rocm/apt/6.0.2/ jammy main" \
+echo "deb [arch=amd64 signed-by=/etc/apt/keyrings/rocm.gpg] https://repo.radeon.com/rocm/apt/6.0.3/ jammy main" \
     | sudo tee --append /etc/apt/sources.list.d/rocm.list
 echo -e 'Package: *\nPin: release o=repo.radeon.com\nPin-Priority: 600' \
     | sudo tee /etc/apt/preferences.d/rocm-pin-600
@@ -189,7 +191,7 @@ tee --append webui-user.sh <<EOF
 # generic import...
 # export TORCH_COMMAND="pip install torch torchvision --index-url https://download.pytorch.org/whl/nightly"
 # use specific versions to avoid downloading all the nightlies... ( update dates as needed ) 
- export TORCH_COMMAND="pip install --pre torch==2.3.0.dev20240306+rocm6.0  torchvision==0.18.0.dev20240306+rocm6.0 --index-url https://download.pytorch.org/whl/nightly"
+ export TORCH_COMMAND="pip install --pre torch==2.4.0.dev20240330+rocm6.0  torchvision==0.19.0.dev20240330+rocm6.0 --index-url https://download.pytorch.org/whl/nightly"
  ## And if you want to call this from other programs...
  export COMMANDLINE_ARGS="--api"
  ## crashes with 2 cards, so to get it to run on the second card (only), unremark the following 
@@ -239,7 +241,7 @@ cd ..
 python3 -m venv venv
 source venv/bin/activate
 # pre-install torch and torchvision from nightlies - note you may want to update versions...
-python3 -m pip install --pre torch==2.3.0.dev20240306+rocm6.0 torchvision==0.18.0.dev20240306+rocm6.0 --index-url https://download.pytorch.org/whl/nightly
+python3 -m pip install --pre torch==2.4.0.dev20240330+rocm6.0 torchvision==0.19.0.dev20240330+rocm6.0 --index-url https://download.pytorch.org/whl/nightly
 python3 -m pip install -r requirements.txt  --extra-index-url https://download.pytorch.org/whl/nightly
 python3 -m pip install -r custom_nodes/ComfyUI-Manager/requirements.txt --extra-index-url https://download.pytorch.org/whl/nightly
 
@@ -374,7 +376,7 @@ Instead of that we go and look through the files at https://download.pytorch.org
 
 Here we refer to specific nightly versions to keep things simple. 
 ```bash
-pip install --pre torch==2.3.0.dev20240306+rocm6.0 torchvision==0.18.0.dev20240306+rocm6.0 \
+pip install --pre torch==2.4.0.dev20240330+rocm6.0 torchvision==0.19.0.dev20240330+rocm6.0 \
   torchtext==0.17.0.dev20240306+cpu torchaudio triton pytorch-triton pytorch-triton-rocm \
   --index-url https://download.pytorch.org/whl/nightly
 ```
@@ -394,7 +396,7 @@ BUILD_CUDA_EXT=0 pip install -r requirements.txt --extra-index-url https://downl
 # 6900XT
 #make hip ROCM_TARGET=gfx1030 ROCM_HOME=/opt/rocm-6.0.0/
 # both...
-make hip ROCM_TARGET=gfx1100,gfx1030 ROCM_HOME=/opt/rocm-6.0.2/
+make hip ROCM_TARGET=gfx1100,gfx1030 ROCM_HOME=/opt/rocm-6.0.3/
 pip install . --extra-index-url https://download.pytorch.org/whl/nightly
 ```
 
