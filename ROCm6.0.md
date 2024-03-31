@@ -379,7 +379,7 @@ Instead of that we go and look through the files at https://download.pytorch.org
 Here we refer to specific nightly versions to keep things simple. 
 ```bash
 pip install --pre torch==2.4.0.dev20240330+rocm6.0 torchvision==0.19.0.dev20240330+rocm6.0 \
-  torchtext==0.17.0.dev20240306+cpu torchaudio triton pytorch-triton pytorch-triton-rocm \
+  torchtext torchaudio triton pytorch-triton pytorch-triton-rocm \
   --index-url https://download.pytorch.org/whl/nightly
 ```
 
@@ -509,7 +509,7 @@ project website : https://github.com/Syllo/nvtop
 optional - tool for displaying gpu / memory usage info
 The package for this crashes with 2 gpu's, here it is from source.
 ```bash
-sudo apt install -y libdrm-dev libsystemd-dev libudev-dev
+sudo apt install -y libdrm-dev libsystemd-dev libudev-dev cmake
 cd 
 git clone https://github.com/Syllo/nvtop.git
 mkdir -p nvtop/build && cd nvtop/build
