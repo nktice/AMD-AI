@@ -399,7 +399,10 @@ pip install . --extra-index-url https://download.pytorch.org/whl/nightly/rocm5.7
 Install may take a few mins ( takes author close to 5mins on an AMD 5950x CPU as tiem of writing )... 
 It appears this may work with ROCm 5.7.3 and ExLlamav2 ( at least it doesn't complain about it being missing when it is installed ) .
 2024-03-07 - As of checking this does not compile on Ubuntu 23.10.1 - Thankfully it's optional and things are functional without it. 
-
+Other notes - [
+2024-01-18 - with ROCm 6... FA2 appears to 'work'... as in it compiles and installs normally. 
+2024-04-03 - with ROCm 6... While this (2.0.4) version 'works' it isn't recent enough to be used by exllamav2 - Here is more info : https://github.com/turboderp/exllamav2/issues/397#issuecomment-2034652594 (2.2.1...)
+]
 ```bash
 cd
 git clone https://github.com/ROCmSoftwarePlatform/flash-attention.git
