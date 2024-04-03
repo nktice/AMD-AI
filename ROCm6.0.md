@@ -412,7 +412,8 @@ pip install . --extra-index-url https://download.pytorch.org/whl/nightly
 
 ### Flash-Attention 2 :
 Install may take a few mins ( takes author close to 5 minutes at time of writing )...
-2024-01-18 - FA2 appears to be working now...
+2024-01-18 - FA2 appears to be 'working' now... as in it compiles and installs normally. 
+2024-04-03 - While this (2.0.4) version 'works' it isn't recent enough to be used by exllamav2 - Here is more info : https://github.com/turboderp/exllamav2/issues/397#issuecomment-2034652594 (2.2.1...)
 ```bash
 cd
 git clone https://github.com/ROCmSoftwarePlatform/flash-attention.git
