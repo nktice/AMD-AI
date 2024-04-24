@@ -2,7 +2,7 @@
 # Ubuntu 22.04 / 23.04 / 23.10
 # ROCm 5.7.3
 # Automatic1111 Stable Diffusion + ComfyUI  ( venv ) 
-# Oobabooga - Text Generation WebUI ( conda, Exllama, BitsAndBytes-ROCm-5.6 ) 
+# Oobabooga - Text Generation WebUI ( conda, Exllamav2, BitsAndBytes ) 
 
 ## Install notes / instructions ##
 
