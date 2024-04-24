@@ -1,41 +1,33 @@
 # AMD / Radeon 7900XTX 6900XT GPU ROCm install / setup / config 
-# Ubuntu 22.04 / 23.04  
+# Ubuntu 22.04 / 23.04 / 23.10
 # ROCm 5.7.3
 # Automatic1111 Stable Diffusion + ComfyUI  ( venv ) 
 # Oobabooga - Text Generation WebUI ( conda, Exllama, BitsAndBytes-ROCm-5.6 ) 
 
 ## Install notes / instructions ##
 
+2023-07 - 
  I have composed this collection of instructions as they are my notes.
  I use to setup my own Linux system with AMD parts.
  I've gone over these doing many re-installs to get them all right.
  This is what I had hoped to find when I had search for install instructions -
  so I'm sharing them in the hopes that they save time for other people. 
  There may be in here extra parts that aren't needed but this works for me.
- Originally text, with comments like a shell script that I cut and paste - 2023-07 - nktice
-
+ Originally text, with comments like a shell script that I cut and paste.
 
 2023-09-09 - I had a report that this doesn't work in virtual machines (virtualbox) as the system there cannot see the hardware, it can't load drivers, etc.  While this is not a guide about Windows, Windows users may find it more helpful to try DirectML - https://rocm.docs.amd.com/en/latest/deploy/windows/quick_start.html / https://github.com/lshqqytiger/stable-diffusion-webui-directml
 
-2023-09-30 - Updated to use ROCm 5.7 - As it is out now, and does appear to be working much like 5.6...
-- On my first attempt, I needed a reboot to get it working... (I've since re-installed and it works as expected following this guide. ) 
-- I've made this a seprate file to start with as these features aren't referred to as being supported by the dependent packages.
-- Added notes for exllamav2 and fast-attention - they're not working yet... but exllamav2 is under active development, and worth following.  
-- I will also note issues with dual GPU loading of models that appear to load but that output gibberish has now been addressed - alas the patch has not made it to packages... here is the bug thread : https://github.com/ROCmSoftwarePlatform/rocBLAS/issues/1346
+[ ... updates abridged ... ] 
 
-2023-11-28 - Update for ROCm 5.7.2.  Revised how Stable Diffusion and ComfyUI are handled ( using venv now ).  Revise handling for Oobabooga... now uses most of their requirements_amd.txt and Flash Attention!  I will note I first attempted to do with Ubuntu 23.10 and foudn obstacles there - they integrate the video drivers, but they're not the latest and this breaks ROCm install, so we're still using 23.04 for the time being.  
-
-2023-12-13 - Added supplement for those who want to use Mixtral models ( uses llama.cpp ) - https://github.com/nktice/AMD-AI/blob/main/Mixtral.md
-
-2023-12-18 - ROCm 6.0 is out, so there's an updated guide for that here - https://github.com/nktice/AMD-AI/blob/main/ROCm6.0.md
+2023-12-18 - ROCm 6 is out, so there's an updated guide for that here - https://github.com/nktice/AMD-AI/blob/main/ROCm6.0.md
 
 2023-12-18 - This document has been updated for ROCm 5.7.3 
 
-2023-12-23 - Update to default to using miniconda ( with minor revisions so that the instructions are there for full anaconda too for those who want it ).  Updated date for nightlies.  Exllamav2 commands corrected.  I'll note that this was tested on Ubuntu 23.10.1 and there are parts that work ( Stable Diffusion, ComfyUI ) alas Oobabooga has issues ( exllamav2 errors out, as does flash-attention 2... ) so 23.10.1 is not recommended at this time.  Exllamav2 does work with 23.10.1 with ROCm 6.0 ( URL above ).  
-
 2024-03-06 - Updates becauase ROCm 5.7 is the current stable version supported by PyTorch, as such I'm making those instructions the main instructions offered here.  They were in a separate file, those contents are still there in case someone links to it, and for posterity once things move on.   Minor updates here to refer to the latest versions of some files. 
 
-2024-03-07 - This page updated to call standard stable default versions ( rather than development versions... )  Mostly functional with Ubuntu 23.10.1 ( Flash Attention 2 does not compile ).  Ubuntu 24.04 does not yet work with amdgpu-dkms.  Note that ROCm 5.7 series still has the issue where loading across multiple GPUs with different architectures will appear to work, but outputs gibberish. 
+2024-03-07 - This page updated to call standard stable default versions ( rather than development versions... )    Note that ROCm 5.7 series still has the issue where loading across multiple GPUs with different architectures will appear to work, but outputs gibberish. 
+
+2024-04-24 - Updates to deal with new versions of Python, and Bitsandbytes.  Ubuntu 24.04 does not yet work with amdgpu-dkms.  
 
 -----
 
@@ -191,12 +183,18 @@ cd stable-diffusion-webui
 
 # Requisites : 
 ```bash
-sudo apt install -y wget git python3 python3-venv libgl1 libglib2.0-0
+sudo apt install -y wget git python3.11 python3.11-venv libgl1 libglib2.0-0
+python3.11 -m venv venv
+source venv/bin/activate
+python3.11 -m pip install -U pip
+deactivate
 ```
 
 ## Edit environment settings...
 ```bash
 tee --append webui-user.sh <<EOF
+# specify compatible python version
+python_cmd="python3.11"
  ## Torch for ROCm
 # generic import...
 # export TORCH_COMMAND="pip install torch torchvision --index-url https://download.pytorch.org/whl/nightly/rocm5.7"
@@ -377,37 +375,12 @@ pip install --pre torch torchvision torchtext torchaudio triton pytorch-triton-r
 
 
 ### bitsandbytes rocm 
-2023-09-11 - New version of BitsAndBytes(0.41 !) made for 5.6 
-Project website : https://github.com/arlo-phoenix/bitsandbytes-rocm-5.6
-
+2024-04-24 - AMD's own ROCm version of bitsandbytes has been updated! - https://github.com/ROCm/bitsandbytes ( ver 0.44.0.dev0 at time of writing )
 ```bash
 cd
-git clone https://github.com/arlo-phoenix/bitsandbytes-rocm-5.6.git
-cd bitsandbytes-rocm-5.6/
-BUILD_CUDA_EXT=0 pip install -r requirements.txt --extra-index-url https://download.pytorch.org/whl/rocm5.7
-# 7900XTX
-#make hip ROCM_TARGET=gfx1100 ROCM_HOME=/opt/rocm-5.7.3/
-# 6900XT
-#make hip ROCM_TARGET=gfx1030 ROCM_HOME=/opt/rocm-5.7.3/
-# both...
-make hip ROCM_TARGET=gfx1100,gfx1030 ROCM_HOME=/opt/rocm-5.7.3/
-pip install . --extra-index-url https://download.pytorch.org/whl/nightly/rocm5.7
-```
-
-
-### Flash-Attention 2 :
-Install may take a few mins ( takes author close to 5mins on an AMD 5950x CPU as tiem of writing )... 
-It appears this may work with ROCm 5.7.3 and ExLlamav2 ( at least it doesn't complain about it being missing when it is installed ) .
-2024-03-07 - As of checking this does not compile on Ubuntu 23.10.1 - Thankfully it's optional and things are functional without it. 
-Other notes - [
-2024-01-18 - with ROCm 6... FA2 appears to 'work'... as in it compiles and installs normally. 
-2024-04-03 - with ROCm 6... While this (2.0.4) version 'works' it isn't recent enough to be used by exllamav2 - Here is more info : https://github.com/turboderp/exllamav2/issues/397#issuecomment-2034652594 (2.2.1...)
-]
-```bash
-cd
-git clone https://github.com/ROCmSoftwarePlatform/flash-attention.git
-cd flash-attention
-pip install . --extra-index-url https://download.pytorch.org/whl/rocm5.7
+git clone https://github.com/ROCm/bitsandbytes.git
+cd bitsandbytes
+pip install .
 ```
 
 
@@ -456,10 +429,9 @@ chmod u+x run.sh
 ```
 
 
-Models 
-If you're new to this - new models can be downloaded from the shell via a python script, or from a form in the interface.
-There are lots of them - http://huggingface.co 
-Generally the GPTQ models by TheBloke are likely to load.  The 30B/33B models will load on 24GB of VRAM, but may error, or run out of memory depending on usage and parameters.  
+### Models 
+Models : If you're new to this - new models can be downloaded from the shell via a python script, or from a form in the interface. There are lots of them - http://huggingface.co Generally the GPTQ models by TheBloke are likely to load... https://huggingface.co/TheBloke The 30B/33B models will load on 24GB of VRAM, but may error, or run out of memory depending on usage and parameters.
+Worthy of mention, TurboDerp ( author of the exllama loaders ) has been posting exllamav2 ( exl2 ) processed versions of models - https://huggingface.co/turboderp ( for use with exllamav2 loader ) - when downloading, note the --branch option.
 
 To get new models note the ~/text-generation-webui directory has a program " download-model.py " that is made for downloading models from HuggingFace's collection.  
 
@@ -475,16 +447,13 @@ Note that to run the script :
 source run.sh
 ```
 
-It does download some things the first time it runs. 
-The exllamav2 loader works with most GPTQ models.  This is the best choice as it is fast.   
-Some models that won't load that way will load with AutoGPTQ - but without Triton ( triton seems to break things ). 
-Also worth noting, I've had things work on one card or the other, but not on both cards, 
-loading on both cards causes LLMs to spit out gibberish.  
 
 ## End - Oobabooga - Text-Generation-WebUI
 
 
----
+
+
+--------
 
 # nvtop from source
 ( As one from packages crashes on 2 GPUs, while this never version from sources works fine. ) 
@@ -501,5 +470,3 @@ make
 sudo make install
 ```
 # end nvtop
-
-
