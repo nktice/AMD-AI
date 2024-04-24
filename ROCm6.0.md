@@ -1,6 +1,6 @@
 # AMD / Radeon 7900XTX 6900XT GPU ROCm install / setup / config 
 # Ubuntu 22.04 / 23.04 / 23.10
-# ROCm 6.0 
+# ROCm 6.1
 # Automatic1111 Stable Diffusion + ComfyUI  ( venv ) 
 # Oobabooga - Text Generation WebUI ( conda, Exllama, BitsAndBytes-ROCm-5.6 ) 
 
@@ -8,34 +8,21 @@
 
 2023-07 - I have composed this collection of instructions as they are my notes, from varied efforts at a configuration that is consistent.  I've gone over these doing many re-installs to get them all right. This is what I had hoped to find when I had search for install instructions - so I'm sharing them in the hopes that they save time for other people. There may be in here extra parts that aren't needed but this works for me.  Originally text, with comments like a shell script that I cut and paste.
 
-2023-09-09 - I had a report that this doesn't work in virtual machines (virtualbox) as the system there cannot see the hardware, it can't load drivers, etc.  While this is not a guide about Windows, Windows users may find it more helpful to try DirectML - https://rocm.docs.amd.com/en/latest/deploy/windows/quick_start.html / https://github.com/lshqqytiger/stable-diffusion-webui-directml
+[ various updates abridged... ] 
 
-2023-09-30 - Updated to use ROCm 5.7 - As it is out now, and does appear to be working much like 5.6...  - On my first attempt, I needed a reboot to get it working... (I've since re-installed and it works as expected following this guide. )  - I've made this a seprate file to start with as these features aren't referred to as being supported by the dependent packages. - Added notes for exllamav2 and fast-attention - they're not working yet... but exllamav2 is under active development, and worth following.   - I will also note issues with dual GPU loading of models that appear to load but that output gibberish has now been addressed - alas the patch has not made it to packages... here is the bug thread : https://github.com/ROCmSoftwarePlatform/rocBLAS/issues/1346
-
-2023-11-28 - Update for ROCm 5.7.2.  Revised how Stable Diffusion and ComfyUI are handled ( using venv now ).  Revise handling for Oobabooga... now uses most of their requirements_amd.txt and Flash Attention!  I will note I first attempted to do with Ubuntu 23.10 and foudn obstacles there - they integrate the video drivers, but they're not the latest and this breaks ROCm install, so we're still using 23.04 for the time being.  
-
-2023-12-13 - Added supplement for those who want to use Mixtral models ( uses llama.cpp ) - https://github.com/nktice/AMD-AI/blob/main/Mixtral.md
-
-2023-12-18 - ROCm 6.0 is out - so this is an update of the 5.7.2 guide to work with AMD's new drivers.  Note that most components still reference the 5.x verions, as systems like PyTorch haven't been written specificly for ROCm 6.x yet. 
-
-2023-12-18 - Update after testing with Ubuntu 23.10.  With the addition of one command, these instructions appear to work with Ubuntu's new release.  
-
-2023-12-23 - Update dates on nightlies, minor revisions. 
-
-2024-01-20 - Update versions, flash attention 2 appears to be working now, issue with exllamav2 loading appears resolved.  There are now nightlies made for 6.0 drivers - changes to use those. 
-
-2024-03-06 - Update for ROCm 6.0.2 - Tested with Ubuntu 23.04 and 23.10.1 and all components function as expected - including multi-architecture GPU loading.   24.04 does not appear to be working with amdgpu-dkms at this time. 
-
-2024-03-30 - Update for ROCm 6.0.3, and nightlies for PyTorch 2.4..., torchvision-0.19... , etc. 
+2024-04-23 - Updated for ROCm 6.1.  Apologies for not changing the file name / url - it appears not much as changed... so rather than a pile of new file names for every version, I'm going to continue the updates here until there's a reason not to.  https://rocm.docs.amd.com/en/latest/about/release-notes.html 
+- Stable Diffusion section changed because Python3.12 is out, and Automatic1111 doesn't work with the new version of Python out of the box... but 3.11 seems to work fine, so we'll make it use that.
+- Ubuntu 24.04 doesn't work yet... it comes out in the next few days - I have tried the nightlies, and either it wouldn't install or couldn't use amdgpu-dkms - looked like it wasn't ready for the new kernel version, so we'll see if that resolves.   
 
 --------
 
 
-# Ubuntu 22.04 / 23.04 - Base system install 
+# Ubuntu 22.04 / 23.04 / 23.10 - Base system install 
 Ubuntu 22.04 works great on Radeon 6900 XT video cards, 
 but does not support 7900XTX cards as they came out later 
-Ubuntu 23.04 is newer but has issues with some of the tools. 
-So the notes below should work on either system, unless commented.
+Ubuntu 23.04 is newer but has issues with some of the tools... 
+note there's one command to include the old system that solves such issues. 
+Ubuntu 23.10 - also generally working... 
 
 At this point we assume you've done the system install
 and you know what that is, have a user, root, etc. 
@@ -52,7 +39,7 @@ sudo apt install -y "linux-headers-$(uname -r)" \
 	"linux-modules-extra-$(uname -r)"
 ```
 
-#### [ for Ubuntu 23.04 - lunar ]
+#### [ for Ubuntu 23.04 or 23.10 ... ] 
 Some things may require older versions of python, so we need to add
 jammy packages, so that they can be installed, on lunar systems.
 ```bash
@@ -90,7 +77,7 @@ Note : This commonly produces warning message about 'Possible missing firmware' 
 https://rocmdocs.amd.com/en/latest/deploy/linux/os-native/install.html
 
 ```bash
-echo "deb [arch=amd64 signed-by=/etc/apt/keyrings/rocm.gpg] https://repo.radeon.com/rocm/apt/6.0.3/ jammy main" \
+echo "deb [arch=amd64 signed-by=/etc/apt/keyrings/rocm.gpg] https://repo.radeon.com/rocm/apt/6.1/ jammy main" \
     | sudo tee --append /etc/apt/sources.list.d/rocm.list
 echo -e 'Package: *\nPin: release o=repo.radeon.com\nPin-Priority: 600' \
     | sudo tee /etc/apt/preferences.d/rocm-pin-600
@@ -181,7 +168,7 @@ cd stable-diffusion-webui
 
 # Requisites : 
 ```bash
-sudo apt install -y wget git python3 python3-venv libgl1 libglib2.0-0
+sudo apt install -y wget git python3.11 python3.11-venv libgl1 libglib2.0-0
 python3 -m venv venv
 ```
 2024-03-30 - Started getting errors saying that it couldn't run venv, so I've added the last line to initialize it manually. 
@@ -189,11 +176,13 @@ python3 -m venv venv
 ## Edit environment settings...
 ```bash
 tee --append webui-user.sh <<EOF
+# specify compatible python version
+python_cmd="python3.11"
  ## Torch for ROCm
 # generic import...
 # export TORCH_COMMAND="pip install torch torchvision --index-url https://download.pytorch.org/whl/nightly"
 # use specific versions to avoid downloading all the nightlies... ( update dates as needed ) 
- export TORCH_COMMAND="pip install --pre torch==2.4.0.dev20240330+rocm6.0  torchvision==0.19.0.dev20240330+rocm6.0 --index-url https://download.pytorch.org/whl/nightly"
+ export TORCH_COMMAND="pip install --pre torch==2.4.0.dev20240423+rocm6.0  torchvision==0.19.0.dev20240423+rocm6.0 --extra-index-url https://download.pytorch.org/whl/nightly"
  ## And if you want to call this from other programs...
  export COMMANDLINE_ARGS="--api"
  ## crashes with 2 cards, so to get it to run on the second card (only), unremark the following 
@@ -229,7 +218,7 @@ The first time this is run it will install the requirements.
 - variation of https://raw.githubusercontent.com/ltdrdata/ComfyUI-Manager/main/scripts/install-comfyui-venv-linux.sh 
 Includes ComfyUI-Manager
 
-Same install of packages here as for Stable Diffusion ( included here in case you're not installed SD and just want ComfyUI... ) 
+Install of packages like for Stable Diffusion ( included here in case you're not installed SD and just want ComfyUI... ) - but it's not bothered by Python 3.12... 
 ```bash
 sudo apt install -y wget git python3 python3-venv libgl1 libglib2.0-0
 ```
@@ -242,8 +231,9 @@ git clone https://github.com/ltdrdata/ComfyUI-Manager
 cd ..
 python3 -m venv venv
 source venv/bin/activate
+python3 -m pip install -U pip 
 # pre-install torch and torchvision from nightlies - note you may want to update versions...
-python3 -m pip install --pre torch==2.4.0.dev20240330+rocm6.0 torchvision==0.19.0.dev20240330+rocm6.0 --index-url https://download.pytorch.org/whl/nightly
+python3 -m pip install --pre torch==2.4.0.dev20240423+rocm6.0 torchvision==0.19.0.dev20240423+rocm6.0 --extra-index-url https://download.pytorch.org/whl/nightly
 python3 -m pip install -r requirements.txt  --extra-index-url https://download.pytorch.org/whl/nightly
 python3 -m pip install -r custom_nodes/ComfyUI-Manager/requirements.txt --extra-index-url https://download.pytorch.org/whl/nightly
 
@@ -378,8 +368,8 @@ Instead of that we go and look through the files at https://download.pytorch.org
 
 Here we refer to specific nightly versions to keep things simple. 
 ```bash
-pip install --pre torch==2.4.0.dev20240330+rocm6.0 torchvision==0.19.0.dev20240330+rocm6.0 \
-  torchtext torchaudio triton pytorch-triton pytorch-triton-rocm \
+pip install --pre torch==2.4.0.dev20240423+rocm6.0 torchvision==0.19.0.dev20240423+rocm6.0 \
+  torchtext torchaudio pytorch-triton pytorch-triton-rocm \
   --index-url https://download.pytorch.org/whl/nightly
 ```
 
@@ -394,11 +384,11 @@ git clone https://github.com/arlo-phoenix/bitsandbytes-rocm-5.6.git
 cd bitsandbytes-rocm-5.6/
 BUILD_CUDA_EXT=0 pip install -r requirements.txt --extra-index-url https://download.pytorch.org/whl/nightly
 # 7900XTX
-#make hip ROCM_TARGET=gfx1100 ROCM_HOME=/opt/rocm-6.0.0/
+make hip ROCM_TARGET=gfx1100 ROCM_HOME=/opt/rocm-6.1/
 # 6900XT
-#make hip ROCM_TARGET=gfx1030 ROCM_HOME=/opt/rocm-6.0.0/
-# both...
-make hip ROCM_TARGET=gfx1100,gfx1030 ROCM_HOME=/opt/rocm-6.0.3/
+#make hip ROCM_TARGET=gfx1030 ROCM_HOME=/opt/rocm-6.1/
+# Here's an example of multiple architectures / both...
+#make hip ROCM_TARGET=gfx1100,gfx1030 ROCM_HOME=/opt/rocm-6.1/
 pip install . --extra-index-url https://download.pytorch.org/whl/nightly
 ```
 
@@ -466,7 +456,9 @@ tee --append run.sh <<EOF
 ## activate conda
 conda activate textgen
 ## command to run server... 
-python server.py --listen --extensions sd_api_pictures send_pictures gallery 
+python server.py --extensions sd_api_pictures send_pictures gallery
+# if you want it to show up on your own network, add --listen 
+#python server.py --listen --extensions sd_api_pictures send_pictures gallery 
 conda deactivate
 EOF
 chmod u+x run.sh
@@ -476,7 +468,8 @@ chmod u+x run.sh
 Models 
 If you're new to this - new models can be downloaded from the shell via a python script, or from a form in the interface.
 There are lots of them - http://huggingface.co 
-Generally the GPTQ models by TheBloke are likely to load.  The 30B/33B models will load on 24GB of VRAM, but may error, or run out of memory depending on usage and parameters.  
+Generally the GPTQ models by TheBloke are likely to load... https://huggingface.co/TheBloke  The 30B/33B models will load on 24GB of VRAM, but may error, or run out of memory depending on usage and parameters.  
+Worthy of mention, TurboDerp ( author of the exllama loaders ) has been posting exllamav2 ( exl2 ) processed versions of models - https://huggingface.co/turboderp ( for use with exllamav2 loader ) - when downloading, note the --branch option.  
 
 To get new models note the ~/text-generation-webui directory has a program " download-model.py " that is made for downloading models from HuggingFace's collection.  
 
@@ -492,13 +485,6 @@ Note that to run the script :
 # conda activate textgen
 source run.sh
 ```
-
-The exllamav2 loader works with most GPTQ models; It's the best choice as it is fast.   
-Some models that won't load that way will load with AutoGPTQ - but without Triton ( triton seems to break things ). 
-
-2023-11-30 - I've had things work on one card or the other, but not on both cards, 
-loading on both cards causes LLMs to spit out gibberish.   It appears the bug with multiple GPUs is not resolved yet... and as such loading models across GPUs outputs gibberish.  https://github.com/ROCmSoftwarePlatform/rocBLAS/issues/1346#issuecomment-1741851573 - 
-2024-01-22 - I can now report that I can load models using both cards and it is responsive.  It appears that this issue has been resolved now.  
 
 ## End - Oobabooga - Text-Generation-WebUI
 
