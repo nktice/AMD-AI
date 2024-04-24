@@ -2,7 +2,7 @@
 # Ubuntu 22.04 / 23.04 / 23.10
 # ROCm 6.1
 # Automatic1111 Stable Diffusion + ComfyUI  ( venv ) 
-# Oobabooga - Text Generation WebUI ( conda, Exllama, BitsAndBytes-ROCm-5.6 ) 
+# Oobabooga - Text Generation WebUI ( conda, Exllamav2, BitsAndBytes ) 
 
 ## Install notes / instructions / changelog ##
 
@@ -10,7 +10,8 @@
 
 [ various updates abridged... ] 
 
-2024-04-23 - Updated for ROCm 6.1.  Apologies for not changing the file name / url - it appears not much as changed... so rather than a pile of new file names for every version, I'm going to continue the updates here until there's a reason not to.  https://rocm.docs.amd.com/en/latest/about/release-notes.html 
+2024-04-23 - 
+- Updated for ROCm 6.1.  Apologies for not changing the file name / url - it appears not much as changed... so rather than a pile of new file names for every version, I'm going to continue the updates here until there's a reason not to.  https://rocm.docs.amd.com/en/latest/about/release-notes.html 
 - Stable Diffusion section changed because Python3.12 is out, and Automatic1111 doesn't work with the new version of Python out of the box... but 3.11 seems to work fine, so we'll make it use that.
 - Ubuntu 24.04 doesn't work yet... it comes out in the next few days - I have tried the nightlies, and either it wouldn't install or couldn't use amdgpu-dkms - looked like it wasn't ready for the new kernel version, so we'll see if that resolves.   
 
