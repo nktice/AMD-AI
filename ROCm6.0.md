@@ -167,11 +167,14 @@ cd stable-diffusion-webui
 ```
 
 # Requisites : 
+Automatic1111 / Stable Diffusion doesn't work with newer versions of python, so we specify one it works with. 
 ```bash
 sudo apt install -y wget git python3.11 python3.11-venv libgl1 libglib2.0-0
-python3 -m venv venv
+python3.11 -m venv venv
+source venv/bin/activate
+python3.11 -m pip install -U pip
+deactivate
 ```
-2024-03-30 - Started getting errors saying that it couldn't run venv, so I've added the last line to initialize it manually. 
 
 ## Edit environment settings...
 ```bash
