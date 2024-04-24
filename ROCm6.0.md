@@ -374,25 +374,6 @@ pip install --pre torch==2.4.0.dev20240423+rocm6.0 torchvision==0.19.0.dev202404
 ```
 
 
-### bitsandbytes rocm 
-2023-09-11 - New version of BitsAndBytes(0.41 !) made for ROCm 5.6 
-Project website : https://github.com/arlo-phoenix/bitsandbytes-rocm-5.6
-
-```bash
-cd
-git clone https://github.com/arlo-phoenix/bitsandbytes-rocm-5.6.git
-cd bitsandbytes-rocm-5.6/
-BUILD_CUDA_EXT=0 pip install -r requirements.txt --extra-index-url https://download.pytorch.org/whl/nightly
-# 7900XTX
-make hip ROCM_TARGET=gfx1100 ROCM_HOME=/opt/rocm-6.1/
-# 6900XT
-#make hip ROCM_TARGET=gfx1030 ROCM_HOME=/opt/rocm-6.1/
-# Here's an example of multiple architectures / both...
-#make hip ROCM_TARGET=gfx1100,gfx1030 ROCM_HOME=/opt/rocm-6.1/
-pip install . --extra-index-url https://download.pytorch.org/whl/nightly
-```
-
-
 ### Triton 
 2023-09-11 : Usually we get Triton from the PyTorch nightly build files (included above)  but I had some errors [akin to these](https://github.com/openai/triton/issues/2002)  and found getting it fresh from the nightly build resovled them.
 2023-12.17 : The issue appears to have been resolved, so I'm remarking this out, but leaving it here in case there are issues with Triton that may call for installing the nightly again.  
@@ -400,16 +381,47 @@ pip install . --extra-index-url https://download.pytorch.org/whl/nightly
 #pip install -U --index-url https://aiinfra.pkgs.visualstudio.com/PublicPackages/_packaging/Triton-Nightly/pypi/simple/ triton-nightly
 ```
 
+
+### bitsandbytes rocm 
+2023-09-11 - New version of BitsAndBytes(0.41 !) made for ROCm 5.6 
+Project website : https://github.com/arlo-phoenix/bitsandbytes-rocm-5.6 
+2024-04-24 - this is deprecated, see note below...
+```bash
+#cd
+#git clone https://github.com/arlo-phoenix/bitsandbytes-rocm-5.6.git
+#cd bitsandbytes-rocm-5.6/
+#BUILD_CUDA_EXT=0 pip install -r requirements.txt --extra-index-url https://download.pytorch.org/whl/nightly
+## 7900XTX
+#make hip ROCM_TARGET=gfx1100 ROCM_HOME=/opt/rocm-6.1/
+## 6900XT
+##make hip ROCM_TARGET=gfx1030 ROCM_HOME=/opt/rocm-6.1/
+## Here's an example of multiple architectures / both...
+##make hip ROCM_TARGET=gfx1100,gfx1030 ROCM_HOME=/opt/rocm-6.1/
+#pip install . --extra-index-url https://download.pytorch.org/whl/nightly
+```
+
+2024-04-24 - AMD's own ROCm version of bitsandbytes has been updated! - https://github.com/ROCm/bitsandbytes  ( ver 0.44.0.dev0 at time of writing ) 
+```bash
+# conda activate textgen
+cd
+git clone https://github.com/ROCm/bitsandbytes.git
+cd bitsandbytes
+pip install .
+```
+
+
 ### Flash-Attention 2 :
 Install may take a few mins ( takes author close to 5 minutes at time of writing )...
 2024-01-18 - FA2 appears to be 'working' now... as in it compiles and installs normally. 
-2024-04-03 - While this (2.0.4) version 'works' it isn't recent enough to be used by exllamav2 - Here is more info : https://github.com/turboderp/exllamav2/issues/397#issuecomment-2034652594 (2.2.1...)
+2024-04-03 - While this (2.0.4) version 'works' it isn't recent enough to be used by exllamav2 - Here is more info : https://github.com/turboderp/exllamav2/issues/397#issuecomment-2034652594 (2.2.1...) - it's a known issue and has had a support thread with the main authors - https://github.com/Dao-AILab/flash-attention/issues/707 
 ```bash
 cd
 git clone https://github.com/ROCmSoftwarePlatform/flash-attention.git
 cd flash-attention
 pip install . 
 ```
+
+
 
 ## Oobabooga / Text-generation-webui - Install webui...
 ```bash
