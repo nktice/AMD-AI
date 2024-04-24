@@ -32,7 +32,7 @@
 -----
 
 
-# Ubuntu 22.04 / 23.04 - Base system install 
+# Ubuntu 22.04 / 23.04 / 23.10 - Base system install 
 Ubuntu 22.04 works great on Radeon 6900 XT video cards, 
 but does not support 7900XTX cards as they came out later 
 Ubuntu 23.04 is newer but has issues with some of the tools. 
@@ -415,19 +415,6 @@ pip install .   --index-url https://download.pytorch.org/whl/rocm5.7
 cd ../..
 ```
 
-Let's create a script (run.sh) to run the program...
-```bash
-tee --append run.sh <<EOF
-#!/bin/bash
-## activate conda
-conda activate textgen
-## command to run server... 
-python server.py --listen  --extensions sd_api_pictures send_pictures gallery 
-conda deactivate
-EOF
-chmod u+x run.sh
-```
-
 
 ### Models 
 Models : If you're new to this - new models can be downloaded from the shell via a python script, or from a form in the interface. There are lots of them - http://huggingface.co Generally the GPTQ models by TheBloke are likely to load... https://huggingface.co/TheBloke The 30B/33B models will load on 24GB of VRAM, but may error, or run out of memory depending on usage and parameters.
@@ -442,10 +429,30 @@ If you have old models,  link pre-stored models into the models
 # ln -s /path/to/models models
 ```
 
+
+### Running TGW 
+
+Let's create a script (run.sh) to run the program...
+```bash
+tee --append run.sh <<EOF
+#!/bin/bash
+## activate conda
+conda activate textgen
+## command to run server... 
+python server.py --extensions sd_api_pictures send_pictures gallery
+# if you want the server to listen on the local network so other machines can access it, add --listen.  
+#python server.py --listen  --extensions sd_api_pictures send_pictures gallery 
+conda deactivate
+EOF
+chmod u+x run.sh
+```
+
 Note that to run the script : 
 ```bash
 source run.sh
 ```
+
+
 
 
 ## End - Oobabooga - Text-Generation-WebUI
