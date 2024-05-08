@@ -167,6 +167,13 @@ git clone https://github.com/AUTOMATIC1111/stable-diffusion-webui.git
 cd stable-diffusion-webui
 ```
 
+The 1.9.x+ release series breaks the API so that it won't work with Oobabooga's TGW - so the following resets to use the 1.8.0 relaase that does work with Oobabooga.  
+```bash
+git checkout bef51ae
+git reset --hard
+```
+
+
 # Requisites : 
 Automatic1111 / Stable Diffusion doesn't work with newer versions of python, so we specify one it works with. 
 ```bash
