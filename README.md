@@ -1,5 +1,5 @@
 # AMD / Radeon 7900XTX 6900XT GPU ROCm install / setup / config 
-# Ubuntu 22.04 / 23.04 / 23.10
+# Ubuntu 22.04 / 23.04 / 23.10 / 24.04
 # ROCm 6.1.1
 # Automatic1111 Stable Diffusion + ComfyUI  ( venv ) 
 # Oobabooga - Text Generation WebUI ( conda, Exllamav2, BitsAndBytes ) 
@@ -19,9 +19,9 @@
 
 [ ... updates abridged ... ] 
 
-2024-04-24 - Updates to deal with new versions of Python, and Bitsandbytes.  Ubuntu 24.04 does not yet work with amdgpu-dkms.  
+2024-04-24 - Updates to deal with new versions of Python, and Bitsandbytes.  
 
-2024-05-12 - PyTorch now refers to ROCm 6.0 as the stable version, so 5.7 series has been archived over here and depricated - https://github.com/nktice/AMD-AI/blob/main/ROCm-5.7.md - This is updated to use the latest drivers and PyTorch stable. 
+2024-05-12 - PyTorch now refers to ROCm 6.0 as the stable version, so 5.7 series has been archived over here and depricated - https://github.com/nktice/AMD-AI/blob/main/ROCm-5.7.md - This is updated to use the latest drivers and PyTorch stable.  Updated to support Ubuntu 24.04. 
 
 
 -----
@@ -53,6 +53,13 @@ Some things may require older versions of python, so we need to add
 jammy packages, so that they can be installed, on lunar systems.
 ```bash
 sudo add-apt-repository -y -s deb http://security.ubuntu.com/ubuntu jammy main universe
+```
+
+#### [ For Ubuntu 24.04 ... ] 
+This allows calls to older versions of Python by using "deadsnakes"
+```bash
+sudo add-apt-repository ppa:deadsnakes/ppa -y
+sudo apt update -y 
 ```
 
 ## Add AMD GPU package sources 
