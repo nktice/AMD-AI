@@ -1,6 +1,6 @@
 # AMD / Radeon 7900XTX 6900XT GPU ROCm install / setup / config 
-# Ubuntu 22.04 / 23.04 / 23.10
-# ROCm 6.1
+# Ubuntu 22.04 / 23.04 / 23.10 / 24.04
+# ROCm 6.1.1
 # Automatic1111 Stable Diffusion + ComfyUI  ( venv ) 
 # Oobabooga - Text Generation WebUI ( conda, Exllamav2, BitsAndBytes ) 
 
@@ -14,6 +14,8 @@
 - Updated for ROCm 6.1.  Apologies for not changing the file name / url - it appears not much as changed... so rather than a pile of new file names for every version, I'm going to continue the updates here until there's a reason not to.  https://rocm.docs.amd.com/en/latest/about/release-notes.html 
 - Stable Diffusion section changed because Python3.12 is out, and Automatic1111 doesn't work with the new version of Python out of the box... but 3.11 seems to work fine, so we'll make it use that.
 - Ubuntu 24.04 doesn't work yet... it comes out in the next few days - I have tried the nightlies, and either it wouldn't install or couldn't use amdgpu-dkms - looked like it wasn't ready for the new kernel version, so we'll see if that resolves.   
+
+2024-05-12 - PyTorch stable now covers ROCm 6 series, and dev has moved on, new packages now point to ROCm 6.1 - so updates for that.  The new Ubuntu works with the newest drivers, so changes for that.  ROCm's new version 6.1.1 is out, so changes for that.  This guide is meant to refer to the dev versions ( rather than stable ). 
 
 --------
 
@@ -47,6 +49,13 @@ jammy packages, so that they can be installed, on lunar systems.
 sudo add-apt-repository -y -s deb http://security.ubuntu.com/ubuntu jammy main universe
 ```
 
+#### [ For Ubuntu 24.04 ... ] 
+This allows calls to older versions of Python by using "deadsnakes" 
+```bash
+sudo add-apt-repository ppa:deadsnakes/ppa -y
+sudo apt update -y 
+```
+
 ## Add AMD GPU package sources 
 Make the directory if it doesn't exist yet.
 This location is recommended by the distribution maintainers.
@@ -63,7 +72,7 @@ wget https://repo.radeon.com/rocm/rocm.gpg.key -O - | \
 ```
 amdgpu repository for jammy
 ```bash
-echo 'deb [arch=amd64 signed-by=/etc/apt/keyrings/rocm.gpg] https://repo.radeon.com/amdgpu/latest/ubuntu jammy main' \
+echo 'deb [arch=amd64 signed-by=/etc/apt/keyrings/rocm.gpg] https://repo.radeon.com/amdgpu/6.1.1/ubuntu jammy main' \
     | sudo tee /etc/apt/sources.list.d/amdgpu.list
 sudo apt update -y 
 ```
@@ -78,7 +87,7 @@ Note : This commonly produces warning message about 'Possible missing firmware' 
 https://rocmdocs.amd.com/en/latest/deploy/linux/os-native/install.html
 
 ```bash
-echo "deb [arch=amd64 signed-by=/etc/apt/keyrings/rocm.gpg] https://repo.radeon.com/rocm/apt/6.1/ jammy main" \
+echo "deb [arch=amd64 signed-by=/etc/apt/keyrings/rocm.gpg] https://repo.radeon.com/rocm/apt/6.1.1/ jammy main" \
     | sudo tee --append /etc/apt/sources.list.d/rocm.list
 echo -e 'Package: *\nPin: release o=repo.radeon.com\nPin-Priority: 600' \
     | sudo tee /etc/apt/preferences.d/rocm-pin-600
@@ -193,7 +202,7 @@ python_cmd="python3.11"
 # generic import...
 # export TORCH_COMMAND="pip install torch torchvision --index-url https://download.pytorch.org/whl/nightly"
 # use specific versions to avoid downloading all the nightlies... ( update dates as needed ) 
- export TORCH_COMMAND="pip install --pre torch==2.4.0.dev20240423+rocm6.0  torchvision==0.19.0.dev20240423+rocm6.0 --extra-index-url https://download.pytorch.org/whl/nightly"
+ export TORCH_COMMAND="pip install --pre torch==2.4.0.dev20240512+rocm6.1 torchvision==0.19.0.dev20240512+rocm6.1 --extra-index-url https://download.pytorch.org/whl/nightly/rocm6.1"
  ## And if you want to call this from other programs...
  export COMMANDLINE_ARGS="--api"
  ## crashes with 2 cards, so to get it to run on the second card (only), unremark the following 
@@ -244,9 +253,9 @@ python3 -m venv venv
 source venv/bin/activate
 python3 -m pip install -U pip 
 # pre-install torch and torchvision from nightlies - note you may want to update versions...
-python3 -m pip install --pre torch==2.4.0.dev20240423+rocm6.0 torchvision==0.19.0.dev20240423+rocm6.0 --extra-index-url https://download.pytorch.org/whl/nightly
-python3 -m pip install -r requirements.txt  --extra-index-url https://download.pytorch.org/whl/nightly
-python3 -m pip install -r custom_nodes/ComfyUI-Manager/requirements.txt --extra-index-url https://download.pytorch.org/whl/nightly
+python3 -m pip install --pre torch==2.4.0.dev20240512+rocm6.1 torchvision==0.19.0.dev20240512+rocm6.1 --extra-index-url https://download.pytorch.org/whl/nightly/rocm6.1
+python3 -m pip install -r requirements.txt  --extra-index-url https://download.pytorch.org/whl/nightly/rocm6.1
+python3 -m pip install -r custom_nodes/ComfyUI-Manager/requirements.txt --extra-index-url https://download.pytorch.org/whl/nightly/rocm6.1
 
 # end vend if needed...
 deactivate
@@ -375,15 +384,19 @@ Here is old method that works - but tries to download things back to the start o
 #	triton pytorch-triton pytorch-triton-rocm \
 #         --index-url https://download.pytorch.org/whl/nightly/rocm5.7
 ```
-Instead of that we go and look through the files at https://download.pytorch.org/whl/nightly/rocm5.7/ (note trailing slash) and in the program directories there, we can see the individual nightly build files.  One has been chosen at the time of writing this, if you want newer, that is where you can find those details to update the file names / versions.  
+Instead of that we go and look through the files at https://download.pytorch.org/whl/nightly/rocm6.1/ (note trailing slash) and in the program directories there, we can see the individual nightly build files.  One has been chosen at the time of writing this, if you want newer, that is where you can find those details to update the file names / versions.  
 
 Here we refer to specific nightly versions to keep things simple. 
 ```bash
-pip install --pre torch==2.4.0.dev20240423+rocm6.0 torchvision==0.19.0.dev20240423+rocm6.0 \
-  torchtext torchaudio pytorch-triton pytorch-triton-rocm \
-  --index-url https://download.pytorch.org/whl/nightly
+pip install --pre torch==2.4.0.dev20240423+rocm6.0 orchvision==0.19.0.dev20240423+rocm6.0 \
+  torchaudio pytorch-triton pytorch-triton-rocm \
+  --index-url https://download.pytorch.org/whl/nightly/rocm6.1
 ```
 
+2024-05-12 For some odd reason, torchtext isn't recognized, even though it's there... so we specify it using it's URL to be explicit.
+```bash
+pip install https://download.pytorch.org/whl/cpu/torchtext-0.18.0%2Bcpu-cp311-cp311-linux_x86_64.whl#sha256=c760e672265cd6f3e4a7c8d4a78afe9e9617deacda926a743479ee0418d4207d
+```
 
 ### Triton 
 2023-09-11 : Usually we get Triton from the PyTorch nightly build files (included above)  but I had some errors [akin to these](https://github.com/openai/triton/issues/2002)  and found getting it fresh from the nightly build resovled them.
@@ -394,23 +407,6 @@ pip install --pre torch==2.4.0.dev20240423+rocm6.0 torchvision==0.19.0.dev202404
 
 
 ### bitsandbytes rocm 
-2023-09-11 - New version of BitsAndBytes(0.41 !) made for ROCm 5.6 
-Project website : https://github.com/arlo-phoenix/bitsandbytes-rocm-5.6 
-2024-04-24 - this is deprecated, see note below...
-```bash
-#cd
-#git clone https://github.com/arlo-phoenix/bitsandbytes-rocm-5.6.git
-#cd bitsandbytes-rocm-5.6/
-#BUILD_CUDA_EXT=0 pip install -r requirements.txt --extra-index-url https://download.pytorch.org/whl/nightly
-## 7900XTX
-#make hip ROCM_TARGET=gfx1100 ROCM_HOME=/opt/rocm-6.1/
-## 6900XT
-##make hip ROCM_TARGET=gfx1030 ROCM_HOME=/opt/rocm-6.1/
-## Here's an example of multiple architectures / both...
-##make hip ROCM_TARGET=gfx1100,gfx1030 ROCM_HOME=/opt/rocm-6.1/
-#pip install . --extra-index-url https://download.pytorch.org/whl/nightly
-```
-
 2024-04-24 - AMD's own ROCm version of bitsandbytes has been updated! - https://github.com/ROCm/bitsandbytes  ( ver 0.44.0.dev0 at time of writing ) 
 ```bash
 # conda activate textgen
@@ -442,28 +438,23 @@ cd text-generation-webui
 ```
 
 ### Oobabooga's 'requirements'
-The default bitsandbytes for AMD is out of date and doesn't support GPU.  So we installed one earlier ( may be unsupported... ) we'll run sed first to adjust that line of the requirements...
 ```bash
-sed -i "s@bitsandbytes==@bitsandbytes>=@g" requirements_amd.txt 
+#sed -i "s@bitsandbytes==@bitsandbytes>=@g" requirements_amd.txt 
 pip install -r requirements_amd.txt 
 ```
 
 Exllama and Exllamav2 loaders ...
 2023-12-17 - Bad news, ROCm 6.0 appears to break loading with exllama and it's not been updated....  Good news, exllamav2 has been updated and does work, including support for Mixtral and MoE ( Mixture of Experts ) models.  
 2024-01-20 - Thanks to TurboDerp for fixing 0.0.11-> latest the code so that it works with HIP! 
+2024-05-12 - There seems to be an issue with Exllamav2 at the moment... so this is remarked until that is resolved. 
 ```bash
-# install exllama
-#git clone https://github.com/turboderp/exllama repositories/exllama
-# install exllamav2
-git clone https://github.com/turboderp/exllamav2 repositories/exllamav2
-cd repositories/exllamav2
-pip install .   --index-url https://download.pytorch.org/whl/nightly
-cd ../..
-```
-
-This line resolves issues with Ubuntu 23.10 - otherwise exllamav2 has issues about missing GLIBCXX_3.4.32. 
-```bash
-#conda install -c conda-forge gcc=12.1.0
+## install exllama
+##git clone https://github.com/turboderp/exllama repositories/exllama
+## install exllamav2
+#git clone https://github.com/turboderp/exllamav2 repositories/exllamav2
+#cd repositories/exllamav2
+#pip install .   --index-url https://download.pytorch.org/whl/nightly
+#cd ../..
 ```
 
 
