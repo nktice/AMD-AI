@@ -445,7 +445,8 @@ pip install -r requirements_amd.txt
 Exllama and Exllamav2 loaders ...
 2023-12-17 - Bad news, ROCm 6.0 appears to break loading with exllama and it's not been updated....  Good news, exllamav2 has been updated and does work, including support for Mixtral and MoE ( Mixture of Experts ) models.  
 2024-01-20 - Thanks to TurboDerp for fixing 0.0.11-> latest the code so that it works with HIP! 
-2024-05-12 - There seems to be an issue with Exllamav2 at the moment... so this is remarked until that is resolved. 
+2024-05-12 - There seems to be an issue with Exllamav2 at the moment... so this is remarked until that is resolved.  Here is more info : https://github.com/turboderp/exllamav2/issues/451#issuecomment-2106340325
+
 ```bash
 ## install exllama
 ##git clone https://github.com/turboderp/exllama repositories/exllama
