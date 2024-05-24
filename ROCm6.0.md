@@ -41,8 +41,8 @@ sudo apt install -y "linux-headers-$(uname -r)" \
 	"linux-modules-extra-$(uname -r)"
 ```
 
-#### [ for Ubuntu 23.04 or 23.10 ... ] 
-Some things may require older versions of python, so we need to add
+#### [ for Ubuntu 23.04, 23.10, and 24.04 ... ]
+Some things may require various old packages so we need to add
 jammy packages, so that they can be installed, on lunar systems.
 ```bash
 sudo add-apt-repository -y -s deb http://security.ubuntu.com/ubuntu jammy main universe
