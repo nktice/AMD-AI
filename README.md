@@ -418,16 +418,17 @@ It appears ExLlama isn't being maintained and the emphasis is now on ExLlamav2..
 2024-01-18 - Something has broken and exllamav2 won't compile so I've added a line to reset the checkout to the last known good / compiling version 0.0.11 
 2024-01-20 - Thanks to TurboDerp for resolving issue with exllamav2 so it plays nice with HIP.  Remarked out workaround, in case such is useful in future. 
 2024-05-15 - There is an issue with one of the components of Exllamav2 in the latest / dev that is preventing it from working, so this is remarked out until that is resolved.  Here is more info : https://github.com/turboderp/exllamav2/issues/451#issuecomment-2106340325
+2024-05-25 - Exllamav2 0.1.0 has been released, and appears functional. 
 ```bash
 ## install exllama
 ##git clone https://github.com/turboderp/exllama repositories/exllama
 ## install exllamav2
-#git clone https://github.com/turboderp/exllamav2 repositories/exllamav2
-#cd repositories/exllamav2
+git clone https://github.com/turboderp/exllamav2 repositories/exllamav2
+cd repositories/exllamav2
 ## Force collection back to base 0.0.11 
 ## git reset --hard a4ecea6
-#pip install .   --index-url https://download.pytorch.org/whl/rocm6.0
-#cd ../..
+pip install .   --index-url https://download.pytorch.org/whl/rocm6.0
+cd ../..
 ```
 
 
