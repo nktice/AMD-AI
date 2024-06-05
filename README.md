@@ -23,11 +23,12 @@
 
 2024-05-12 - PyTorch now refers to ROCm 6.0 as the stable version, so 5.7 series has been archived over here and depricated - https://github.com/nktice/AMD-AI/blob/main/ROCm-5.7.md - This is updated to use the latest drivers and PyTorch stable.  Updated to support Ubuntu 24.04. 
 
+2024-06-04 - Updated for ROCm 6.1.2
 
 -----
 
 
-# Ubuntu 22.04 / 23.04 / 23.10 - Base system install 
+# Ubuntu 22.04 / 23.04 / 23.10 / 24.04 - Base system install 
 Ubuntu 22.04 works great on Radeon 6900 XT video cards, 
 but does not support 7900XTX cards as they came out later 
 Ubuntu 23.04 is newer but has issues with some of the tools. 
@@ -78,7 +79,7 @@ wget https://repo.radeon.com/rocm/rocm.gpg.key -O - | \
 ```
 amdgpu repository for jammy
 ```bash
-echo 'deb [arch=amd64 signed-by=/etc/apt/keyrings/rocm.gpg] https://repo.radeon.com/amdgpu/6.1.1/ubuntu jammy main' \
+echo 'deb [arch=amd64 signed-by=/etc/apt/keyrings/rocm.gpg] https://repo.radeon.com/amdgpu/6.1.2/ubuntu jammy main' \
     | sudo tee /etc/apt/sources.list.d/amdgpu.list
 sudo apt update -y 
 ```
@@ -93,7 +94,7 @@ Note : This commonly produces warning message about 'Possible missing firmware' 
 https://rocmdocs.amd.com/en/latest/deploy/linux/os-native/install.html
 
 ```bash
-echo "deb [arch=amd64 signed-by=/etc/apt/keyrings/rocm.gpg] https://repo.radeon.com/rocm/apt/6.1.1 jammy main" \
+echo "deb [arch=amd64 signed-by=/etc/apt/keyrings/rocm.gpg] https://repo.radeon.com/rocm/apt/6.1.2 jammy main" \
     | sudo tee --append /etc/apt/sources.list.d/rocm.list
 echo -e 'Package: *\nPin: release o=repo.radeon.com\nPin-Priority: 600' \
     | sudo tee /etc/apt/preferences.d/rocm-pin-600
