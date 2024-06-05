@@ -192,7 +192,7 @@ git reset --hard
 
 # Requisites : 
 ```bash
-sudo apt install -y wget git python3.11 python3.11-venv libgl1 libglib2.0-0
+sudo apt install -y wget git python3.11 python3.11-venv libgl1 
 python3.11 -m venv venv
 source venv/bin/activate
 python3.11 -m pip install -U pip
@@ -243,7 +243,7 @@ Includes ComfyUI-Manager
 
 Same install of packages here as for Stable Diffusion ( included here in case you're not installed SD and just want ComfyUI... ) 
 ```bash
-sudo apt install -y wget git python3 python3-venv libgl1 libglib2.0-0
+sudo apt install -y wget git python3 python3-venv libgl1 
 ```
 
 ```bash
