@@ -23,7 +23,7 @@
 
 2024-05-12 - PyTorch now refers to ROCm 6.0 as the stable version, so 5.7 series has been archived over here and depricated - https://github.com/nktice/AMD-AI/blob/main/ROCm-5.7.md - This is updated to use the latest drivers and PyTorch stable.  Updated to support Ubuntu 24.04. 
 
-2024-06-04 - Updated for ROCm 6.1.2
+2024-06-05 - Updated for ROCm 6.1.2... New PyTorch stable ( 2.3.1 )...
 
 -----
 
@@ -380,7 +380,9 @@ pip install --pre cmake colorama filelock lit numpy Pillow Jinja2 \
 There's version conflicts, so we specify versions that we want installed - 
 ```bash
 #pip install --pre torch torchvision torchtext torchaudio triton pytorch-triton-rocm \
-pip install --pre torch==2.3.0+rocm6.0 torchvision==0.18.0+rocm6.0 torchaudio==2.3.0 triton pytorch-triton-rocm   \
+#pip install --pre torch==2.3.0+rocm6.0 torchvision==0.18.0+rocm6.0 torchaudio==2.3.0 triton pytorch-triton-rocm   \
+  --index-url https://download.pytorch.org/whl/rocm6.0
+pip install --pre torch==2.3.1+rocm6.0 torchvision==0.18.1+rocm6.0 torchaudio==2.3.1 triton pytorch-triton-rocm   \
   --index-url https://download.pytorch.org/whl/rocm6.0
 ```
 2024-05-12 For some odd reason, torchtext isn't recognized, even though it's there... so we specify it using it's URL to be explicit. 
