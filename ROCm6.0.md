@@ -205,7 +205,7 @@ python_cmd="python3.11"
 # generic import...
 # export TORCH_COMMAND="pip install torch torchvision --index-url https://download.pytorch.org/whl/nightly"
 # use specific versions to avoid downloading all the nightlies... ( update dates as needed ) 
- export TORCH_COMMAND="pip install --pre torch==2.4.0.dev20240607+rocm6.1 torchvision==0.19.0.dev20240506+rocm6.1 --extra-index-url https://download.pytorch.org/whl/nightly/rocm6.1"
+ export TORCH_COMMAND="pip install --pre torch==2.4.0.dev20240607+rocm6.1 torchvision==0.19.0.dev20240607+rocm6.1 --extra-index-url https://download.pytorch.org/whl/nightly/rocm6.1"
  ## And if you want to call this from other programs...
  export COMMANDLINE_ARGS="--api"
  ## crashes with 2 cards, so to get it to run on the second card (only), unremark the following 
