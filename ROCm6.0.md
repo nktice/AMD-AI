@@ -205,7 +205,7 @@ python_cmd="python3.11"
 # generic import...
 # export TORCH_COMMAND="pip install torch torchvision --index-url https://download.pytorch.org/whl/nightly"
 # use specific versions to avoid downloading all the nightlies... ( update dates as needed ) 
- export TORCH_COMMAND="pip install --pre torch==2.4.0.dev20240607+rocm6.1 torchvision==0.19.0.dev20240607+rocm6.1 --extra-index-url https://download.pytorch.org/whl/nightly/rocm6.1"
+ export TORCH_COMMAND="pip install --pre torch==2.4.0.dev20240606+rocm6.1 torchvision==0.19.0.dev20240606+rocm6.1 --extra-index-url https://download.pytorch.org/whl/nightly/rocm6.1"
  ## And if you want to call this from other programs...
  export COMMANDLINE_ARGS="--api"
  ## crashes with 2 cards, so to get it to run on the second card (only), unremark the following 
@@ -257,7 +257,7 @@ python3 -m venv venv
 source venv/bin/activate
 python3 -m pip install -U pip 
 # pre-install torch and torchvision from nightlies - note you may want to update versions...
-python3 -m pip install --pre torch==2.4.0.dev20240607+rocm6.1 torchvision==0.19.0.dev20240607+rocm6.1 --extra-index-url https://download.pytorch.org/whl/nightly/rocm6.1
+python3 -m pip install --pre torch==2.4.0.dev20240606+rocm6.1 torchvision==0.19.0.dev20240606+rocm6.1 --extra-index-url https://download.pytorch.org/whl/nightly/rocm6.1
 python3 -m pip install -r requirements.txt  --extra-index-url https://download.pytorch.org/whl/nightly/rocm6.1
 python3 -m pip install -r custom_nodes/ComfyUI-Manager/requirements.txt --extra-index-url https://download.pytorch.org/whl/nightly/rocm6.1
 
@@ -392,7 +392,7 @@ Instead of that we go and look through the files at https://download.pytorch.org
 
 Here we refer to specific nightly versions to keep things simple. 
 ```bash
-pip install --pre -U torch==2.4.0.dev20240607+rocm6.1 torchvision==0.19.0.dev20240607+rocm6.1 \
+pip install --pre -U torch==2.4.0.dev20240606+rocm6.1 torchvision==0.19.0.dev20240606+rocm6.1 \
   torchaudio pytorch-triton pytorch-triton-rocm \
   --index-url https://download.pytorch.org/whl/nightly/rocm6.1
 ```
