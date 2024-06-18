@@ -18,7 +18,7 @@
 
 2024-06-04 - Updated to use ROCm 6.1.2
 
-2024-06-18 - Updated to use ROCm 6.1.3
+2024-06-18 - Updated to use ROCm 6.1.3... add Llama-cpp-python instructions.
 
 --------
 
@@ -464,8 +464,19 @@ pip install .   --extra-index-url https://download.pytorch.org/whl/nightly
 cd ../..
 ```
 
+2024-06-18 - Llama-cpp-python - Another loader, that is highly efficient in resource use, but not very fast. https://github.com/abetlen/llama-cpp-python  It may need models in GGUF format ( and not other types ).  
+```
+# remove old versions
+pip uninstall llama_cpp_python
+pip uninstall llama_cpp_python_cuda
+# install llama-cpp-python 
+git clone  --recurse-submodules  https://github.com/abetlen/llama-cpp-python.git repositories/llama-cpp-python 
+cd repositories/llama-cpp-python
+pip install .
+cd ../.. 
+```
 
-This supplement has more details on how to load the Auto-GPTQ and llama.cpp loaders, written to support their updates for Mixtral -
+Here's a supplement written when Mixtral was new and not supported for how to install Auto-GPTQ, and Llama.cpp at that time - deprecated now, but may be of interest for some explorers. 
 https://github.com/nktice/AMD-AI/blob/main/Mixtral.md
 
 
