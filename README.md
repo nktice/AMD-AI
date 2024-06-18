@@ -25,7 +25,7 @@
 
 2024-06-05 - Updated for ROCm 6.1.2... New PyTorch stable ( 2.3.1 )...
 
-2024-06-18 - Updated for ROCm 6.1.3... 
+2024-06-18 - Updated for ROCm 6.1.3... add instructions for Llama-cpp-python. 
 
 -----
 
@@ -434,6 +434,19 @@ cd repositories/exllamav2
 ## git reset --hard a4ecea6
 pip install .   --index-url https://download.pytorch.org/whl/rocm6.0
 cd ../..
+```
+
+
+2024-06-18 - Llama-cpp-python - Another loader, that is highly efficient in resource use, but not very fast. https://github.com/abetlen/llama-cpp-python  It may need models in GGUF format ( and not other types ).  
+```
+# remove old versions
+pip uninstall llama_cpp_python
+pip uninstall llama_cpp_python_cuda
+# install llama-cpp-python 
+git clone  --recurse-submodules  https://github.com/abetlen/llama-cpp-python.git repositories/llama-cpp-python 
+cd repositories/llama-cpp-python
+pip install .
+cd ../.. 
 ```
 
 
