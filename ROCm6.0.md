@@ -451,31 +451,25 @@ cd text-generation-webui
 pip install -r requirements_amd.txt 
 ```
 
-Exllama and Exllamav2 loaders ...
-2023-12-17 - Bad news, ROCm 6.0 appears to break loading with exllama and it's not been updated....  Good news, exllamav2 has been updated and does work, including support for Mixtral and MoE ( Mixture of Experts ) models.  
-2024-01-20 - Thanks to TurboDerp for fixing 0.0.11-> latest the code so that it works with HIP! 
-2024-05-12 - There seems to be an issue with Exllamav2 at the moment... so this is remarked until that is resolved.  Here is more info : https://github.com/turboderp/exllamav2/issues/451#issuecomment-2106340325
-2024-05-25 - Exllamav2 0.1.0 is out now, and appears functional. 
+Exllamav2 loader 
 ```bash
-## install exllama
-##git clone https://github.com/turboderp/exllama repositories/exllama
-## install exllamav2
 git clone https://github.com/turboderp/exllamav2 repositories/exllamav2
 cd repositories/exllamav2
 pip install .   --extra-index-url https://download.pytorch.org/whl/nightly
 cd ../..
 ```
 
-2024-06-18 - Llama-cpp-python - Another loader, that is highly efficient in resource use, but not very fast. https://github.com/abetlen/llama-cpp-python  It may need models in GGUF format ( and not other types ).  2024-07-04 - not compiling, disabled for now. 
+Llama-cpp-python 
+2024-06-18 - Another loader, that is highly efficient in resource use, but not very fast. https://github.com/abetlen/llama-cpp-python  It may need models in GGUF format ( and not other types ).  
 ```
 ## remove old versions
-#pip uninstall llama_cpp_python
-#pip uninstall llama_cpp_python_cuda
+pip uninstall llama_cpp_python
+pip uninstall llama_cpp_python_cuda
 ## install llama-cpp-python
-#git clone  --recurse-submodules  https://github.com/abetlen/llama-cpp-python.git repositories/llama-cpp-python 
-#cd repositories/llama-cpp-python
-#pip install .
-#cd ../.. 
+git clone  --recurse-submodules  https://github.com/abetlen/llama-cpp-python.git repositories/llama-cpp-python 
+cd repositories/llama-cpp-python
+CC='/opt/rocm/llvm/bin/clang' CXX='/opt/rocm/llvm/bin/clang++' CFLAGS='-fPIC' CXXFLAGS='-fPIC' CMAKE_PREFIX_PATH='/opt/rocm' ROCM_PATH="/opt/rocm" HIP_PATH="/opt/rocm" CMAKE_ARGS="-GNinja -DLLAMA_HIPBLAS=ON -DLLAMA_AVX2=on " pip install --no-cache-dir .
+cd ../.. 
 ```
 
 Here's a supplement written when Mixtral was new and not supported for how to install Auto-GPTQ, and Llama.cpp at that time - deprecated now, but may be of interest for some explorers. 
