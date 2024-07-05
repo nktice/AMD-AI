@@ -210,6 +210,8 @@ tee --append webui-user.sh <<EOF
 # specify compatible python version
 python_cmd="python3.10"
  ## Torch for ROCm
+# workaround for ROCm + Torch > 2.4.x - https://github.com/comfyanonymous/ComfyUI/issues/3698
+ export TORCH_BLAS_PREFER_HIPBLASLT=0
 # generic import...
 # export TORCH_COMMAND="pip install torch torchvision --index-url https://download.pytorch.org/whl/nightly/rocm6.1"
 # use specific versions to avoid downloading all the nightlies... ( update dates as needed ) 
