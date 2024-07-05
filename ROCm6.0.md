@@ -459,8 +459,9 @@ pip install .   --extra-index-url https://download.pytorch.org/whl/nightly
 cd ../..
 ```
 
-Llama-cpp-python 
-2024-06-18 - Another loader, that is highly efficient in resource use, but not very fast. https://github.com/abetlen/llama-cpp-python  It may need models in GGUF format ( and not other types ).  
+Llama-cpp-python - 
+- Another loader, that is highly efficient in resource use, but not very fast. https://github.com/abetlen/llama-cpp-python  It may need models in GGUF format ( and not other types ).
+- Note compiling took 5:35 on my 5950x cpu... so be patient. 
 ```
 ## remove old versions
 pip uninstall llama_cpp_python
