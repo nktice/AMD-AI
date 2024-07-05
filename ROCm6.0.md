@@ -20,6 +20,9 @@
 
 2024-06-18 - Updated to use ROCm 6.1.3... add Llama-cpp-python instructions.
 
+2024-07-04 - Oobabooga TGW has updated to fix an issue with calling Stable Diffusion - https://github.com/oobabooga/text-generation-webui/issues/5993#event-13399938788 - with that there's updates to remove the workaround, and to add a new workaround because of a feature in newer Pytorch ( > 2.4.x ) documented here - https://github.com/comfyanonymous/ComfyUI/issues/3698 
+
+
 --------
 
 
@@ -180,21 +183,13 @@ git clone https://github.com/AUTOMATIC1111/stable-diffusion-webui.git
 cd stable-diffusion-webui
 ```
 
-The 1.9.x+ release series breaks the API so that it won't work with Oobabooga's TGW - so the following resets to use the 1.8.0 relaase that does work with Oobabooga.  
-```bash
-git checkout bef51ae
-git reset --hard
-```
-
-
 # Requisites : 
 Automatic1111 / Stable Diffusion doesn't work with newer versions of python, so we specify one it works with. 
 ```bash
-#sudo apt install -y wget git python3.11 python3.11-venv libgl1 libglib2.0-0
-sudo apt install -y wget git python3.11 python3.11-venv libgl1
-python3.11 -m venv venv
+sudo apt install -y wget git python3.10 python3.10-venv libgl1
+python3.10 -m venv venv
 source venv/bin/activate
-python3.11 -m pip install -U pip
+python3.10 -m pip install -U pip
 deactivate
 ```
 
@@ -202,12 +197,14 @@ deactivate
 ```bash
 tee --append webui-user.sh <<EOF
 # specify compatible python version
-python_cmd="python3.11"
+python_cmd="python3.10"
  ## Torch for ROCm
 # generic import...
 # export TORCH_COMMAND="pip install torch torchvision --index-url https://download.pytorch.org/whl/nightly"
-# use specific versions to avoid downloading all the nightlies... ( update dates as needed ) 
- export TORCH_COMMAND="pip install --pre torch==2.4.0.dev20240606+rocm6.1 torchvision==0.19.0.dev20240606+rocm6.1 --extra-index-url https://download.pytorch.org/whl/nightly/rocm6.1"
+# workaround for ROCm + Torch > 2.4.x - https://github.com/comfyanonymous/ComfyUI/issues/3698
+ export TORCH_BLAS_PREFER_HIPBLASLT=0
+# use specific versions to avoid downloading all the nightlies... ( update dates as needed )
+ export TORCH_COMMAND="pip install --pre torch==2.5.0.dev20240704+rocm6.1 torchvision==0.20.0.dev20240704+rocm6.1 --extra-index-url https://download.pytorch.org/whl/nightly/rocm6.1"
  ## And if you want to call this from other programs...
  export COMMANDLINE_ARGS="--api"
  ## crashes with 2 cards, so to get it to run on the second card (only), unremark the following 
@@ -245,8 +242,7 @@ Includes ComfyUI-Manager
 
 Install of packages like for Stable Diffusion ( included here in case you're not installed SD and just want ComfyUI... ) - but it's not bothered by Python 3.12... 
 ```bash
-#sudo apt install -y wget git python3 python3-venv libgl1 libglib2.0-0
-sudo apt install -y wget git python3 python3-venv libgl1 
+sudo apt install -y wget git python3.10 python3.10-venv libgl1 
 ```
 
 ```bash
@@ -255,25 +251,31 @@ git clone https://github.com/comfyanonymous/ComfyUI
 cd ComfyUI/custom_nodes
 git clone https://github.com/ltdrdata/ComfyUI-Manager
 cd ..
-python3 -m venv venv
+python3.10 -m venv venv
 source venv/bin/activate
-python3 -m pip install -U pip 
-# pre-install torch and torchvision from nightlies - note you may want to update versions...
-python3 -m pip install --pre torch==2.4.0.dev20240606+rocm6.1 torchvision==0.19.0.dev20240606+rocm6.1 --extra-index-url https://download.pytorch.org/whl/nightly/rocm6.1
-python3 -m pip install -r requirements.txt  --extra-index-url https://download.pytorch.org/whl/nightly/rocm6.1
-python3 -m pip install -r custom_nodes/ComfyUI-Manager/requirements.txt --extra-index-url https://download.pytorch.org/whl/nightly/rocm6.1
+python3.10 -m pip install -U pip 
+## pre-install torch and torchvision from nightlies - note you may want to update versions... 
+# python3.10 -m pip install --pre torch==2.5.0.dev20240704+rocm6.1 torchvision==0.20.0.dev20240704+rocm6.1 --extra-index-url https://download.pytorch.org/whl/nightly/rocm6.1
+# python3.10 -m pip install -r requirements.txt  --extra-index-url https://download.pytorch.org/whl/nightly/rocm6.1
+##
+## Note the following manually includes the contents of requirements.txt - because otherwise attempting to install the requirements goes and reinstalls torch over again. 
+python3.10 -m pip install --pre torch==2.5.0.dev20240704+rocm6.1 torchvision==0.20.0.dev20240704+rocm6.1  torchsde torchaudio einops transformers>=4.25.1 safetensors>=0.4.2 aiohttp pyyaml Pillow scipy tqdm psutil  --extra-index-url https://download.pytorch.org/whl/nightly/rocm6.1
+
+python3.10 -m pip install -r custom_nodes/ComfyUI-Manager/requirements.txt --extra-index-url https://download.pytorch.org/whl/nightly/rocm6.1
 
 # end vend if needed...
 deactivate
 ```
 
 Scripts for running the program...
+Note that " TORCH_BLAS_PREFER_HIPBLASLT=0 " is needed as explained here - https://github.com/comfyanonymous/ComfyUI/issues/3698
+
 ```bash
 # run_gpu.sh
 tee --append run_gpu.sh <<EOF
 #!/bin/bash
 source venv/bin/activate
-python3 main.py --preview-method auto
+TORCH_BLAS_PREFER_HIPBLASLT=0 python3 main.py --preview-method auto
 EOF
 chmod +x run_gpu.sh
 
@@ -281,7 +283,7 @@ chmod +x run_gpu.sh
 tee --append run_cpu.sh <<EOF
 #!/bin/bash
 source venv/bin/activate
-python3 main.py --preview-method auto --cpu
+TORCH_BLAS_PREFER_HIPBLASLT=0 python3 main.py --preview-method auto --cpu
 EOF
 chmod +x run_cpu.sh
 ```
@@ -394,7 +396,7 @@ Instead of that we go and look through the files at https://download.pytorch.org
 
 Here we refer to specific nightly versions to keep things simple. 
 ```bash
-pip install --pre -U torch==2.4.0.dev20240606+rocm6.1 torchvision==0.19.0.dev20240606+rocm6.1 \
+pip install --pre -U torch==2.5.0.dev20240704+rocm6.1 torchvision==0.20.0.dev20240704+rocm6.1 \
   torchaudio pytorch-triton pytorch-triton-rocm \
   --index-url https://download.pytorch.org/whl/nightly/rocm6.1
 ```
@@ -464,16 +466,16 @@ pip install .   --extra-index-url https://download.pytorch.org/whl/nightly
 cd ../..
 ```
 
-2024-06-18 - Llama-cpp-python - Another loader, that is highly efficient in resource use, but not very fast. https://github.com/abetlen/llama-cpp-python  It may need models in GGUF format ( and not other types ).  
+2024-06-18 - Llama-cpp-python - Another loader, that is highly efficient in resource use, but not very fast. https://github.com/abetlen/llama-cpp-python  It may need models in GGUF format ( and not other types ).  2024-07-04 - not compiling, disabled for now. 
 ```
-# remove old versions
-pip uninstall llama_cpp_python
-pip uninstall llama_cpp_python_cuda
-# install llama-cpp-python 
-git clone  --recurse-submodules  https://github.com/abetlen/llama-cpp-python.git repositories/llama-cpp-python 
-cd repositories/llama-cpp-python
-pip install .
-cd ../.. 
+## remove old versions
+#pip uninstall llama_cpp_python
+#pip uninstall llama_cpp_python_cuda
+## install llama-cpp-python
+#git clone  --recurse-submodules  https://github.com/abetlen/llama-cpp-python.git repositories/llama-cpp-python 
+#cd repositories/llama-cpp-python
+#pip install .
+#cd ../.. 
 ```
 
 Here's a supplement written when Mixtral was new and not supported for how to install Auto-GPTQ, and Llama.cpp at that time - deprecated now, but may be of interest for some explorers. 
@@ -481,14 +483,15 @@ https://github.com/nktice/AMD-AI/blob/main/Mixtral.md
 
 
 
-Let's create a script (run.sh) to run the program...
+Let's create a script (run.sh) to run the program... 
+note "TORCH_BLAS_PREFER_HIPBLASLT=0" is to deal with the issue described here - https://github.com/comfyanonymous/ComfyUI/issues/3698
 ```bash
 tee --append run.sh <<EOF
 #!/bin/bash
 ## activate conda
 conda activate textgen
 ## command to run server... 
-python server.py --extensions sd_api_pictures send_pictures gallery
+TORCH_BLAS_PREFER_HIPBLASLT=0 python server.py --extensions sd_api_pictures send_pictures gallery
 # if you want it to show up on your own network, add --listen 
 #python server.py --listen --extensions sd_api_pictures send_pictures gallery 
 conda deactivate
