@@ -27,6 +27,8 @@
 
 2024-06-18 - Updated for ROCm 6.1.3... add instructions for Llama-cpp-python. 
 
+2024-07-04 - Oobabooga TGW has updated to fix an issue with calling Stable Diffusion - https://github.com/oobabooga/text-generation-webui/issues/5993#event-13399938788 - with that there's updates to remove the workaround, and to add a new workaround because of a feature in newer Pytorch ( > 2.4.x ) documented here - https://github.com/comfyanonymous/ComfyUI/issues/3698 
+
 -----
 
 
@@ -186,18 +188,19 @@ cd stable-diffusion-webui
 ```
 
 The 1.9.x+ release series breaks the API so that it won't work with Oobabooga's TGW - so the following resets to use the 1.8.0 relaase that does work with Oobabooga.  
+2024-07-04 - Oobabooga 1.9 resolves this issue - these lines are remarked out for now, but preserved in case someone wants to see how to do something similar in the future...
 ```bash
-git checkout bef51ae
-git reset --hard
+# git checkout bef51ae
+# git reset --hard
 ```
 
 
 # Requisites : 
 ```bash
-sudo apt install -y wget git python3.11 python3.11-venv libgl1 
-python3.11 -m venv venv
+sudo apt install -y wget git python3.10 python3.10-venv libgl1 
+python3.10 -m venv venv
 source venv/bin/activate
-python3.11 -m pip install -U pip
+python3.10 -m pip install -U pip
 deactivate
 ```
 
@@ -205,7 +208,7 @@ deactivate
 ```bash
 tee --append webui-user.sh <<EOF
 # specify compatible python version
-python_cmd="python3.11"
+python_cmd="python3.10"
  ## Torch for ROCm
 # generic import...
 # export TORCH_COMMAND="pip install torch torchvision --index-url https://download.pytorch.org/whl/nightly/rocm6.1"
@@ -436,16 +439,16 @@ cd ../..
 ```
 
 
-2024-06-18 - Llama-cpp-python - Another loader, that is highly efficient in resource use, but not very fast. https://github.com/abetlen/llama-cpp-python  It may need models in GGUF format ( and not other types ).  
+2024-06-18 - Llama-cpp-python - Another loader, that is highly efficient in resource use, but not very fast. https://github.com/abetlen/llama-cpp-python  It may need models in GGUF format ( and not other types ).  2024-07-04 - isn't compiling now... so this is remarked out for the time being...
 ```
-# remove old versions
-pip uninstall llama_cpp_python
-pip uninstall llama_cpp_python_cuda
-# install llama-cpp-python 
-git clone  --recurse-submodules  https://github.com/abetlen/llama-cpp-python.git repositories/llama-cpp-python 
-cd repositories/llama-cpp-python
-pip install .
-cd ../.. 
+## remove old versions
+#pip uninstall llama_cpp_python
+#pip uninstall llama_cpp_python_cuda
+## install llama-cpp-python 
+#git clone  --recurse-submodules  https://github.com/abetlen/llama-cpp-python.git repositories/llama-cpp-python 
+#cd repositories/llama-cpp-python
+#pip install .
+#cd ../.. 
 ```
 
 
