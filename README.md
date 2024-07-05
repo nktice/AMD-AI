@@ -419,17 +419,8 @@ cd text-generation-webui
 pip install -r requirements_amd.txt 
 ```
 
-Exllama and Exllamav2 loaders ...
-It appears ExLlama isn't being maintained and the emphasis is now on ExLlamav2... v2 has been updated to support Mixture of Experts (MoE such as Mixtral ). 
-2023-12-23 - After many tests, it appears that the exllamav2 that's installed above gives an error, so we're compiling and reinstalling exllama here as when we do that it does work.  
-2024-01-18 - Something has broken and exllamav2 won't compile so I've added a line to reset the checkout to the last known good / compiling version 0.0.11 
-2024-01-20 - Thanks to TurboDerp for resolving issue with exllamav2 so it plays nice with HIP.  Remarked out workaround, in case such is useful in future. 
-2024-05-15 - There is an issue with one of the components of Exllamav2 in the latest / dev that is preventing it from working, so this is remarked out until that is resolved.  Here is more info : https://github.com/turboderp/exllamav2/issues/451#issuecomment-2106340325
-2024-05-25 - Exllamav2 0.1.0 has been released, and appears functional. 
+Exllamav2 loader
 ```bash
-## install exllama
-##git clone https://github.com/turboderp/exllama repositories/exllama
-## install exllamav2
 git clone https://github.com/turboderp/exllamav2 repositories/exllamav2
 cd repositories/exllamav2
 ## Force collection back to base 0.0.11 
@@ -439,16 +430,17 @@ cd ../..
 ```
 
 
-2024-06-18 - Llama-cpp-python - Another loader, that is highly efficient in resource use, but not very fast. https://github.com/abetlen/llama-cpp-python  It may need models in GGUF format ( and not other types ).  2024-07-04 - isn't compiling now... so this is remarked out for the time being...
+Llama-cpp-python 
+2024-06-18 - Llama-cpp-python - Another loader, that is highly efficient in resource use, but not very fast. https://github.com/abetlen/llama-cpp-python  It may need models in GGUF format ( and not other types ).  
 ```
 ## remove old versions
-#pip uninstall llama_cpp_python
-#pip uninstall llama_cpp_python_cuda
+pip uninstall llama_cpp_python
+pip uninstall llama_cpp_python_cuda
 ## install llama-cpp-python 
-#git clone  --recurse-submodules  https://github.com/abetlen/llama-cpp-python.git repositories/llama-cpp-python 
-#cd repositories/llama-cpp-python
-#pip install .
-#cd ../.. 
+git clone  --recurse-submodules  https://github.com/abetlen/llama-cpp-python.git repositories/llama-cpp-python 
+cd repositories/llama-cpp-python
+CC='/opt/rocm/llvm/bin/clang' CXX='/opt/rocm/llvm/bin/clang++' CFLAGS='-fPIC' CXXFLAGS='-fPIC' CMAKE_PREFIX_PATH='/opt/rocm' ROCM_PATH="/opt/rocm" HIP_PATH="/opt/rocm" CMAKE_ARGS="-GNinja -DLLAMA_HIPBLAS=ON -DLLAMA_AVX2=on " pip install --no-cache-dir .
+cd ../.. 
 ```
 
 
