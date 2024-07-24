@@ -396,9 +396,9 @@ Instead of that we go and look through the files at https://download.pytorch.org
 
 Here we refer to specific nightly versions to keep things simple. 
 ```bash
-pip install --pre -U torch==2.5.0.dev20240704+rocm6.1 torchvision==0.20.0.dev20240704+rocm6.1 \
-  torchaudio pytorch-triton pytorch-triton-rocm \
-  --index-url https://download.pytorch.org/whl/nightly/rocm6.1
+pip install --pre -U torch==2.5.0.dev20240722+rocm6.1 torchvision==0.20.0.dev20240723+rocm6.1  \
+	torchaudio pytorch-triton pytorch-triton-rocm  \
+	 --index-url https://download.pytorch.org/whl/nightly/rocm6.1
 ```
 
 2024-05-12 For some odd reason, torchtext isn't recognized, even though it's there... so we specify it using it's URL to be explicit.
