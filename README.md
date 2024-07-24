@@ -29,6 +29,8 @@
 
 2024-07-04 - Oobabooga TGW has updated to fix an issue with calling Stable Diffusion - https://github.com/oobabooga/text-generation-webui/issues/5993#event-13399938788 - with that there's updates to remove the workaround, and to add a new workaround because of a feature in newer Pytorch ( > 2.4.x ) documented here - https://github.com/comfyanonymous/ComfyUI/issues/3698 
 
+2024-07-24 - PyTorch has updated with 2.4 now stable and referring to ROCm 6.1, so there's updates here to reflect those changes. 
+
 -----
 
 
@@ -215,7 +217,7 @@ python_cmd="python3.10"
 # generic import...
 # export TORCH_COMMAND="pip install torch torchvision --index-url https://download.pytorch.org/whl/nightly/rocm6.1"
 # use specific versions to avoid downloading all the nightlies... ( update dates as needed ) 
- export TORCH_COMMAND="pip install --pre torch torchvision --index-url https://download.pytorch.org/whl/rocm6.0"
+ export TORCH_COMMAND="pip install --pre torch torchvision --index-url https://download.pytorch.org/whl/rocm6.1"
  ## And if you want to call this from other programs...
  export COMMANDLINE_ARGS="--api"
  ## crashes with 2 cards, so to get it to run on the second card (only), unremark the following 
@@ -262,9 +264,9 @@ cd ..
 python3 -m venv venv
 source venv/bin/activate
 # pre-install torch and torchvision from nightlies - note you may want to update versions...
-python3 -m pip install --pre torch torchvision --index-url https://download.pytorch.org/whl/rocm6.0
-python3 -m pip install -r requirements.txt  --extra-index-url https://download.pytorch.org/whl/rocm6.0
-python3 -m pip install -r custom_nodes/ComfyUI-Manager/requirements.txt --extra-index-url https://download.pytorch.org/whl/rocm6.0
+python3 -m pip install --pre torch torchvision --index-url https://download.pytorch.org/whl/rocm6.1
+python3 -m pip install -r requirements.txt  --extra-index-url https://download.pytorch.org/whl/rocm6.1
+python3 -m pip install -r custom_nodes/ComfyUI-Manager/requirements.txt --extra-index-url https://download.pytorch.org/whl/rocm6.1
 
 # end vend if needed...
 deactivate
@@ -381,15 +383,16 @@ conda activate textgen
 pip install --pre cmake colorama filelock lit numpy Pillow Jinja2 \
 	mpmath fsspec MarkupSafe certifi filelock networkx \
 	sympy packaging requests \
-         --index-url https://download.pytorch.org/whl/rocm6.0
+         --index-url https://download.pytorch.org/whl/rocm6.1
 ```
 
 There's version conflicts, so we specify versions that we want installed - 
 ```bash
 #pip install --pre torch torchvision torchtext torchaudio triton pytorch-triton-rocm \
-#pip install --pre torch==2.3.0+rocm6.0 torchvision==0.18.0+rocm6.0 torchaudio==2.3.0 triton pytorch-triton-rocm    --index-url https://download.pytorch.org/whl/rocm6.0
-pip install --pre torch==2.3.1+rocm6.0 torchvision==0.18.1+rocm6.0 torchaudio==2.3.1 triton pytorch-triton-rocm   \
+#pip install --pre torch==2.3.1+rocm6.0 torchvision==0.18.1+rocm6.0 torchaudio==2.3.1 triton pytorch-triton-rocm   \
   --index-url https://download.pytorch.org/whl/rocm6.0
+pip install --pre torch==2.4.0+rocm6.1 torchvision==0.19.0+rocm6.1 torchaudio==2.4.0 triton pytorch-triton-rocm   \
+  --index-url https://download.pytorch.org/whl/rocm6.1
 ```
 2024-05-12 For some odd reason, torchtext isn't recognized, even though it's there... so we specify it using it's URL to be explicit. 
 ```bash
