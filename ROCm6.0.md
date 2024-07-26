@@ -446,10 +446,53 @@ cd text-generation-webui
 ```
 
 ### Oobabooga's 'requirements'
+2024-07-26 Oobabooga release 1.12 changed how requirements are done, including calls that refer to old versions of PyTorch which didn't work for me... So the usual command here is remarked out, and I have instead offered a replacement requirements.txt with minimal includes, that combined with what else is here gets it up and running ( for me ), using more recent versions of packages. 
+
 ```bash
 #sed -i "s@bitsandbytes==@bitsandbytes>=@g" requirements_amd.txt 
-pip install -r requirements_amd.txt 
+#pip install -r requirements_amd.txt 
 ```
+
+```bash
+tee --append requirements_amdai.txt <<EOF
+# alternate simplified requirements from https://github.com/nktice/AMD-AI/edit/main/ROCm6.0.md 
+accelerate>=0.32.*
+colorama
+datasets
+einops
+gradio>=4.26.*
+hqq>=0.1.7.post3
+jinja2>=3.1.4
+lm_eval==0.3.0
+markdown
+numba>=0.59.*
+numpy>=1.26.*
+optimum>=1.17.*
+pandas
+peft>=0.8.*
+Pillow>=9.5.0
+psutil
+pyyaml
+requests
+rich
+safetensors>=0.4.*
+scipy
+sentencepiece
+tensorboard
+transformers>=4.43.*
+tqdm
+wandb
+
+# API
+SpeechRecognition==3.10.0
+flask_cloudflared==0.0.14
+sse-starlette==1.6.5
+tiktoken
+
+EOF
+pip install -r requirements_amdai.txt  --extra-index-url https://download.pytorch.org/whl/nightly/rocm6.1
+```
+
 
 Exllamav2 loader 
 ```bash
