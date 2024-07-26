@@ -463,7 +463,7 @@ einops
 gradio>=4.26.*
 hqq>=0.1.7.post3
 jinja2>=3.1.4
-lm_eval==0.3.0
+lm_eval>=0.3.0
 markdown
 numba>=0.59.*
 numpy>=1.26.*
@@ -484,9 +484,9 @@ tqdm
 wandb
 
 # API
-SpeechRecognition==3.10.0
-flask_cloudflared==0.0.14
-sse-starlette==1.6.5
+SpeechRecognition>=3.10.0
+flask_cloudflared>=0.0.14
+sse-starlette>=1.6.5
 tiktoken
 
 EOF
