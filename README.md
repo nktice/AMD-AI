@@ -390,7 +390,7 @@ There's version conflicts, so we specify versions that we want installed -
 ```bash
 #pip install --pre torch torchvision torchtext torchaudio triton pytorch-triton-rocm \
 #pip install --pre torch==2.3.1+rocm6.0 torchvision==0.18.1+rocm6.0 torchaudio==2.3.1 triton pytorch-triton-rocm   \
-  --index-url https://download.pytorch.org/whl/rocm6.0
+#   --index-url https://download.pytorch.org/whl/rocm6.0
 pip install --pre torch==2.4.0+rocm6.1 torchvision==0.19.0+rocm6.1 torchaudio==2.4.0 triton pytorch-triton-rocm   \
   --index-url https://download.pytorch.org/whl/rocm6.1
 ```
