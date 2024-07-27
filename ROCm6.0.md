@@ -204,7 +204,7 @@ python_cmd="python3.10"
 # workaround for ROCm + Torch > 2.4.x - https://github.com/comfyanonymous/ComfyUI/issues/3698
  export TORCH_BLAS_PREFER_HIPBLASLT=0
 # use specific versions to avoid downloading all the nightlies... ( update dates as needed )
- export TORCH_COMMAND="pip install --pre torch==2.5.0.dev20240704+rocm6.1 torchvision==0.20.0.dev20240704+rocm6.1 --extra-index-url https://download.pytorch.org/whl/nightly/rocm6.1"
+ export TORCH_COMMAND="pip install --pre torch==2.5.0.dev20240724+rocm6.1 torchvision==0.20.0.dev20240725+rocm6.1 --extra-index-url https://download.pytorch.org/whl/nightly/rocm6.1"
  ## And if you want to call this from other programs...
  export COMMANDLINE_ARGS="--api"
  ## crashes with 2 cards, so to get it to run on the second card (only), unremark the following 
@@ -259,7 +259,7 @@ python3.10 -m pip install -U pip
 # python3.10 -m pip install -r requirements.txt  --extra-index-url https://download.pytorch.org/whl/nightly/rocm6.1
 ##
 ## Note the following manually includes the contents of requirements.txt - because otherwise attempting to install the requirements goes and reinstalls torch over again. 
-python3.10 -m pip install --pre torch==2.5.0.dev20240704+rocm6.1 torchvision==0.20.0.dev20240704+rocm6.1  torchsde torchaudio einops transformers>=4.25.1 safetensors>=0.4.2 aiohttp pyyaml Pillow scipy tqdm psutil  --extra-index-url https://download.pytorch.org/whl/nightly/rocm6.1
+python3.10 -m pip install --pre torch==2.5.0.dev20240724+rocm6.1 torchvision==0.20.0.dev20240725+rocm6.1  torchsde torchaudio einops transformers>=4.25.1 safetensors>=0.4.2 aiohttp pyyaml Pillow scipy tqdm psutil  --extra-index-url https://download.pytorch.org/whl/nightly/rocm6.1
 
 python3.10 -m pip install -r custom_nodes/ComfyUI-Manager/requirements.txt --extra-index-url https://download.pytorch.org/whl/nightly/rocm6.1
 
