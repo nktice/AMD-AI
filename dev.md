@@ -59,7 +59,7 @@ Keyring required by apt and store in the keyring directory
 wget https://repo.radeon.com/rocm/rocm.gpg.key -O - | \
     gpg --dearmor | sudo tee /etc/apt/keyrings/rocm.gpg > /dev/null
 ```
-amdgpu repository for jammy
+amdgpu repository...
 ```bash
 echo 'deb [arch=amd64 signed-by=/etc/apt/keyrings/rocm.gpg] https://repo.radeon.com/amdgpu/6.2/ubuntu noble main' \
     | sudo tee /etc/apt/sources.list.d/amdgpu.list
