@@ -4,7 +4,8 @@
 # Automatic1111 Stable Diffusion + ComfyUI  ( venv ) 
 # Oobabooga - Text Generation WebUI ( conda, Exllamav2, Llama-cpp-python, BitsAndBytes ) 
 
-## Install notes / instructions ##
+## Install notes / instructions 
+This file is focused on the current stable version of PyTorch.  There is another variation of these instructions for the development / nightly version(s) here : https://github.com/nktice/AMD-AI/blob/main/dev.md
 
 2023-07 - 
  I have composed this collection of instructions as they are my notes.
@@ -79,7 +80,7 @@ AMDGPU DKMS
 sudo apt install -y amdgpu-dkms
 ```
 
-# ROCm repositories for jammy
+# ROCm repositories...
 https://rocmdocs.amd.com/en/latest/deploy/linux/os-native/install.html
 
 ```bash
