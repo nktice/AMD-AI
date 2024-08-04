@@ -1,8 +1,8 @@
 # AMD / Radeon 7900XTX 6900XT GPU ROCm install / setup / config 
-# Ubuntu 22.04 / 23.04 / 23.10 / 24.04
-# ROCm 6.1.3
+# Ubuntu 24.04
+# ROCm 6.2
 # Automatic1111 Stable Diffusion + ComfyUI  ( venv ) 
-# Oobabooga - Text Generation WebUI ( conda, Exllamav2, BitsAndBytes ) 
+# Oobabooga - Text Generation WebUI ( conda, Exllamav2, Llama-cpp-python, BitsAndBytes ) 
 
 ## Install notes / instructions ##
 
@@ -19,26 +19,15 @@
 
 [ ... updates abridged ... ] 
 
-2024-04-24 - Updates to deal with new versions of Python, and Bitsandbytes.  
-
-2024-05-12 - PyTorch now refers to ROCm 6.0 as the stable version, so 5.7 series has been archived over here and depricated - https://github.com/nktice/AMD-AI/blob/main/ROCm-5.7.md - This is updated to use the latest drivers and PyTorch stable.  Updated to support Ubuntu 24.04. 
-
-2024-06-05 - Updated for ROCm 6.1.2... New PyTorch stable ( 2.3.1 )...
-
-2024-06-18 - Updated for ROCm 6.1.3... add instructions for Llama-cpp-python. 
-
-2024-07-04 - Oobabooga TGW has updated to fix an issue with calling Stable Diffusion - https://github.com/oobabooga/text-generation-webui/issues/5993#event-13399938788 - with that there's updates to remove the workaround, and to add a new workaround because of a feature in newer Pytorch ( > 2.4.x ) documented here - https://github.com/comfyanonymous/ComfyUI/issues/3698 
-
 2024-07-24 - PyTorch has updated with 2.4 now stable and referring to ROCm 6.1, so there's updates here to reflect those changes. 
+
+2024-08-04 - ROCm 6.2 is out, including support for the current version of Ubuntu (24.04 / Noble) so this revision includes changes to emphasize use of the new version.  Previous stable has been set aside here - https://github.com/nktice/AMD-AI/blob/main/ROCm-6.1.3-Stable.md 
 
 -----
 
 
-# Ubuntu 22.04 / 23.04 / 23.10 / 24.04 - Base system install 
-Ubuntu 22.04 works great on Radeon 6900 XT video cards, 
-but does not support 7900XTX cards as they came out later 
-Ubuntu 23.04 is newer but has issues with some of the tools. 
-So the notes below should work on either system, unless commented.
+# Ubuntu 24.04 - Base system install 
+ROCm 6.2 includes support for Ubuntu 24.04 (noble). 
 
 At this point we assume you've done the system install
 and you know what that is, have a user, root, etc. 
@@ -55,14 +44,8 @@ sudo apt install -y "linux-headers-$(uname -r)" \
 	"linux-modules-extra-$(uname -r)"
 ```
 
-#### [ for Ubuntu 23.04, 23.10, and 24.04 ... ]
-Some things may require various old packages so we need to add
-jammy packages, so that they can be installed, on lunar systems.
-```bash
-sudo add-apt-repository -y -s deb http://security.ubuntu.com/ubuntu jammy main universe
-```
 
-#### [ For Ubuntu 24.04 ... ] 
+## Support older version of Python
 This allows calls to older versions of Python by using "deadsnakes"
 ```bash
 sudo add-apt-repository ppa:deadsnakes/ppa -y
@@ -83,9 +66,10 @@ Keyring required by apt and store in the keyring directory
 wget https://repo.radeon.com/rocm/rocm.gpg.key -O - | \
     gpg --dearmor | sudo tee /etc/apt/keyrings/rocm.gpg > /dev/null
 ```
-amdgpu repository for jammy
+
+amdgpu repository 
 ```bash
-echo 'deb [arch=amd64 signed-by=/etc/apt/keyrings/rocm.gpg] https://repo.radeon.com/amdgpu/6.1.3/ubuntu jammy main' \
+echo 'deb [arch=amd64 signed-by=/etc/apt/keyrings/rocm.gpg] https://repo.radeon.com/amdgpu/6.2/ubuntu noble main' \
     | sudo tee /etc/apt/sources.list.d/amdgpu.list
 sudo apt update -y 
 ```
@@ -94,13 +78,12 @@ AMDGPU DKMS
 ```bash
 sudo apt install -y amdgpu-dkms
 ```
-Note : This commonly produces warning message about 'Possible missing firmware' these are just wanrings and things work anyway, they can be ignored. 
 
 # ROCm repositories for jammy
 https://rocmdocs.amd.com/en/latest/deploy/linux/os-native/install.html
 
 ```bash
-echo "deb [arch=amd64 signed-by=/etc/apt/keyrings/rocm.gpg] https://repo.radeon.com/rocm/apt/6.1.3 jammy main" \
+echo "deb [arch=amd64 signed-by=/etc/apt/keyrings/rocm.gpg] https://repo.radeon.com/rocm/apt/6.2 noble main" \
     | sudo tee --append /etc/apt/sources.list.d/rocm.list
 echo -e 'Package: *\nPin: release o=repo.radeon.com\nPin-Priority: 600' \
     | sudo tee /etc/apt/preferences.d/rocm-pin-600
@@ -112,7 +95,7 @@ This is lots of stuff, but comparatively small so worth including,
 as some stuff later may want as dependencies without much notice.
 ```bash
 # ROCm...
-sudo apt install -y rocm-dev rocm-libs rocm-hip-sdk rocm-dkms rocm-libs
+sudo apt install -y rocm-dev rocm-libs rocm-hip-sdk rocm-libs
 ```
 
 
@@ -474,7 +457,7 @@ pip install -r requirements_amdai.txt  --extra-index-url https://download.pytorc
 ```
 
 
-Exllamav2 loader
+#### Exllamav2 loader
 ```bash
 git clone https://github.com/turboderp/exllamav2 repositories/exllamav2
 cd repositories/exllamav2
@@ -485,12 +468,12 @@ cd ../..
 ```
 
 
-Llama-cpp-python 
+#### Llama-cpp-python 
 2024-06-18 - Llama-cpp-python - Another loader, that is highly efficient in resource use, but not very fast. https://github.com/abetlen/llama-cpp-python  It may need models in GGUF format ( and not other types ).  
 ```
 ## remove old versions
-pip uninstall llama_cpp_python
-pip uninstall llama_cpp_python_cuda
+pip uninstall llama_cpp_python -y 
+pip uninstall llama_cpp_python_cuda -y
 ## install llama-cpp-python 
 git clone  --recurse-submodules  https://github.com/abetlen/llama-cpp-python.git repositories/llama-cpp-python 
 cd repositories/llama-cpp-python
