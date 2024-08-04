@@ -456,30 +456,30 @@ cd text-generation-webui
 ```bash
 tee --append requirements_amdai.txt <<EOF
 # alternate simplified requirements from https://github.com/nktice/AMD-AI/edit/main/ROCm6.0.md 
-accelerate>=0.32.*
+accelerate>=0.32
 colorama
 datasets
 einops
-gradio>=4.26.*
+gradio>=4.26
 hqq>=0.1.7.post3
 jinja2>=3.1.4
 lm_eval>=0.3.0
 markdown
-numba>=0.59.*
-numpy>=1.26.*
-optimum>=1.17.*
+numba>=0.59
+numpy>=1.26
+optimum>=1.17
 pandas
-peft>=0.8.*
+peft>=0.8
 Pillow>=9.5.0
 psutil
 pyyaml
 requests
 rich
-safetensors>=0.4.*
+safetensors>=0.4
 scipy
 sentencepiece
 tensorboard
-transformers>=4.43.*
+transformers>=4.43
 tqdm
 wandb
 
