@@ -22,7 +22,7 @@ This file is focused on the current stable version of PyTorch.  There is another
 
 2024-07-24 - PyTorch has updated with 2.4 now stable and referring to ROCm 6.1, so there's updates here to reflect those changes. 
 
-2024-08-04 - ROCm 6.2 is out, including support for the current version of Ubuntu (24.04 / Noble) so this revision includes changes to emphasize use of the new version.  Previous stable has been set aside here - https://github.com/nktice/AMD-AI/blob/main/ROCm-6.1.3-Stable.md 
+2024-08-04 - ROCm 6.2 is out, including support for the current version of Ubuntu (24.04 / Noble) so this revision includes changes to emphasize use of the new version.  Previous stable has been set aside here - https://github.com/nktice/AMD-AI/blob/main/ROCm-6.1.3-Stable.md - Note I'm getting errors with the 2nd GPU with the new ROCm, bug report is filed, here is a link to that thread so you can follow :  https://github.com/ROCm/ROCm/issues/3518   
 
 -----
 
