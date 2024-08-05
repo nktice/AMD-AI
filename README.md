@@ -1,4 +1,4 @@
-# AMD / Radeon 7900XTX 6900XT GPU ROCm install / setup / config 
+# AMD Radeon 7900XTX GPU ROCm install / setup / config 
 # Ubuntu 24.04
 # ROCm 6.2
 # Automatic1111 Stable Diffusion + ComfyUI  ( venv ) 
@@ -118,8 +118,8 @@ echo "PATH=/opt/rocm/bin:/opt/rocm/opencl/bin:$PATH" >> ~/.profile
 ```bash
 sudo /opt/rocm/bin/rocminfo | grep gfx
 ```
-Found : gfx1030 [ Radeon 6900 ]
-Found : gfx1100 [ Radeon 7900 ] 
+
+My 6900 reported as gfx1030, and my 7900 XTX show up as gfx1100 
 
 ## Add user to groups
 Of course note to change the user name to match your user. 
