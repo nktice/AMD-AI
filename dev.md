@@ -1,4 +1,4 @@
-# AMD / Radeon 7900XTX 6900XT GPU ROCm install / setup / config 
+# AMD / Radeon 7900XTX GPU ROCm install / setup / config 
 # Ubuntu 24.04
 # ROCm 6.2
 # Automatic1111 Stable Diffusion + ComfyUI  ( venv ) 
