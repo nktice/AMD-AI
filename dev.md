@@ -14,7 +14,7 @@ https://github.com/nktice/AMD-AI/blob/main/README.md
 
 2024-07-04 - Oobabooga TGW has updated to fix an issue with calling Stable Diffusion - https://github.com/oobabooga/text-generation-webui/issues/5993#event-13399938788 - with that there's updates to remove the workaround, and to add a new workaround because of a feature in newer Pytorch ( > 2.4.x ) documented here - https://github.com/comfyanonymous/ComfyUI/issues/3698 
 
-2024-08-04 - ROCm 6.2 is out... with it comes official support for Ubuntu 24.04 - that simplifies things, and in light of the changes I'm restructuring things with file naming, hence this new file name for the current dev instructions. 
+2024-08-04 - ROCm 6.2 is out... with it comes official support for Ubuntu 24.04 - that simplifies things, and in light of the changes I'm restructuring things with file naming, hence this new file name for the current dev instructions.  Note I'm getting errors with the 2nd GPU with the new ROCm, bug report is filed, here is a link to that thread so you can follow :  https://github.com/ROCm/ROCm/issues/3518   If you need 2 GPUs the older instructions for ROCm 6.1.3 are preserved here : https://github.com/nktice/AMD-AI/blob/main/ROCm-6.1.3-Dev.md
 
 --------
 
