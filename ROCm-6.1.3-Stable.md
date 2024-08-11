@@ -482,7 +482,8 @@ git clone https://github.com/turboderp/exllamav2 repositories/exllamav2
 cd repositories/exllamav2
 ## Force collection back to base 0.0.11 
 ## git reset --hard a4ecea6
-pip install .   --index-url https://download.pytorch.org/whl/rocm6.0
+pip install -r requirements.txt  --extra-index-url https://download.pytorch.org/whl/rocm6.1
+pip install .   --index-url https://download.pytorch.org/whl/rocm6.1
 cd ../..
 ```
 
