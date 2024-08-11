@@ -501,6 +501,7 @@ Exllamav2 loader
 ```bash
 git clone https://github.com/turboderp/exllamav2 repositories/exllamav2
 cd repositories/exllamav2
+pip install -r requirements.txt  --extra-index-url https://download.pytorch.org/whl/nightly/rocm6.1
 pip install .   --extra-index-url https://download.pytorch.org/whl/nightly
 cd ../..
 ```
