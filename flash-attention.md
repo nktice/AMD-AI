@@ -27,3 +27,6 @@ pip install https://download.pytorch.org/whl/cpu/torchtext-0.18.0%2Bcpu-cp311-cp
 
 # now we continue installing oobabooga's textgeneeration-webui normally...such as from here : https://github.com/nktice/AMD-AI/blob/main/README.md
 ```
+
+Spoiler alert, I've been unable to get it working as of yet.  Although it's installed it's not been recognized by the TGW... I filed this report in the hopes that the authors may share some insight.  
+https://github.com/ROCm/flash-attention/issues/73
