@@ -565,6 +565,11 @@ source run.sh
 
 ## End - Oobabooga - Text-Generation-WebUI
 
+
+Here's an example, nvtop, sd console, tgw console... 
+this screencap taken using ROCm 6.1.3 - under this config : https://github.com/nktice/AMD-AI/blob/main/ROCm-6.1.3-Dev.md
+![Alt text](Screenshot-2024-08-17.png)
+
 -------
 
 # nvtop from source
