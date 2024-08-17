@@ -525,7 +525,7 @@ source run.sh
 
 ## End - Oobabooga - Text-Generation-WebUI
 
-Here's an example, nvtop, sd console, twg console... 
+Here's an example, nvtop, sd console, tgw console... 
 ![Alt text](Screenshot-2024-08-17.png)
 
 --------
