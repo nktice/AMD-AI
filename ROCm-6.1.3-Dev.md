@@ -278,7 +278,7 @@ Note that " TORCH_BLAS_PREFER_HIPBLASLT=0 " is needed as explained here - https:
 tee --append run_gpu.sh <<EOF
 #!/bin/bash
 source venv/bin/activate
-TORCH_BLAS_PREFER_HIPBLASLT=0 python3 main.py --preview-method auto
+TORCH_BLAS_PREFER_HIPBLASLT=0 python3.10 main.py --preview-method auto
 EOF
 chmod +x run_gpu.sh
 
@@ -286,7 +286,7 @@ chmod +x run_gpu.sh
 tee --append run_cpu.sh <<EOF
 #!/bin/bash
 source venv/bin/activate
-TORCH_BLAS_PREFER_HIPBLASLT=0 python3 main.py --preview-method auto --cpu
+TORCH_BLAS_PREFER_HIPBLASLT=0 python3.10 main.py --preview-method auto --cpu
 EOF
 chmod +x run_cpu.sh
 ```
