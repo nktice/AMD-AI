@@ -134,13 +134,14 @@ ollama help
 ## LiteLLM
 LiteLLM is the API Aider likes to communicate.  As such it functions to interface with models, via Ollama.
 Here's their github page : https://github.com/BerriAI/litellm
+It appears that my issue that inspired this part have now been resolved : https://github.com/paul-gauthier/aider/issues/1140 - so this section is now kept for reference, but remarked out. 
 
 ### Installation
 
 Theoretically you can simply install it using pip...
 ```bash
-# conda activate ollama
-pip install litellm
+## conda activate ollama
+#pip install litellm
 ```
 
 Or if you prefer, it can be installed from sources, from their github site.
@@ -158,18 +159,18 @@ Automatically works with a range of models pulled with Ollama.  Unfortunately Li
 ### LiteLLM config
 Here's an example litellm config file...
 ```bash
-cd
-tee --append litellm.config.yaml <<EOF
-model_list:
-  - model_name: deepseek-coder:33b 
-    litellm_params:
-      model: ollama/deepseek-coder:33b 
-      input_cost_per_second: 0
-  - model_name: deepseek-coder-v2:16b
-    litellm_params:
-      model: ollama/deepseek-coder-v2:16b
-      input_cost_per_second: 0
-EOF
+# cd
+# tee --append litellm.config.yaml <<EOF
+# model_list:
+#  - model_name: deepseek-coder:33b 
+#    litellm_params:
+#      model: ollama/deepseek-coder:33b 
+#      input_cost_per_second: 0
+#  - model_name: deepseek-coder-v2:16b
+#    litellm_params:
+#      model: ollama/deepseek-coder-v2:16b
+#      input_cost_per_second: 0
+#EOF
 ```
 
 ### Running LiteLLM 
