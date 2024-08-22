@@ -131,6 +131,15 @@ That is the basics of preparing Ollama, to get more info...
 ollama help
 ```
 
+
+I have had issues after a system restart with it not starting...  in the system logs there were messages about like the following : `ollama.service: Service has more than one ExecStart= setting, which is only allowed for Type=oneshot services. Refusing.` I found that I had to move /etc/systemd/system/ollama.service.d/override.conf and it worked again.  Another option, if the daemon doesn't start, is manual start - opening a shell, and running the following commands at the shell... 
+```bash
+## manual loading of ollama if needed ... 
+# conda activate ollama
+# ollama serve 
+```
+
+
 ## LiteLLM
 LiteLLM is the API Aider likes to communicate.  As such it functions to interface with models, via Ollama.
 Here's their github page : https://github.com/BerriAI/litellm
