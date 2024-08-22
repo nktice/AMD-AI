@@ -177,8 +177,8 @@ Here's an example litellm config file...
 Of course you can choose other models you may have using such format.  
 And now to run it... 
 ```bash
-# conda activate ollama 
-litellm -c litellm.config.yaml
+## conda activate ollama 
+# litellm -c litellm.config.yaml
 ```
 Then LiteLLM will be will be running with config from specified file.  Now we can run Aider, it'll use LiteLLM as we've configured.
 
