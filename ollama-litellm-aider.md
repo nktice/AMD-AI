@@ -1,8 +1,9 @@
-# Ollama and Aider
+# Ollama for Aider, and CrewAI
 2024-08-21 - Here's a supplement for Aider with Ollama install instructions.  
 In order, Conda, Ollama, LiteLLM, and last it's Aider - 
 there are some issues I note for all these sysstems, but get them running.   
 This is the first draft, after getting to to work, and may revise more.  
+2024-08-22 - I have now added details about CrewAI... added at bottom. 
 
 This guide is based on the first part of the guide as a foundation. 
 https://github.com/nktice/AMD-AI 
@@ -221,3 +222,64 @@ For running Aider...
 ## starting Aider... you can load model once it's going too... and you will likely want other options, this is just a start...
 # aider --model ollama:codellama:70b
 ```
+
+
+## CrewAI 
+CrewAI is an agent based AI framework that uses python.  
+Here is their website : https://www.crewai.com/  
+Here is their github : https://github.com/crewAIInc/crewAI
+
+CrewAI can use Ollama as we've installed earlier / above.  
+Here is some info on how to use CrewAI calling Ollama
+https://docs.crewai.com/how-to/LLM-Connections/#connect-crewai-to-llms
+
+The basics of this involve installing python modules as follows...
+```bash
+## in case it's ont active activate ollama conda env
+# conda activate ollama
+pip install langchain-ollama
+pip install crewai crewai-tools
+```
+
+This was sufficient for me to run the test script on CrewAI's site. 
+I'll paraphrase here, to streamline people testing, and getting started.
+```bash
+cd
+mkdir crewai
+cd crewai
+tee --append crewaidemo.py <<EOF
+# CrewAI with Ollama demo script
+from crewai import Agent, Task, Crew
+from langchain_ollama import ChatOllama
+import os
+os.environ["OPENAI_API_KEY"] = "NA"
+
+llm = ChatOllama(
+    model = "llama3.1:70b",
+    base_url = "http://localhost:11434")
+
+general_agent = Agent(role = "Math Professor",
+                      goal = """Provide the solution to the students that are asking mathematical questions and give them the answer.""",
+                      backstory = """You are an excellent math professor that likes to solve math questions in a way that everyone can understand your solution""",
+                      allow_delegation = False,
+                      verbose = True,
+                      llm = llm)
+
+task = Task(description="""what is 3 + 5""",
+             agent = general_agent,
+             expected_output="A numerical answer.")
+
+crew = Crew(
+            agents=[general_agent],
+            tasks=[task],
+            verbose=True
+        )
+
+result = crew.kickoff()
+
+print(result)
+EOF
+# now test that it's working...
+python crewaidemo.py
+```
+Nothe the selection of the model may vary based on your setup.  For me with it pulled, the script functions properly, and demonstrates work. 
