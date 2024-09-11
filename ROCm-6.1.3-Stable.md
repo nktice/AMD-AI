@@ -33,6 +33,9 @@
 
 2024-08-04 - With the release of ROCm 6.2 there is uspport for the current version of Ubuntu (24.04) as such new versions of the guide will remove instructions for previous versions.  This page is set aside to provide a record of working stable configuration for ROCm 6.1.3 and references to older versions of Ubuntu - it will not be maintained.  Please see https://github.com/nktice/AMD-AI/tree/main for the current stable. 
 
+2024-09-11 - Ubuntu 24.04 has introduced Linux Kernel 6.8.0-44 Generic, it turns out this kernel is incompatible with amdgpu-dkms .  I did the normal (daily) `sudo apt update -y && sudo apt upgrade -y ` and got errors about amdgpu-dkms not installing, and then in the next reboot Ubuntu wouldn't start.  So beware of this upgrade, as things are disasterously broken at the present time. 
+
+
 -----
 
 
