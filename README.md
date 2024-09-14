@@ -22,7 +22,7 @@ This file is focused on the current stable version of PyTorch.  There is another
 
 2024-09-11 - Ubuntu 24.04.1 has introduced Linux Kernel 6.8.0-44 Generic, it turns out this kernel is incompatible with amdgpu-dkms . I did the normal (daily) `sudo apt update -y && sudo apt upgrade -y` and got errors about amdgpu-dkms not installing, and then in the next reboot Ubuntu wouldn't start (black screen at boot). So beware of this upgrade, as things are disasterously broken at the present time.  Bug report here : https://github.com/ROCm/ROCm/issues/3701  
 
-2024-09-13 - Issues have resolves with multi-gpu with ROCm 6.2, and so there's some updates to refer to new versions of things ( that we meant to work with 6.2 ).  Added adaptations to deal with kernel version vs amdgpu-dkms ( mentioned above ). 
+2024-09-13 - Issues have resolves with multi-gpu with ROCm 6.2, and so there's some updates to refer to new versions of things ( meant to work with 6.2 ).  Added adaptations to deal with kernel version vs amdgpu-dkms ( mentioned above ). 
 
 
 
