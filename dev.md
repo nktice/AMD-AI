@@ -12,13 +12,9 @@ https://github.com/nktice/AMD-AI/blob/main/README.md
 
 [ various updates abridged... ] 
 
-2024-07-04 - Oobabooga TGW has updated to fix an issue with calling Stable Diffusion - https://github.com/oobabooga/text-generation-webui/issues/5993#event-13399938788 - with that there's updates to remove the workaround, and to add a new workaround because of a feature in newer Pytorch ( > 2.4.x ) documented here - https://github.com/comfyanonymous/ComfyUI/issues/3698 
-
-2024-08-04 - ROCm 6.2 is out... with it comes official support for Ubuntu 24.04 - that simplifies things, and in light of the changes I'm restructuring things with file naming, hence this new file name for the current dev instructions.  Note I'm getting errors with the 2nd GPU with the new ROCm, bug report is filed, here is a link to that thread so you can follow :  https://github.com/ROCm/ROCm/issues/3518   If you need 2 GPUs the older instructions for ROCm 6.1.3 are preserved here : https://github.com/nktice/AMD-AI/blob/main/ROCm-6.1.3-Dev.md
-
 2024-09-11 - Ubuntu 24.04 has introduced Linux Kernel 6.8.0-44 Generic, it turns out this kernel is incompatible with amdgpu-dkms . I did the normal (daily) sudo apt update -y && sudo apt upgrade -y and got errors about amdgpu-dkms not installing, and then in the next reboot Ubuntu wouldn't start (black screen at boot). So beware of this upgrade, as things are disasterously broken at the present time.  Bug report here : https://github.com/ROCm/ROCm/issues/3701  .  
 
-2024-09-13 - Updates to introduce workaround for kernel version, and various other updates.  It also appears issues noted on 2024-08-04 have resolved, and 6.2 works with multi-gpu arrangements now - so there are updates in here to refer to the proper new versions. 
+2024-09-13 - Updates to introduce workaround for kernel version ( not working with amdgpu-dkms ), and various other updates.   6.2 works with multi-gpu arrangements now - so there are updates in here to refer to the proper new versions. 
 
 --------
 
@@ -29,7 +25,7 @@ With ROCm 6.2 there is now official support for Ubuntu 24.04.1 ( noble )
 At this point we assume you've done the system install
 and you know what that is, have a user, root, etc. 
 
-2024-09-13 AMD's graphics driver ( amdgpu-dkms ) doesn't work with Ubuntu kernel 6.8.0-44 ( introduced with release 24.04.1 ), and so we need to revert to an older version of the kernl in order for things to function.  Here are the instructions to do that... 
+2024-09-13 - AMD's graphics driver ( amdgpu-dkms ) doesn't work with Ubuntu kernel 6.8.0-44 ( introduced with release 24.04.1 ), and so we need to revert to an older version of the kernel in order for things to function.  Here are the instructions to do that... 
 ```bash
 # check kernel version 
 uname -r 
