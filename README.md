@@ -439,13 +439,6 @@ git clone https://github.com/oobabooga/text-generation-webui
 cd text-generation-webui
 ```
 
-## Oobabooga / Text-generation-webui - Install webui...
-```bash
-cd
-git clone https://github.com/oobabooga/text-generation-webui
-cd text-generation-webui
-```
-
 ### Oobabooga's 'requirements'
 2024-07-26 Oobabooga release 1.12 changed how requirements are done, including calls that refer to old versions of PyTorch which didn't work for me... So the usual command here is remarked out, and I have instead offered a replacement requirements.txt with minimal includes, that combined with what else is here gets it up and running ( for me ), using more recent versions of packages. 
 
