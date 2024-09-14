@@ -26,7 +26,7 @@ This file is focused on the current stable version of PyTorch.  There is another
 
 2024-09-11 - Ubuntu 24.04 has been transitioned to 24.04.1... with that they introduced Linux Kernel 6.8.0-44 Generic, it turns out this kernel is incompatible with amdgpu-dkms . I had done the normal (daily) `sudo apt update -y && sudo apt upgrade -y` and got errors about amdgpu-dkms not installing, and then in the next reboot Ubuntu wouldn't start (black screen at boot). So beware of this upgrade, as things are disasterously broken at the present time.  Bug report here : https://github.com/ROCm/ROCm/issues/3701   As a solution, I've worked with the current dev version of Ubuntu 24.10 - please see notes below about it. 
 
-2024-09-12 - As a work-around given Ubuntu's issues with kernel updates, I've been attempting to use the new dev version 24.10 ( with an old kernel ).  The notes below are my work-in-progress for that at the present time.  Stable Diffusion, and ComfyUI function, but not TGW - where Oobabooga has loaders throwing errors, I've yet to resolve.  I need a break now, so I am posting these here with this added note. 
+2024-09-12 - As a work-around given Ubuntu's issues with kernel updates, I've been attempting to use the new dev version 24.10 ( with an old kernel ).  The notes below are my work-in-progress for that at the present time.  Stable Diffusion, and ComfyUI function, but not TGW - where Oobabooga has loaders throwing errors, I've yet to resolve.  I need a break now, so I am posting these here with this added note.  Errors are noted, until I find solutions to get them resolved. 
 
 -----
 
@@ -538,7 +538,50 @@ Note that to run the script :
 source run.sh
 ```
 
+2024-09-13 - Notes... unfortunately the above at present is giving me errors when I try to load models.  
+Exllamav2 error : 
+```bash
+19:51:48-149210 ERROR    Failed to load the model.                              
+Traceback (most recent call last):
+  File "/home/n/text-generation-webui/modules/ui_model_menu.py", line 231, in load_model_wrapper
+    shared.model, shared.tokenizer = load_model(selected_model, loader)
+                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/n/text-generation-webui/modules/models.py", line 93, in load_model
+    output = load_func_map[loader](model_name)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/n/text-generation-webui/modules/models.py", line 312, in ExLlamav2_loader
+    from modules.exllamav2 import Exllamav2Model
+  File "/home/n/text-generation-webui/modules/exllamav2.py", line 5, in <module>
+    from exllamav2 import (
+  File "/home/n/miniconda3/envs/textgen/lib/python3.11/site-packages/exllamav2/__init__.py", line 3, in <module>
+    from exllamav2.model import ExLlamaV2
+  File "/home/n/miniconda3/envs/textgen/lib/python3.11/site-packages/exllamav2/model.py", line 35, in <module>
+    from exllamav2.config import ExLlamaV2Config
+  File "/home/n/miniconda3/envs/textgen/lib/python3.11/site-packages/exllamav2/config.py", line 5, in <module>
+    from exllamav2.fasttensors import STFile, cleanup_stfiles
+  File "/home/n/miniconda3/envs/textgen/lib/python3.11/site-packages/exllamav2/fasttensors.py", line 6, in <module>
+    from exllamav2.ext import exllamav2_ext as ext_c
+  File "/home/n/miniconda3/envs/textgen/lib/python3.11/site-packages/exllamav2/ext.py", line 114, in <module>
+    raise e
+  File "/home/n/miniconda3/envs/textgen/lib/python3.11/site-packages/exllamav2/ext.py", line 106, in <module>
+    import exllamav2_ext
+ImportError: /home/n/miniconda3/envs/textgen/lib/python3.11/site-packages/exllamav2_ext.cpython-311-x86_64-linux-gnu.so: undefined symbol: __cxa_call_terminate
+```
 
+Llama.cpp error:
+```bash
+Traceback (most recent call last):
+  File "/home/n/text-generation-webui/modules/ui_model_menu.py", line 231, in load_model_wrapper
+    shared.model, shared.tokenizer = load_model(selected_model, loader)
+                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/n/text-generation-webui/modules/models.py", line 93, in load_model
+    output = load_func_map[loader](model_name)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/n/text-generation-webui/modules/models.py", line 275, in llamacpp_loader
+    model_file = sorted(Path(f'{shared.args.model_dir}/{model_name}').glob('*.gguf'))[0]
+                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^
+IndexError: list index out of range
+```
 
 
 ## End - Oobabooga - Text-Generation-WebUI
