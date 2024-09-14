@@ -33,7 +33,7 @@ This file is focused on the current stable version of PyTorch.  There is another
 ROCm 6.2 includes support for Ubuntu 24.04.1 (noble). 
 
 
-2024-09-13 - AMD's graphics driver ( amdgpu-dkms ) doesn't work with Ubuntu kernel 6.8.0-44 ( introduced with release 24.04.1 ), and so we need to revert to an older version of the kernl in order for things to function.  Here are the instructions to do that... 
+2024-09-13 - AMD's graphics driver ( amdgpu-dkms ) doesn't work with Ubuntu kernel 6.8.0-44 ( introduced with release 24.04.1 ), and so we need to revert to an older version of the kernel in order for things to function.  Here are the instructions to do that... 
 
 ```bash
 # check kernel version 
