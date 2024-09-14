@@ -22,15 +22,50 @@ This file is focused on the current stable version of PyTorch.  There is another
 
 2024-07-24 - PyTorch has updated with 2.4 now stable and referring to ROCm 6.1, so there's updates here to reflect those changes. 
 
-2024-08-04 - ROCm 6.2 is out, including support for the current version of Ubuntu (24.04 / Noble) so this revision includes changes to emphasize use of the new version.  Previous stable has been set aside here - https://github.com/nktice/AMD-AI/blob/main/ROCm-6.1.3-Stable.md - Note I'm getting errors with the 2nd GPU with the new ROCm, bug report is filed, here is a link to that thread so you can follow :  https://github.com/ROCm/ROCm/issues/3518   
+2024-09-11 - Ubuntu 24.04 has introduced Linux Kernel 6.8.0-44 Generic, it turns out this kernel is incompatible with amdgpu-dkms . I did the normal (daily) sudo apt update -y && sudo apt upgrade -y and got errors about amdgpu-dkms not installing, and then in the next reboot Ubuntu wouldn't start (black screen at boot). So beware of this upgrade, as things are disasterously broken at the present time.  Bug report here : https://github.com/ROCm/ROCm/issues/3701  
 
-2024-09-11 - Ubuntu 24.04 has introduced Linux Kernel 6.8.0-44 Generic, it turns out this kernel is incompatible with amdgpu-dkms . I did the normal (daily) sudo apt update -y && sudo apt upgrade -y and got errors about amdgpu-dkms not installing, and then in the next reboot Ubuntu wouldn't start (black screen at boot). So beware of this upgrade, as things are disasterously broken at the present time.  Bug report here : https://github.com/ROCm/ROCm/issues/3701
+2024-09-13 - Issues have resolves with multi-gpu with ROCm 6.2, and so there's some updates to refer to new versions of things ( that we meant to work with 6.2 ).  Added adaptations to deal with kernel version vs amdgpu-dkms ( mentioned above ). 
+
+
 
 -----
 
 
-# Ubuntu 24.04 - Base system install 
-ROCm 6.2 includes support for Ubuntu 24.04 (noble). 
+# Ubuntu 24.04.1 - Base system install 
+ROCm 6.2 includes support for Ubuntu 24.04.1 (noble). 
+
+
+2024-09-13 - AMD's graphics driver ( amdgpu-dkms ) doesn't work with Ubuntu kernel 6.8.0-44 ( introduced with release 24.04.1 ), and so we need to revert to an older version of the kernl in order for things to function.  Here are the instructions to do that... 
+
+```bash
+# check kernel version 
+uname -r 
+# example output : "6.8.0-44-generic" or after reboot "6.8.0-41-generic"
+
+# list the apt packages that refer to that kernel version -
+apt list --installed | grep 6.8.0-44 
+# this shows the relevant files we need alternate versions for...
+
+# install 6.8.0-41 files : 
+sudo apt install linux-headers-6.8.0-41-generic linux-headers-6.8.0-41 linux-image-6.8.0-41-generic linux-modules-6.8.0-41-generic linux-modules-extra-6.8.0-41-generic linux-tools-6.8.0-41-generic linux-tools-6.8.0-41 -y
+
+# remove current kernel - note that this will show a warning screen ( logic is reversed ) 
+sudo apt remove linux-headers-6.8.0-44-generic linux-headers-6.8.0-44 linux-image-6.8.0-44-generic linux-modules-6.8.0-44-generic linux-modules-extra-6.8.0-44-generic linux-tools-6.8.0-44-generic linux-tools-6.8.0-44 -y
+
+# Now refresh grub ( controls boot process ) 
+sudo update-grub
+# notice it's output should show only the preferred kernel. 
+
+reboot 
+# this will get you rebooted with the preferred kernel
+````
+
+Prevent Ubuntu from automatically updating the kernel ( which would negate the solution to the issue we just did above... ) 
+```bash
+sudo apt-mark hold linux-image-6.8.0-41-generic
+```
+
+
 
 At this point we assume you've done the system install
 and you know what that is, have a user, root, etc. 
@@ -156,7 +191,7 @@ sudo apt install -y radeontop rovclock
 
 ## and now we reboot...
 ```bash
-sudo reboot
+reboot
 ```
 
 ## End of OS / base setup
@@ -203,7 +238,7 @@ python_cmd="python3.10"
 # generic import...
 # export TORCH_COMMAND="pip install torch torchvision --index-url https://download.pytorch.org/whl/nightly/rocm6.1"
 # use specific versions to avoid downloading all the nightlies... ( update dates as needed ) 
- export TORCH_COMMAND="pip install --pre torch torchvision --index-url https://download.pytorch.org/whl/rocm6.1"
+ export TORCH_COMMAND="pip install --pre torch torchvision --index-url https://download.pytorch.org/whl/rocm6.2"
  ## And if you want to call this from other programs...
  export COMMANDLINE_ARGS="--api"
  ## crashes with 2 cards, so to get it to run on the second card (only), unremark the following 
@@ -250,9 +285,9 @@ cd ..
 python3 -m venv venv
 source venv/bin/activate
 # pre-install torch and torchvision from nightlies - note you may want to update versions...
-python3 -m pip install --pre torch torchvision --index-url https://download.pytorch.org/whl/rocm6.1
-python3 -m pip install -r requirements.txt  --extra-index-url https://download.pytorch.org/whl/rocm6.1
-python3 -m pip install -r custom_nodes/ComfyUI-Manager/requirements.txt --extra-index-url https://download.pytorch.org/whl/rocm6.1
+python3 -m pip install --pre torch torchvision --index-url https://download.pytorch.org/whl/nightly/rocm6.2
+python3 -m pip install -r requirements.txt  --extra-index-url https://download.pytorch.org/whl/nightly/rocm6.2
+python3 -m pip install -r custom_nodes/ComfyUI-Manager/requirements.txt --extra-index-url https://download.pytorch.org/whl/nightly/rocm6.2
 
 # end vend if needed...
 deactivate
@@ -369,7 +404,7 @@ conda activate textgen
 pip install --pre cmake colorama filelock lit numpy Pillow Jinja2 \
 	mpmath fsspec MarkupSafe certifi filelock networkx \
 	sympy packaging requests \
-         --index-url https://download.pytorch.org/whl/rocm6.1
+         --index-url https://download.pytorch.org/whl/nightly/rocm6.2
 ```
 
 There's version conflicts, so we specify versions that we want installed - 
@@ -377,8 +412,9 @@ There's version conflicts, so we specify versions that we want installed -
 #pip install --pre torch torchvision torchtext torchaudio triton pytorch-triton-rocm \
 #pip install --pre torch==2.3.1+rocm6.0 torchvision==0.18.1+rocm6.0 torchaudio==2.3.1 triton pytorch-triton-rocm   \
 #   --index-url https://download.pytorch.org/whl/rocm6.0
-pip install --pre torch==2.4.0+rocm6.1 torchvision==0.19.0+rocm6.1 torchaudio==2.4.0 triton pytorch-triton-rocm   \
-  --index-url https://download.pytorch.org/whl/rocm6.1
+#pip install --pre torch==2.4.0+rocm6.1 torchvision==0.19.0+rocm6.1 torchaudio==2.4.0 triton pytorch-triton-rocm   \
+pip install --pre torch torchvision torchaudio triton pytorch-triton-rocm   \
+  --index-url https://download.pytorch.org/whl/nightly/rocm6.2
 ```
 2024-05-12 For some odd reason, torchtext isn't recognized, even though it's there... so we specify it using it's URL to be explicit. 
 ```bash
@@ -456,7 +492,7 @@ sse-starlette>=1.6.5
 tiktoken
 
 EOF
-pip install -r requirements_amdai.txt  --extra-index-url https://download.pytorch.org/whl/nightly/rocm6.1
+pip install -r requirements_amdai.txt  --extra-index-url https://download.pytorch.org/whl/nightly/rocm6.2
 ```
 
 
@@ -466,8 +502,8 @@ git clone https://github.com/turboderp/exllamav2 repositories/exllamav2
 cd repositories/exllamav2
 ## Force collection back to base 0.0.11 
 ## git reset --hard a4ecea6
-pip install -r requirements.txt  --extra-index-url https://download.pytorch.org/whl/rocm6.1
-pip install .   --index-url https://download.pytorch.org/whl/rocm6.1
+pip install -r requirements.txt  --extra-index-url https://download.pytorch.org/whl/nightly/rocm6.2
+pip install .   --index-url https://download.pytorch.org/whl/nightly/rocm6.2
 cd ../..
 ```
 
