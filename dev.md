@@ -14,7 +14,10 @@ https://github.com/nktice/AMD-AI/blob/main/README.md
 
 2024-09-11 - Ubuntu 24.04 has introduced Linux Kernel 6.8.0-44 Generic, it turns out this kernel is incompatible with amdgpu-dkms . I did the normal (daily) sudo apt update -y && sudo apt upgrade -y and got errors about amdgpu-dkms not installing, and then in the next reboot Ubuntu wouldn't start (black screen at boot). So beware of this upgrade, as things are disasterously broken at the present time.  Bug report here : https://github.com/ROCm/ROCm/issues/3701  .  
 
-2024-09-13 - Updates to introduce workaround for kernel version ( not working with amdgpu-dkms ), and various other updates.   6.2 works with multi-gpu arrangements now - so there are updates in here to refer to the proper new versions. 
+2024-09-13 - ROCm 6.2 works with multi-gpu arrangements now - so there are updates in here to refer to the proper new versions. 
+
+2024-09-15 - Update to add edit one line of amdgpu-dkms so that it will work with Ubuntu 24.04.1's default kernel ( and perhaps others as well... ). 
+
 
 --------
 
@@ -24,35 +27,6 @@ With ROCm 6.2 there is now official support for Ubuntu 24.04.1 ( noble )
 
 At this point we assume you've done the system install
 and you know what that is, have a user, root, etc. 
-
-2024-09-13 - AMD's graphics driver ( amdgpu-dkms ) doesn't work with Ubuntu kernel 6.8.0-44 ( introduced with release 24.04.1 ), and so we need to revert to an older version of the kernel in order for things to function.  Here are the instructions to do that... 
-```bash
-# check kernel version 
-uname -r 
-# example output : "6.8.0-44-generic" or after reboot "6.8.0-41-generic"
-
-# list the apt packages that refer to that kernel version -
-apt list --installed | grep 6.8.0-44 
-# this shows the relevant files we need alternate versions for...
-
-# install 6.8.0-41 files : 
-sudo apt install linux-headers-6.8.0-41-generic linux-headers-6.8.0-41 linux-image-6.8.0-41-generic linux-modules-6.8.0-41-generic linux-modules-extra-6.8.0-41-generic linux-tools-6.8.0-41-generic linux-tools-6.8.0-41 -y
-
-# remove current kernel - note that this will show a warning screen ( logic is reversed ) 
-sudo apt remove linux-headers-6.8.0-44-generic linux-headers-6.8.0-44 linux-image-6.8.0-44-generic linux-modules-6.8.0-44-generic linux-modules-extra-6.8.0-44-generic linux-tools-6.8.0-44-generic linux-tools-6.8.0-44 -y
-
-# Now refresh grub ( controls boot process ) 
-sudo update-grub
-# notice it's output should show only the preferred kernel. 
-
-reboot 
-# this will get you rebooted with the preferred kernel
-````
-
-Prevent Ubuntu from automatically updating the kernel ( which would negate the solution to the issue we just did above... ) 
-```bash
-sudo apt-mark hold linux-image-6.8.0-41-generic
-```
 
 
 Update system software packages... 
@@ -97,9 +71,22 @@ echo 'deb [arch=amd64 signed-by=/etc/apt/keyrings/rocm.gpg] https://repo.radeon.
 sudo apt update -y 
 ```
 
+
 AMDGPU DKMS
+2024-09-15 - There have been issues with ROCm 6.2's amdgpu-dkms not compiling after Ubuntu's kernel upgrade to 6.8.0-44.  That issue is documented here : https://github.com/ROCm/ROCm/issues/3701 - The following is a one line file edit to work around this. 
 ```bash
-sudo apt install -y amdgpu-dkms
+# attempt (and fail) to install amdgpu-dkms - this get the source code, so we can change it...
+sudo apt install  amdgpu-dkms 
+# go to the directory...
+cd /usr/src/amdgpu-6.8.5-2009582.24.04/amd/display/amdgpu_dm/
+# backup file before editing...
+sudo cp amdgpu_dm_helpers.c amdgpu_dm_helpers.c.orig
+# edit the line...
+sudo sed -i "s@mst_state->base.state,@\ @g" amdgpu_dm_helpers.c
+# now we can finish the install with the amended code...
+sudo apt install  amdgpu-dkms 
+# in case that doesn't work... because it's installed, to 'reinstall' : 
+# sudo apt reinstall  amdgpu-dkms 
 ```
 
 # ROCm repositories for jammy
