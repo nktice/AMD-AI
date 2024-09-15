@@ -78,11 +78,11 @@ echo 'deb [arch=amd64 signed-by=/etc/apt/keyrings/rocm.gpg] https://repo.radeon.
 sudo apt update -y 
 ```
 
-AMDGPU DKMS
+## AMDGPU DKMS
 2024-09-15 - There have been issues with ROCm 6.2's amdgpu-dkms not compiling after Ubuntu's kernel upgrade to 6.8.0-44.  That issue is documented here : https://github.com/ROCm/ROCm/issues/3701 - The following is a one line file edit to work around this. 
 ```bash
 # attempt (and fail) to install amdgpu-dkms - this get the source code, so we can change it...
-sudo apt install  amdgpu-dkms 
+sudo apt install  amdgpu-dkms -y
 # go to the directory...
 cd /usr/src/amdgpu-6.8.5-2009582.24.04/amd/display/amdgpu_dm/
 # backup file before editing...
@@ -90,13 +90,11 @@ sudo cp amdgpu_dm_helpers.c amdgpu_dm_helpers.c.orig
 # edit the line...
 sudo sed -i "s@mst_state->base.state,@\ @g" amdgpu_dm_helpers.c
 # now we can finish the install with the amended code...
-sudo apt install  amdgpu-dkms 
-# in case that doesn't work... because it's installed, to 'reinstall' : 
-# sudo apt reinstall  amdgpu-dkms 
+sudo apt install  amdgpu-dkms -y
 ```
 
 
-# ROCm repositories...
+## ROCm repositories...
 https://rocmdocs.amd.com/en/latest/deploy/linux/os-native/install.html
 
 ```bash
@@ -107,7 +105,7 @@ echo -e 'Package: *\nPin: release o=repo.radeon.com\nPin-Priority: 600' \
 sudo apt update -y
 ```
 
-# More AMD ROCm related packages 
+## More AMD ROCm related packages 
 This is lots of stuff, but comparatively small so worth including,
 as some stuff later may want as dependencies without much notice.
 ```bash
