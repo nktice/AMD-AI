@@ -1,6 +1,6 @@
 # AMD / Radeon 7900XTX GPU ROCm install / setup / config 
 # Ubuntu 24.04.1
-# ROCm 6.2
+# ROCm 6.2.1
 # Automatic1111 Stable Diffusion + ComfyUI  ( venv ) 
 # Oobabooga - Text Generation WebUI ( conda, Exllamav2, BitsAndBytes ) 
 
@@ -10,20 +10,17 @@ https://github.com/nktice/AMD-AI/blob/main/README.md
 
 2023-07 - I have composed this collection of instructions as they are my notes, from varied efforts at a configuration that is consistent.  I've gone over these doing many re-installs to get them all right. This is what I had hoped to find when I had search for install instructions - so I'm sharing them in the hopes that they save time for other people. There may be in here extra parts that aren't needed but this works for me.  Originally text, with comments like a shell script that I cut and paste.
 
+2023-09-09 - I had a report that this doesn't work in virtual machines (virtualbox) as the system there cannot see the hardware, it can't load drivers, etc. 
+
 [ various updates abridged... ] 
 
-2024-09-11 - Ubuntu 24.04 has introduced Linux Kernel 6.8.0-44 Generic, it turns out this kernel is incompatible with amdgpu-dkms . I did the normal (daily) sudo apt update -y && sudo apt upgrade -y and got errors about amdgpu-dkms not installing, and then in the next reboot Ubuntu wouldn't start (black screen at boot). So beware of this upgrade, as things are disasterously broken at the present time.  Bug report here : https://github.com/ROCm/ROCm/issues/3701  .  
-
-2024-09-13 - ROCm 6.2 works with multi-gpu arrangements now - so there are updates in here to refer to the proper new versions. 
-
-2024-09-15 - Update to add edit one line of amdgpu-dkms so that it will work with Ubuntu 24.04.1's default kernel ( and perhaps others as well... ). 
-
+2024-09-21 - ROCm 6.2.1 is out...
 
 --------
 
 
 # Ubuntu 24.04.1 - Base system install 
-With ROCm 6.2 there is now official support for Ubuntu 24.04.1 ( noble ) 
+With ROCm 6.2.1 there is now official support for Ubuntu 24.04.1 ( noble ) 
 
 At this point we assume you've done the system install
 and you know what that is, have a user, root, etc. 
@@ -66,7 +63,7 @@ wget https://repo.radeon.com/rocm/rocm.gpg.key -O - | \
 ```
 amdgpu repository...
 ```bash
-echo 'deb [arch=amd64 signed-by=/etc/apt/keyrings/rocm.gpg] https://repo.radeon.com/amdgpu/6.2/ubuntu noble main' \
+echo 'deb [arch=amd64 signed-by=/etc/apt/keyrings/rocm.gpg] https://repo.radeon.com/amdgpu/6.2.1/ubuntu noble main' \
     | sudo tee /etc/apt/sources.list.d/amdgpu.list
 sudo apt update -y 
 ```
@@ -74,17 +71,7 @@ sudo apt update -y
 
 ## AMDGPU DKMS
 
-2024-09-15 - There have been issues with ROCm 6.2's amdgpu-dkms not compiling after Ubuntu's kernel upgrade to 6.8.0-44.  That issue is documented here : https://github.com/ROCm/ROCm/issues/3701 - The following is a one line file edit to work around this. 
 ```bash
-# attempt (and fail) to install amdgpu-dkms - this get the source code, so we can change it...
-sudo apt install  amdgpu-dkms  -y
-# go to the directory...
-cd /usr/src/amdgpu-6.8.5-2009582.24.04/amd/display/amdgpu_dm/
-# backup file before editing...
-sudo cp amdgpu_dm_helpers.c amdgpu_dm_helpers.c.orig
-# edit the line...
-sudo sed -i "s@mst_state->base.state,@\ @g" amdgpu_dm_helpers.c
-# now we can finish the install with the amended code...
 sudo apt install  amdgpu-dkms  -y
 ```
 
@@ -92,7 +79,7 @@ sudo apt install  amdgpu-dkms  -y
 https://rocmdocs.amd.com/en/latest/deploy/linux/os-native/install.html
 
 ```bash
-echo "deb [arch=amd64 signed-by=/etc/apt/keyrings/rocm.gpg] https://repo.radeon.com/rocm/apt/6.2/ noble main" \
+echo "deb [arch=amd64 signed-by=/etc/apt/keyrings/rocm.gpg] https://repo.radeon.com/rocm/apt/6.2.1/ noble main" \
     | sudo tee --append /etc/apt/sources.list.d/rocm.list
 echo -e 'Package: *\nPin: release o=repo.radeon.com\nPin-Priority: 600' \
     | sudo tee /etc/apt/preferences.d/rocm-pin-600
