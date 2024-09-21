@@ -1,6 +1,6 @@
 # AMD Radeon 7900XTX GPU ROCm install / setup / config 
 # Ubuntu 24.04.1
-# ROCm 6.2
+# ROCm 6.2.1
 # Automatic1111 Stable Diffusion + ComfyUI  ( venv ) 
 # Oobabooga - Text Generation WebUI ( conda, Exllamav2, Llama-cpp-python, BitsAndBytes ) 
 
@@ -20,17 +20,13 @@ This file is focused on the current stable version of PyTorch.  There is another
 
 [ ... updates abridged ... ] 
 
-2024-09-11 - Ubuntu 24.04.1 has introduced Linux Kernel 6.8.0-44 Generic, it turns out this kernel is incompatible with amdgpu-dkms . I did the normal (daily) `sudo apt update -y && sudo apt upgrade -y` and got errors about amdgpu-dkms not installing, and then in the next reboot Ubuntu wouldn't start (black screen at boot). So beware of this upgrade, as things are disasterously broken at the present time.  Bug report here : https://github.com/ROCm/ROCm/issues/3701  - 
-
-2024-09-13 - Issues have resolved with multi-gpu with ROCm 6.2, and so there's some updates to refer to new versions of things ( meant to work with 6.2 ).  Added a line edit to one of the ROCm files to get things working. 
-
-
+2024-09-21 - ROCm 6.2.1 is out... 
 
 -----
 
 
 # Ubuntu 24.04.1 - Base system install 
-ROCm 6.2 includes support for Ubuntu 24.04.1 (noble). 
+ROCm 6.2.1 includes support for Ubuntu 24.04.1 (noble). 
 
 
 At this point we assume you've done the system install
@@ -73,23 +69,14 @@ wget https://repo.radeon.com/rocm/rocm.gpg.key -O - | \
 
 amdgpu repository 
 ```bash
-echo 'deb [arch=amd64 signed-by=/etc/apt/keyrings/rocm.gpg] https://repo.radeon.com/amdgpu/6.2/ubuntu noble main' \
+echo 'deb [arch=amd64 signed-by=/etc/apt/keyrings/rocm.gpg] https://repo.radeon.com/amdgpu/6.2.1/ubuntu noble main' \
     | sudo tee /etc/apt/sources.list.d/amdgpu.list
 sudo apt update -y 
 ```
 
 ## AMDGPU DKMS
-2024-09-15 - There have been issues with ROCm 6.2's amdgpu-dkms not compiling after Ubuntu's kernel upgrade to 6.8.0-44.  That issue is documented here : https://github.com/ROCm/ROCm/issues/3701 - The following is a one line file edit to work around this. 
+
 ```bash
-# attempt (and fail) to install amdgpu-dkms - this get the source code, so we can change it...
-sudo apt install  amdgpu-dkms -y
-# go to the directory...
-cd /usr/src/amdgpu-6.8.5-2009582.24.04/amd/display/amdgpu_dm/
-# backup file before editing...
-sudo cp amdgpu_dm_helpers.c amdgpu_dm_helpers.c.orig
-# edit the line...
-sudo sed -i "s@mst_state->base.state,@\ @g" amdgpu_dm_helpers.c
-# now we can finish the install with the amended code...
 sudo apt install  amdgpu-dkms -y
 ```
 
@@ -98,7 +85,7 @@ sudo apt install  amdgpu-dkms -y
 https://rocmdocs.amd.com/en/latest/deploy/linux/os-native/install.html
 
 ```bash
-echo "deb [arch=amd64 signed-by=/etc/apt/keyrings/rocm.gpg] https://repo.radeon.com/rocm/apt/6.2 noble main" \
+echo "deb [arch=amd64 signed-by=/etc/apt/keyrings/rocm.gpg] https://repo.radeon.com/rocm/apt/6.2.1 noble main" \
     | sudo tee --append /etc/apt/sources.list.d/rocm.list
 echo -e 'Package: *\nPin: release o=repo.radeon.com\nPin-Priority: 600' \
     | sudo tee /etc/apt/preferences.d/rocm-pin-600
