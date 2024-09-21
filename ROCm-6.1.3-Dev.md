@@ -22,9 +22,7 @@
 
 2024-07-04 - Oobabooga TGW has updated to fix an issue with calling Stable Diffusion - https://github.com/oobabooga/text-generation-webui/issues/5993#event-13399938788 - with that there's updates to remove the workaround, and to add a new workaround because of a feature in newer Pytorch ( > 2.4.x ) documented here - https://github.com/comfyanonymous/ComfyUI/issues/3698 
 
-2024-08-04 - ROCm 6.2 is out, and it includes official support for Ubuntu 24.04 - there is no longer need to refer to previous versions of Ubuntu, so before those revisions I'm setting aside this document for reference; It will no longer be maintained.  
-
-2024-09-11 - Ubuntu 24.04 has introduced Linux Kernel 6.8.0-44 Generic, it turns out this kernel is incompatible with amdgpu-dkms .  I did the normal `sudo apt update -y && sudo apt upgrade -y ` and got errors about amdgpu-dkms not installing, and then in the next reboot Ubuntu wouldn't start.  So beware of this upgrade, as things are disasterously broken at the present time.   Bug report here : https://github.com/ROCm/ROCm/issues/3701
+2024-08-04 - ROCm 6.2... is out, and it includes official support for Ubuntu 24.04 - there is no longer need to refer to previous versions of Ubuntu, so before those revisions I'm setting aside this document for reference; It will no longer be maintained.  
 
 
 --------
