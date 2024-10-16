@@ -21,7 +21,9 @@ This file is focused on the current stable version of PyTorch.  There is another
 [ ... updates abridged ... ] 
 
 2024-10-16 - ROCm 6.2.3 is out...  
-Ubuntu 24.10 tested - no deadsnakes support, amdgpu-dkms gave errors, so wasn't functioning. 
+Ubuntu 24.10 tested - no deadsnakes support, amdgpu-dkms gave errors, so wasn't functioning... wiped my /home partition unexpectedly. 
+Updates to use the current "Stable" version of PyTorch ( 2.4.1 ).  Note bug report filed on issues with TGW. https://github.com/oobabooga/text-generation-webui/issues/6471
+To those following these guides... I have plans to do retreat starting November 2024 into March 2025, so it is unlikely there will be updates here during that period.  
 
 -----
 
@@ -203,7 +205,7 @@ python_cmd="python3.10"
 # generic import...
 # export TORCH_COMMAND="pip install torch torchvision --index-url https://download.pytorch.org/whl/nightly/rocm6.1"
 # use specific versions to avoid downloading all the nightlies... ( update dates as needed ) 
- export TORCH_COMMAND="pip install --pre torch torchvision --index-url https://download.pytorch.org/whl/rocm6.2"
+ export TORCH_COMMAND="pip install --pre torch torchvision --index-url https://download.pytorch.org/whl/rocm6.1"
  ## And if you want to call this from other programs...
  export COMMANDLINE_ARGS="--api"
  ## crashes with 2 cards, so to get it to run on the second card (only), unremark the following 
@@ -238,7 +240,7 @@ Includes ComfyUI-Manager
 
 Same install of packages here as for Stable Diffusion ( included here in case you're not installed SD and just want ComfyUI... ) 
 ```bash
-sudo apt install -y wget git python3 python3-venv libgl1 
+sudo apt install -y wget git python3.10 python3.10-venv libgl1 
 ```
 
 ```bash
@@ -247,12 +249,15 @@ git clone https://github.com/comfyanonymous/ComfyUI
 cd ComfyUI/custom_nodes
 git clone https://github.com/ltdrdata/ComfyUI-Manager
 cd ..
-python3 -m venv venv
+# if we want to save some effort, we can reuse the venv from sd
+mv venv venv.1
+ln -s ../stable-diffusion/venv venv
+python3.10 -m venv venv
 source venv/bin/activate
 # pre-install torch and torchvision from nightlies - note you may want to update versions...
-python3 -m pip install --pre torch torchvision --index-url https://download.pytorch.org/whl/nightly/rocm6.2
-python3 -m pip install -r requirements.txt  --extra-index-url https://download.pytorch.org/whl/nightly/rocm6.2
-python3 -m pip install -r custom_nodes/ComfyUI-Manager/requirements.txt --extra-index-url https://download.pytorch.org/whl/nightly/rocm6.2
+python3.10 -m pip install --pre torch torchvision --index-url https://download.pytorch.org/whl/rocm6.1
+python3.10 -m pip install -r requirements.txt  --extra-index-url https://download.pytorch.org/whl/rocm6.1
+python3.10 -m pip install -r custom_nodes/ComfyUI-Manager/requirements.txt --extra-index-url https://download.pytorch.org/whl/rocm6.1
 
 # end vend if needed...
 deactivate
@@ -369,17 +374,13 @@ conda activate textgen
 pip install --pre cmake colorama filelock lit numpy Pillow Jinja2 \
 	mpmath fsspec MarkupSafe certifi filelock networkx \
 	sympy packaging requests \
-         --index-url https://download.pytorch.org/whl/nightly/rocm6.2
+         --index-url https://download.pytorch.org/whl/rocm6.1
 ```
 
 There's version conflicts, so we specify versions that we want installed - 
 ```bash
-#pip install --pre torch torchvision torchtext torchaudio triton pytorch-triton-rocm \
-#pip install --pre torch==2.3.1+rocm6.0 torchvision==0.18.1+rocm6.0 torchaudio==2.3.1 triton pytorch-triton-rocm   \
-#   --index-url https://download.pytorch.org/whl/rocm6.0
-#pip install --pre torch==2.4.0+rocm6.1 torchvision==0.19.0+rocm6.1 torchaudio==2.4.0 triton pytorch-triton-rocm   \
 pip install --pre torch torchvision torchaudio triton pytorch-triton-rocm   \
-  --index-url https://download.pytorch.org/whl/nightly/rocm6.2
+  --index-url https://download.pytorch.org/whl/rocm6.1
 ```
 2024-05-12 For some odd reason, torchtext isn't recognized, even though it's there... so we specify it using it's URL to be explicit. 
 ```bash
@@ -407,76 +408,39 @@ cd text-generation-webui
 ```
 
 ### Oobabooga's 'requirements'
-2024-07-26 Oobabooga release 1.12 changed how requirements are done, including calls that refer to old versions of PyTorch which didn't work for me... So the usual command here is remarked out, and I have instead offered a replacement requirements.txt with minimal includes, that combined with what else is here gets it up and running ( for me ), using more recent versions of packages. 
 
+As of TGW 1.15 the requirements install smoothly.  (2024-10-16)
 ```bash
-#pip install -r requirements_amd.txt 
-```
-
-```bash
-tee --append requirements_amdai.txt <<EOF
-# alternate simplified requirements from https://github.com/nktice/AMD-AI
-accelerate>=0.32
-colorama
-datasets
-einops
-gradio>=4.26
-hqq>=0.1.7.post3
-jinja2>=3.1.4
-lm_eval>=0.3.0
-markdown
-numba>=0.59
-numpy>=1.26
-optimum>=1.17
-pandas
-peft>=0.8
-Pillow>=9.5.0
-psutil
-pyyaml
-requests
-rich
-safetensors>=0.4
-scipy
-sentencepiece
-tensorboard
-transformers>=4.43
-tqdm
-wandb
-
-# API
-SpeechRecognition>=3.10.0
-flask_cloudflared>=0.0.14
-sse-starlette>=1.6.5
-tiktoken
-
-EOF
-pip install -r requirements_amdai.txt  --extra-index-url https://download.pytorch.org/whl/nightly/rocm6.2
+pip install -r requirements_amd.txt  --extra-index-url https://download.pytorch.org/whl/rocm6.1
 ```
 
 
 #### Exllamav2 loader
+2024-10-16 - I filed bug reports as manually loading loaders currently breaks TGW.
+https://github.com/oobabooga/text-generation-webui/issues/6471
+
 ```bash
-git clone https://github.com/turboderp/exllamav2 repositories/exllamav2
-cd repositories/exllamav2
-## Force collection back to base 0.0.11 
-## git reset --hard a4ecea6
-pip install -r requirements.txt  --extra-index-url https://download.pytorch.org/whl/nightly/rocm6.2
-pip install .   --index-url https://download.pytorch.org/whl/nightly/rocm6.2
-cd ../..
+#git clone https://github.com/turboderp/exllamav2 repositories/exllamav2
+#cd repositories/exllamav2
+### Force collection back to base 0.0.11 
+### git reset --hard a4ecea6
+#pip install -r requirements.txt  --extra-index-url https://download.pytorch.org/whl/nightly/rocm6.2
+#pip install .   --index-url https://download.pytorch.org/whl/rocm6.1
+#cd ../..
 ```
 
 
 #### Llama-cpp-python 
 2024-06-18 - Llama-cpp-python - Another loader, that is highly efficient in resource use, but not very fast. https://github.com/abetlen/llama-cpp-python  It may need models in GGUF format ( and not other types ).  
 ```
-## remove old versions
-pip uninstall llama_cpp_python -y 
-pip uninstall llama_cpp_python_cuda -y
-## install llama-cpp-python 
-git clone  --recurse-submodules  https://github.com/abetlen/llama-cpp-python.git repositories/llama-cpp-python 
-cd repositories/llama-cpp-python
-CC='/opt/rocm/llvm/bin/clang' CXX='/opt/rocm/llvm/bin/clang++' CFLAGS='-fPIC' CXXFLAGS='-fPIC' CMAKE_PREFIX_PATH='/opt/rocm' ROCM_PATH="/opt/rocm" HIP_PATH="/opt/rocm" CMAKE_ARGS="-GNinja -DLLAMA_HIPBLAS=ON -DLLAMA_AVX2=on " pip install --no-cache-dir .
-cd ../.. 
+### remove old versions
+#pip uninstall llama_cpp_python -y 
+#pip uninstall llama_cpp_python_cuda -y
+### install llama-cpp-python 
+#git clone  --recurse-submodules  https://github.com/abetlen/llama-cpp-python.git #repositories/llama-cpp-python 
+#cd repositories/llama-cpp-python
+#CC='/opt/rocm/llvm/bin/clang' CXX='/opt/rocm/llvm/bin/clang++' CFLAGS='-fPIC' CXXFLAGS='-fPIC' CMAKE_PREFIX_PATH='/opt/rocm' ROCM_PATH="/opt/rocm" HIP_PATH="/opt/rocm" CMAKE_ARGS="-GNinja -DLLAMA_HIPBLAS=ON -DLLAMA_AVX2=on " pip install --no-cache-dir .
+#cd ../.. 
 ```
 
 
@@ -516,7 +480,7 @@ Note that to run the script :
 source run.sh
 ```
 
-
+2024-10-16 - This 'stable' version using PyTorch 2.4.1 did not appear to be able to load across both GPUs.  The dev versions ( on the other page ) do... so if you don't need it, then this should be fine for you... if you do need that, and it's not working, you may check to dev instructions to see if that helps. 
 
 
 ## End - Oobabooga - Text-Generation-WebUI
