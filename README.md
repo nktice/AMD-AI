@@ -1,6 +1,6 @@
 # AMD Radeon 7900XTX GPU ROCm install / setup / config 
 # Ubuntu 24.04.1
-# ROCm 6.2.1
+# ROCm 6.2.3
 # Automatic1111 Stable Diffusion + ComfyUI  ( venv ) 
 # Oobabooga - Text Generation WebUI ( conda, Exllamav2, Llama-cpp-python, BitsAndBytes ) 
 
@@ -20,13 +20,14 @@ This file is focused on the current stable version of PyTorch.  There is another
 
 [ ... updates abridged ... ] 
 
-2024-09-21 - ROCm 6.2.1 is out... 
+2024-10-16 - ROCm 6.2.3 is out...  
+Ubuntu 24.10 tested - no deadsnakes support, amdgpu-dkms gave errors, so wasn't functioning. 
 
 -----
 
 
 # Ubuntu 24.04.1 - Base system install 
-ROCm 6.2.1 includes support for Ubuntu 24.04.1 (noble). 
+ROCm 6.2.3 includes support for Ubuntu 24.04.1 (noble). 
 
 
 At this point we assume you've done the system install
@@ -69,7 +70,7 @@ wget https://repo.radeon.com/rocm/rocm.gpg.key -O - | \
 
 amdgpu repository 
 ```bash
-echo 'deb [arch=amd64 signed-by=/etc/apt/keyrings/rocm.gpg] https://repo.radeon.com/amdgpu/6.2.1/ubuntu noble main' \
+echo 'deb [arch=amd64 signed-by=/etc/apt/keyrings/rocm.gpg] https://repo.radeon.com/amdgpu/6.2.3/ubuntu noble main' \
     | sudo tee /etc/apt/sources.list.d/amdgpu.list
 sudo apt update -y 
 ```
@@ -85,7 +86,7 @@ sudo apt install  amdgpu-dkms -y
 https://rocmdocs.amd.com/en/latest/deploy/linux/os-native/install.html
 
 ```bash
-echo "deb [arch=amd64 signed-by=/etc/apt/keyrings/rocm.gpg] https://repo.radeon.com/rocm/apt/6.2.1 noble main" \
+echo "deb [arch=amd64 signed-by=/etc/apt/keyrings/rocm.gpg] https://repo.radeon.com/rocm/apt/6.2.3 noble main" \
     | sudo tee --append /etc/apt/sources.list.d/rocm.list
 echo -e 'Package: *\nPin: release o=repo.radeon.com\nPin-Priority: 600' \
     | sudo tee /etc/apt/preferences.d/rocm-pin-600
