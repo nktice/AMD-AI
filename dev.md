@@ -16,6 +16,8 @@ https://github.com/nktice/AMD-AI/blob/main/README.md
 
 2024-10-16 - ROCm 6.2.3 is out...    
 I tested 24.10, and amdgpu-dkms gave errors, and it isn't supported by deadsnakes, so didn't proceed.  
+PyTorch 20241014, and 20241015 gave errors with hipBLASLt, so I needed to specify previous versions to get things working.  Bug report here : https://github.com/ROCm/hipBLASLt/issues/1243
+
 
 --------
 
@@ -190,7 +192,11 @@ python_cmd="python3.10"
 # workaround for ROCm + Torch > 2.4.x - https://github.com/comfyanonymous/ComfyUI/issues/3698
  export TORCH_BLAS_PREFER_HIPBLASLT=0
 # use specific versions to avoid downloading all the nightlies... ( update dates as needed )
- export TORCH_COMMAND="pip install --pre torch torchvision --extra-index-url https://download.pytorch.org/whl/nightly/rocm6.2"
+## This command should work - but the new ( 20241014, 20241015 pytorch versions have errors with hipBLASLt - 
+# export TORCH_COMMAND="pip install --pre torch torchvision --extra-index-url https://download.pytorch.org/whl/nightly/rocm6.2"
+export TORCH_COMMAND="pip install --pre torch==2.6.0.dev20241013  torchvision==0.20.0.dev20241013+rocm6.2 --extra-index-url https://download.pytorch.org/whl/nightly/rocm6.2"
+
+
  ## And if you want to call this from other programs...
  export COMMANDLINE_ARGS="--api"
  ## crashes with 2 cards, so to get it to run on the second card (only), unremark the following 
@@ -240,8 +246,9 @@ source venv/bin/activate
 python3.10 -m pip install -U pip 
 ## pre-install torch and torchvision from nightlies - note you may want to update versions... 
 ## Note the following manually includes the contents of requirements.txt - because otherwise attempting to install the requirements goes and reinstalls torch over again. 
-python3.10 -m pip install --pre torch torchvision torchsde torchaudio einops transformers>=4.25.1 safetensors>=0.4.2 aiohttp pyyaml Pillow scipy tqdm psutil  --extra-index-url https://download.pytorch.org/whl/nightly/rocm6.2
-python3.10 -m pip install -r custom_nodes/ComfyUI-Manager/requirements.txt --extra-index-url https://download.pytorch.org/whl/nightly/rocm6.1
+# python3.10 -m pip install --pre torch torchvision torchsde torchaudio einops transformers>=4.25.1 safetensors>=0.4.2 aiohttp pyyaml Pillow scipy tqdm psutil  --extra-index-url https://download.pytorch.org/whl/nightly/rocm6.2
+python3.10 -m pip install --pre torch==2.6.0.dev20241013 torchvision==0.20.0.dev20241013+rocm6.2  torchsde torchaudio einops transformers>=4.25.1 safetensors>=0.4.2 aiohttp pyyaml Pillow scipy tqdm psutil  --extra-index-url https://download.pytorch.org/whl/nightly/rocm6.2
+python3.10 -m pip install -r custom_nodes/ComfyUI-Manager/requirements.txt --extra-index-url https://download.pytorch.org/whl/nightly/rocm6.2
 
 # end vend if needed...
 deactivate
@@ -349,6 +356,10 @@ pip3 install --upgrade pip
 ## Oobabooga / Textgen webui 
 - https://github.com/oobabooga/text-generation-webui
 
+2024-10-16 - New version of TGW 1.15 has resolved some issues ( the requirements_amd.txt installs smoothly now... ) but has introduced issues with the locally built loaders ( exllamav2 and llamacpp ).  I've filed a bug report with them, but have remarked out those portions of these instructions for now, as their exllamav2 loader works from fresh install, but breaks after manual install.  
+https://github.com/oobabooga/text-generation-webui/issues/6471
+
+
 ```bash
 conda create -n textgen python=3.11 -y
 conda activate textgen
@@ -376,14 +387,16 @@ Instead of that we go and look through the files at https://download.pytorch.org
 
 Here we refer to specific nightly versions to keep things simple. 
 ```bash
-pip install --pre -U torch torchvision  \
-	torchaudio pytorch-triton pytorch-triton-rocm  \
-	 --index-url https://download.pytorch.org/whl/nightly/rocm6.2
+#pip install --pre -U torch torchvision  \
+pip install --pre -U torch==2.6.0.dev20241013+rocm6.2  torchvision==0.20.0.dev20241013+rocm6.2 \
+	torchtext torchaudio pytorch-triton pytorch-triton-rocm  \
+	 --index-url https://download.pytorch.org/whl/nightly
+
 ```
 
-2024-05-12 For some odd reason, torchtext isn't recognized, even though it's there... so we specify it using it's URL to be explicit.
+2024-05-12 For some odd reason, torchtext isn't recognized, even though it's there... so we specify it using it's URL to be explicit.  
 ```bash
-pip install https://download.pytorch.org/whl/cpu/torchtext-0.18.0%2Bcpu-cp311-cp311-linux_x86_64.whl#sha256=c760e672265cd6f3e4a7c8d4a78afe9e9617deacda926a743479ee0418d4207d
+# pip install https://download.pytorch.org/whl/cpu/torchtext-0.18.0%2Bcpu-cp311-cp311-linux_x86_64.whl#sha256=c760e672265cd6f3e4a7c8d4a78afe9e9617deacda926a743479ee0418d4207d
 ```
 
 ### Triton 
@@ -412,7 +425,7 @@ Install may take a few mins ( takes author close to 5 minutes at time of writing
 2024-08-04 - Isn't compiling... there are occasionally updates to the sources so it looks like they're working on it, but at a glacial pace... remarked out for now.
 ```bash
 #cd
-#git clone https://github.com/ROCmSoftwarePlatform/flash-attention.git
+#git clone --recurse-submodules https://github.com/ROCmSoftwarePlatform/flash-attention.git
 #cd flash-attention
 #pip install . 
 ```
@@ -425,61 +438,21 @@ cd text-generation-webui
 ```
 
 ### Oobabooga's 'requirements'
-2024-07-26 Oobabooga release 1.12 changed how requirements are done, including calls that refer to old versions of PyTorch which didn't work for me... So the usual command here is remarked out, and I have instead offered a replacement requirements.txt with minimal includes, that combined with what else is here gets it up and running ( for me ), using more recent versions of packages. 
 
 ```bash
-#sed -i "s@bitsandbytes==@bitsandbytes>=@g" requirements_amd.txt 
-#pip install -r requirements_amd.txt 
-```
-
-```bash
-tee --append requirements_amdai.txt <<EOF
-# alternate simplified requirements from https://github.com/nktice/AMD-AI/edit/main/ROCm6.0.md 
-accelerate>=0.32
-colorama
-datasets
-einops
-gradio>=4.26
-hqq>=0.1.7.post3
-jinja2>=3.1.4
-lm_eval>=0.3.0
-markdown
-numba>=0.59
-numpy>=1.26
-optimum>=1.17
-pandas
-peft>=0.8
-Pillow>=9.5.0
-psutil
-pyyaml
-requests
-rich
-safetensors>=0.4
-scipy
-sentencepiece
-tensorboard
-transformers>=4.43
-tqdm
-wandb
-
-# API
-SpeechRecognition>=3.10.0
-flask_cloudflared>=0.0.14
-sse-starlette>=1.6.5
-tiktoken
-
-EOF
-pip install -r requirements_amdai.txt  --extra-index-url https://download.pytorch.org/whl/nightly/rocm6.2
+pip install -r requirements_amd.txt  --extra-index-url https://download.pytorch.org/whl/nightly/rocm6.2
 ```
 
 
 #### Exllamav2 loader 
+https://github.com/turboderp/exllamav2
+
 ```bash
-git clone https://github.com/turboderp/exllamav2 repositories/exllamav2
-cd repositories/exllamav2
-pip install -r requirements.txt  --extra-index-url https://download.pytorch.org/whl/nightly/rocm6.2
-pip install .   --extra-index-url https://download.pytorch.org/whl/nightly/rocm6.2
-cd ../..
+# git clone https://github.com/turboderp/exllamav2 repositories/exllamav2
+# cd repositories/exllamav2
+# pip install -r requirements.txt  --extra-index-url https://download.pytorch.org/whl/nightly/rocm6.2
+# pip install .   --extra-index-url https://download.pytorch.org/whl/nightly/rocm6.2
+# cd ../..
 ```
 
 #### Llama-cpp-python - 
@@ -487,13 +460,13 @@ cd ../..
 - Note compiling took 5:35 on my 5950x cpu... so be patient. 
 ```
 ## remove old versions
-pip uninstall llama_cpp_python -y 
-pip uninstall llama_cpp_python_cuda -y 
-## install llama-cpp-python
-git clone  --recurse-submodules  https://github.com/abetlen/llama-cpp-python.git repositories/llama-cpp-python 
-cd repositories/llama-cpp-python
-CC='/opt/rocm/llvm/bin/clang' CXX='/opt/rocm/llvm/bin/clang++' CFLAGS='-fPIC' CXXFLAGS='-fPIC' CMAKE_PREFIX_PATH='/opt/rocm' ROCM_PATH="/opt/rocm" HIP_PATH="/opt/rocm" CMAKE_ARGS="-GNinja -DLLAMA_HIPBLAS=ON -DLLAMA_AVX2=on " pip install --no-cache-dir .
-cd ../.. 
+# pip uninstall llama_cpp_python -y 
+# pip uninstall llama_cpp_python_cuda -y 
+# ## install llama-cpp-python
+# git clone  --recurse-submodules  https://github.com/abetlen/llama-cpp-python.git repositories/llama-cpp-python 
+# cd repositories/llama-cpp-python
+# CC='/opt/rocm/llvm/bin/clang' CXX='/opt/rocm/llvm/bin/clang++' CFLAGS='-fPIC' CXXFLAGS='-fPIC' CMAKE_PREFIX_PATH='/opt/rocm' ROCM_PATH="/opt/rocm" HIP_PATH="/opt/rocm" CMAKE_ARGS="-GNinja -DLLAMA_HIPBLAS=ON -DLLAMA_AVX2=on " pip install --no-cache-dir .
+# cd ../.. 
 ```
 
 Here's a supplement written when Mixtral was new and not supported for how to install Auto-GPTQ, and Llama.cpp at that time - deprecated now, but may be of interest for some explorers. 
