@@ -15,8 +15,8 @@ https://github.com/nktice/AMD-AI/blob/main/README.md
 [ various updates abridged... ] 
 
 2024-10-16 - ROCm 6.2.3 is out...    
-I tested 24.10, and amdgpu-dkms gave errors, and it isn't supported by deadsnakes, so didn't proceed.  
-PyTorch 20241014, and 20241015 gave errors with hipBLASLt, so I needed to specify previous versions to get things working.  Bug report here : https://github.com/ROCm/hipBLASLt/issues/1243
+- I tested 24.10, and amdgpu-dkms gave errors, and it isn't supported by deadsnakes, so didn't proceed.  ( It also wiped out my entire home partition unexpectedly... )
+- PyTorch 20241014, and 20241015 gave errors with hipBLASLt, so I needed to specify previous versions to get things working.  Bug report here : https://github.com/ROCm/hipBLASLt/issues/1243  This has been resolved as of 20241021 
 
 
 --------
@@ -193,14 +193,10 @@ python_cmd="python3.10"
  export TORCH_BLAS_PREFER_HIPBLASLT=0
 # use specific versions to avoid downloading all the nightlies... ( update dates as needed )
 ## This command should work - but the new ( 20241014, 20241015 pytorch versions have errors with hipBLASLt - 
-# export TORCH_COMMAND="pip install --pre torch torchvision --extra-index-url https://download.pytorch.org/whl/nightly/rocm6.2"
-export TORCH_COMMAND="pip install --pre torch==2.6.0.dev20241013  torchvision==0.20.0.dev20241013+rocm6.2 --extra-index-url https://download.pytorch.org/whl/nightly/rocm6.2"
-
-
+#export TORCH_COMMAND="pip install --pre torch torchvision --extra-index-url https://download.pytorch.org/whl/nightly/rocm6.2"
+export TORCH_COMMAND="pip install --pre torch==2.6.0.dev20241021+rocm6.2  torchvision==0.20.0.dev20241021+rocm6.2 --extra-index-url https://download.pytorch.org/whl/nightly/rocm6.2"
  ## And if you want to call this from other programs...
  export COMMANDLINE_ARGS="--api"
- ## crashes with 2 cards, so to get it to run on the second card (only), unremark the following 
- # export CUDA_VISIBLE_DEVICES="1"
 EOF
 ```
 
@@ -241,15 +237,17 @@ git clone https://github.com/comfyanonymous/ComfyUI
 cd ComfyUI/custom_nodes
 git clone https://github.com/ltdrdata/ComfyUI-Manager
 cd ..
+```
+
+```bash
 python3.10 -m venv venv
 source venv/bin/activate
 python3.10 -m pip install -U pip 
 ## pre-install torch and torchvision from nightlies - note you may want to update versions... 
 ## Note the following manually includes the contents of requirements.txt - because otherwise attempting to install the requirements goes and reinstalls torch over again. 
 # python3.10 -m pip install --pre torch torchvision torchsde torchaudio einops transformers>=4.25.1 safetensors>=0.4.2 aiohttp pyyaml Pillow scipy tqdm psutil  --extra-index-url https://download.pytorch.org/whl/nightly/rocm6.2
-python3.10 -m pip install --pre torch==2.6.0.dev20241013 torchvision==0.20.0.dev20241013+rocm6.2  torchsde torchaudio einops transformers>=4.25.1 safetensors>=0.4.2 aiohttp pyyaml Pillow scipy tqdm psutil  --extra-index-url https://download.pytorch.org/whl/nightly/rocm6.2
+python3.10 -m pip install --pre torch==2.6.0.dev20241021+rocm6.2  torchvision==0.20.0.dev20241021+rocm6.2  torchsde torchaudio einops transformers>=4.25.1 safetensors>=0.4.2 aiohttp pyyaml Pillow scipy tqdm psutil  --extra-index-url https://download.pytorch.org/whl/nightly/rocm6.2
 python3.10 -m pip install -r custom_nodes/ComfyUI-Manager/requirements.txt --extra-index-url https://download.pytorch.org/whl/nightly/rocm6.2
-
 # end vend if needed...
 deactivate
 ```
@@ -388,7 +386,7 @@ Instead of that we go and look through the files at https://download.pytorch.org
 Here we refer to specific nightly versions to keep things simple. 
 ```bash
 #pip install --pre -U torch torchvision  \
-pip install --pre -U torch==2.6.0.dev20241013+rocm6.2  torchvision==0.20.0.dev20241013+rocm6.2 \
+pip install --pre -U torch==2.6.0.dev20241021+rocm6.2  torchvision==0.20.0.dev202410121+rocm6.2 \
 	torchtext torchaudio pytorch-triton pytorch-triton-rocm  \
 	 --index-url https://download.pytorch.org/whl/nightly
 
