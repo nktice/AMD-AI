@@ -16,7 +16,8 @@ https://github.com/nktice/AMD-AI/blob/main/README.md
 
 2024-10-16 - ROCm 6.2.3 is out...    
 - I tested 24.10, and amdgpu-dkms gave errors, and it isn't supported by deadsnakes, so didn't proceed.  ( It also wiped out my entire home partition unexpectedly... )
-- PyTorch 20241014, and 20241015 gave errors with hipBLASLt, so I needed to specify previous versions to get things working.  Bug report here : https://github.com/ROCm/hipBLASLt/issues/1243  This has been resolved as of 20241021 
+- Note bug report filed on issues with TGW. oobabooga/text-generation-webui#6471
+- PyTorch 20241014, and 20241015... gave errors with hipBLASLt, so I needed to specify previous versions to get things working.  Bug report here : https://github.com/ROCm/hipBLASLt/issues/1243  This has been resolved as of 20241021 
 
 
 --------
