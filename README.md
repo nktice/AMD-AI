@@ -20,10 +20,12 @@ This file is focused on the current stable version of PyTorch.  There is another
 
 [ ... updates abridged ... ] 
 
-2024-10-16 - ROCm 6.2.3 is out...  
-Ubuntu 24.10 tested - no deadsnakes support, amdgpu-dkms gave errors, so wasn't functioning... wiped my /home partition unexpectedly. 
-Updates to use the current "Stable" version of PyTorch ( 2.4.1 ).  Note bug report filed on issues with TGW. https://github.com/oobabooga/text-generation-webui/issues/6471
-To those following these guides... I have plans to do retreat starting November 2024 into March 2025, so it is unlikely there will be updates here during that period.  
+2024-10-16 -
+- ROCm 6.2.3 is out...  
+- Ubuntu 24.10 tested - no deadsnakes support, amdgpu-dkms gave errors, so wasn't functioning... wiped my /home partition unexpectedly. 
+Updates to use the current "Stable" version of PyTorch ( 2.4.1 ).
+- Note bug report filed on issues with TGW. https://github.com/oobabooga/text-generation-webui/issues/6471
+- To those following these guides... I have plans to do retreat starting November 2024 into March 2025, so it is unlikely there will be updates here during that period.  
 
 -----
 
@@ -249,9 +251,9 @@ git clone https://github.com/comfyanonymous/ComfyUI
 cd ComfyUI/custom_nodes
 git clone https://github.com/ltdrdata/ComfyUI-Manager
 cd ..
-# if we want to save some effort, we can reuse the venv from sd
-mv venv venv.1
-ln -s ../stable-diffusion/venv venv
+## if we want to save some effort, we can reuse the venv from sd
+# mv venv venv.1
+# ln -s ../stable-diffusion/venv venv
 python3.10 -m venv venv
 source venv/bin/activate
 # pre-install torch and torchvision from nightlies - note you may want to update versions...
