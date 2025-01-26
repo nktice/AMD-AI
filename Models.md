@@ -1,4 +1,24 @@
 # Models 
+
+Large Language Models aren't always easy downloads, so here are some clues...
+
+The big collection that's presently popular is huggingface's site ( huggingface.co ). 
+Using search tools there, one can find many models and all their details. 
+
+Here is a page with some details on downloading from huggingface's site. 
+https://huggingface.co/docs/hub/en/models-downloading
+
+Example : 
+```bash
+# cd ~/models 
+pip install "huggingface_hub[hf_transfer]"
+# replace ... here with the user/model from huggingface's url... 
+HF_HUB_ENABLE_HF_TRANSFER=1 huggingface-cli download ...
+# HF_HUB_ENABLE_HF_TRANSFER=1 huggingface-cli download user/model-name 
+```
+
+-----
+
 This page serves as a source of links to relevant models of interest.   Started 2024-03-10
 Inspiration : Tom Jobbins aka TheBloke - https://huggingface.co/TheBloke - produced a great many models ready for easy use with Oobabooga.  He appears to be taking a break, with no activity for weeks now...  Looking for new models, I've been forced to look at other sources for the latest releases... So I'm composing this with links to direct sources of models worth watching. 
 
