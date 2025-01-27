@@ -9,6 +9,10 @@ I saw this question on a post on reddit and thought it was worth trying...
 These settings appear important to get things to work so they are default:
 exllama [loader] : max_seq_len 4096, compress_pos_emb 4
 
+cc_Dolphin3.0-Llama3.1-8B - [ Fail ] 
+"Since Sally has 3 brothers, and each brother has 2 sisters, we can calculate the total number of sisters as follows: Each brother has 2 sisters, so the 3 brothers together have 3 x 2 = 6 sisters. However, this includes all sisters, not just Sally's sisters. Since Sally herself is one of the sisters (as she has brothers), we must subtract her from the total count to find her direct sisters. Therefore, Sally has 6 - 1 = 5 sisters."
+
+
 TheBloke_Amber-GPTQ - [2x+fail]
 gives bogus URL... extra double fail for not even trying and lying about it. 
 
@@ -304,6 +308,10 @@ As some systems had trouble with the previous question, I simplified it...
 
 These settings appear important to get things to work so they are default:
 exllama [loader] : max_seq_len 4096, compress_pos_emb 4
+
+
+cc_Dolphin3.0-Llama3.1-8B - [ pass ] 
+"Since Sally is one of the two girls and there are five children in total, and we know there are three boys, that means there must be two girls. Since Sally is one of those girls, she would have one sister."
 
 TheBloke_Amber-GPTQ - [pass]
 `"She has 1 Sister"`
