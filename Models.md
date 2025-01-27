@@ -10,11 +10,13 @@ https://huggingface.co/docs/hub/en/models-downloading
 
 Example : 
 ```bash
-# cd ~/models 
 pip install "huggingface_hub[hf_transfer]"
-# replace ... here with the user/model from huggingface's url... 
-HF_HUB_ENABLE_HF_TRANSFER=1 huggingface-cli download ...
-# HF_HUB_ENABLE_HF_TRANSFER=1 huggingface-cli download user/model-name 
+# replace ... here with the user/model from huggingface's url...  and specify target
+HF_HUB_ENABLE_HF_TRANSFER=1 huggingface-cli download ... --local-dir ~/models/target
+# HF_HUB_ENABLE_HF_TRANSFER=1 huggingface-cli download user/model-name
+# Here's an example
+# HF_HUB_ENABLE_HF_TRANSFER=1 huggingface-cli download deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B --local-dir ~/models/deepseekai_DeepSeek-R1-Distill-Qwen-1.5B
+
 ```
 
 -----
