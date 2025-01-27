@@ -15,6 +15,10 @@ cc_Dolphin3.0-Llama3.1-8B - [ Fail ]
 mistralai_Ministral-8B-Instruct-2410 - [ fail ] 
 "Let's break this down. If each of Sally's brothers has 2 sisters, that means they share the same sisters. Since Sally is one of the sisters, she has 2 brothers who see her as one of their sisters. Therefore, Sally has 2 sisters."
 
+Qwen-Qwen2.5-14B-Instruct-1M - [ pass ] 
+"Let's break it down the information given: Sally has 3 brothers, and each of those brothers has 2 sisters, who would include Sally herself. So, the 2 sisters are the same for all the brothers. Therefore, Sally has 2 sisters in total, including herself, making her one of them."
+
+
 
 TheBloke_Amber-GPTQ - [2x+fail]
 gives bogus URL... extra double fail for not even trying and lying about it. 
@@ -318,6 +322,9 @@ cc_Dolphin3.0-Llama3.1-8B - [ pass ]
 
 mistralai_Ministral-8B-Instruct-2410 - [ pass ] 
 "Sally has 1 sister. Since Sally is one of the girls and the parents have two girls, she has another sister."
+
+Qwen-Qwen2.5-14B-Instruct-1M - [ pass ] 
+"Sally has 1 sister. Since there are 5 children in total—3 boys and 2 girls—and Sally is one of them, that leaves 1 other girl who is her sister."
 
 
 TheBloke_Amber-GPTQ - [pass]
