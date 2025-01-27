@@ -36,6 +36,9 @@ LLMs... ( no particular order... )
 - Cognitive Computations - https://erichartford.com/ - https://huggingface.co/cognitivecomputations - source of Dolphin ( and other ) models...
 - Exllama's author Turboderp has been posting exl2 quants - https://huggingface.co/turboderp
 
+- Qwen - popular models including ones for coding - https://huggingface.co/Qwen
+- Meta's Llama - https://huggingface.co/meta-llama
+
 Some published models aren't in Safetensors formats and need conversion if they are to work in Oobabooga's UI and other systems.  Here are some links to the related instructions to do conversions...
 - PyTorch to Safetensors conversion - https://github.com/Silver267/pytorch-to-safetensor-converter
 - Exllamav2's converter - https://github.com/turboderp/exllamav2/blob/master/doc/convert.md
