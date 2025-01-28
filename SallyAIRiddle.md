@@ -12,6 +12,9 @@ exllama [loader] : max_seq_len 4096, compress_pos_emb 4
 cc_Dolphin3.0-Llama3.1-8B - [ Fail ] 
 "Since Sally has 3 brothers, and each brother has 2 sisters, we can calculate the total number of sisters as follows: Each brother has 2 sisters, so the 3 brothers together have 3 x 2 = 6 sisters. However, this includes all sisters, not just Sally's sisters. Since Sally herself is one of the sisters (as she has brothers), we must subtract her from the total count to find her direct sisters. Therefore, Sally has 6 - 1 = 5 sisters."
 
+deepseekai_DeepSeek-R1-Distill-Llama-8B - [ pass ] 
+"[...] Sally has 1 sister."
+
 mistralai_Ministral-8B-Instruct-2410 - [ fail ] 
 "Let's break this down. If each of Sally's brothers has 2 sisters, that means they share the same sisters. Since Sally is one of the sisters, she has 2 brothers who see her as one of their sisters. Therefore, Sally has 2 sisters."
 
@@ -321,6 +324,9 @@ exllama [loader] : max_seq_len 4096, compress_pos_emb 4
 
 cc_Dolphin3.0-Llama3.1-8B - [ pass ] 
 "Since Sally is one of the two girls and there are five children in total, and we know there are three boys, that means there must be two girls. Since Sally is one of those girls, she would have one sister."
+
+deepseekai_DeepSeek-R1-Distill-Llama-8B - [ pass ] 
+"[...]Sally has one sister."
 
 mistralai_Ministral-8B-Instruct-2410 - [ pass ] 
 "Sally has 1 sister. Since Sally is one of the girls and the parents have two girls, she has another sister."
