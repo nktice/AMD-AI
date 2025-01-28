@@ -18,6 +18,8 @@ mistralai_Ministral-8B-Instruct-2410 - [ fail ]
 Qwen-Qwen2.5-14B-Instruct-1M - [ pass ] 
 "Let's break it down the information given: Sally has 3 brothers, and each of those brothers has 2 sisters, who would include Sally herself. So, the 2 sisters are the same for all the brothers. Therefore, Sally has 2 sisters in total, including herself, making her one of them."
 
+Qwen-Qwen2.5-Coder-32B-Instruct - [ pass ] 
+"Let's break down the problem:  Sally has 3 brothers. Each of these 3 brothers has 2 sisters. Since Sally is one of the sisters, the other sister must be the only one shared sister among all the brothers. Therefore, Sally and her sister are the two sisters.  So, Sally has 1 sister."
 
 
 TheBloke_Amber-GPTQ - [2x+fail]
@@ -325,6 +327,9 @@ mistralai_Ministral-8B-Instruct-2410 - [ pass ]
 
 Qwen-Qwen2.5-14B-Instruct-1M - [ pass ] 
 "Sally has 1 sister. Since there are 5 children in total—3 boys and 2 girls—and Sally is one of them, that leaves 1 other girl who is her sister."
+
+Qwen-Qwen2.5-Coder-32B-Instruct - [ pass ] 
+"Sally has one sister, since she is one of the two girls among the five children."
 
 
 TheBloke_Amber-GPTQ - [pass]
