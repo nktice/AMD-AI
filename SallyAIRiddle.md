@@ -15,6 +15,9 @@ cc_Dolphin3.0-Llama3.1-8B - [ Fail ]
 deepseekai_DeepSeek-R1-Distill-Llama-8B - [ pass ] 
 "[...] Sally has 1 sister."
 
+deepseekai_DeepSeek-R1-Distill-Qwen-14B - [ fail ] 
+"Sally has 2 sisters." 
+
 mistralai_Ministral-8B-Instruct-2410 - [ fail ] 
 "Let's break this down. If each of Sally's brothers has 2 sisters, that means they share the same sisters. Since Sally is one of the sisters, she has 2 brothers who see her as one of their sisters. Therefore, Sally has 2 sisters."
 
@@ -327,6 +330,9 @@ cc_Dolphin3.0-Llama3.1-8B - [ pass ]
 
 deepseekai_DeepSeek-R1-Distill-Llama-8B - [ pass ] 
 "[...]Sally has one sister."
+
+deepseekai_DeepSeek-R1-Distill-Qwen-14B  - [fail] 
+"Sally has two sisters."
 
 mistralai_Ministral-8B-Instruct-2410 - [ pass ] 
 "Sally has 1 sister. Since Sally is one of the girls and the parents have two girls, she has another sister."
