@@ -15,7 +15,7 @@ cc_Dolphin3.0-Llama3.1-8B - [ Fail ]
 deepseekai_DeepSeek-R1-Distill-Llama-8B - [ pass ] 
 "[...] Sally has 1 sister."
 
-deepseekai_DeepSeek-R1-Distill-Qwen-14B - [ fail ] 
+deepseekai_DeepSeek-R1-Distill-Qwen-1.5B - [ fail ] 
 "Sally has 2 sisters." 
 
 mistralai_Ministral-8B-Instruct-2410 - [ fail ] 
@@ -331,7 +331,7 @@ cc_Dolphin3.0-Llama3.1-8B - [ pass ]
 deepseekai_DeepSeek-R1-Distill-Llama-8B - [ pass ] 
 "[...]Sally has one sister."
 
-deepseekai_DeepSeek-R1-Distill-Qwen-14B  - [fail] 
+deepseekai_DeepSeek-R1-Distill-Qwen-1.5B  - [fail] 
 "Sally has two sisters."
 
 mistralai_Ministral-8B-Instruct-2410 - [ pass ] 
