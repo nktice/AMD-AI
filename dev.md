@@ -1,6 +1,6 @@
 # AMD / Radeon 7900XTX GPU ROCm install / setup / config 
 # Ubuntu 24.04.1
-# ROCm 6.3.1
+# ROCm 6.3.2
 # Automatic1111 Stable Diffusion + ComfyUI  ( venv ) 
 # Oobabooga - Text Generation WebUI ( conda, Exllamav2, BitsAndBytes ) 
 
@@ -25,7 +25,7 @@ https://github.com/nktice/AMD-AI/blob/main/README.md
 
 
 # Ubuntu 24.04.1 - Base system install 
-With ROCm 6.3.1 
+With ROCm 6.3.2 
 
 At this point we assume you've done the system install
 and you know what that is, have a user, root, etc. 
@@ -68,7 +68,7 @@ wget https://repo.radeon.com/rocm/rocm.gpg.key -O - | \
 ```
 amdgpu repository...
 ```bash
-echo 'deb [arch=amd64 signed-by=/etc/apt/keyrings/rocm.gpg] https://repo.radeon.com/amdgpu/6.3.1/ubuntu noble main' \
+echo 'deb [arch=amd64 signed-by=/etc/apt/keyrings/rocm.gpg] https://repo.radeon.com/amdgpu/6.3.2/ubuntu noble main' \
     | sudo tee /etc/apt/sources.list.d/amdgpu.list
 sudo apt update -y 
 ```
@@ -84,7 +84,7 @@ sudo apt install  amdgpu-dkms  -y
 https://rocmdocs.amd.com/en/latest/deploy/linux/os-native/install.html
 
 ```bash
-echo "deb [arch=amd64 signed-by=/etc/apt/keyrings/rocm.gpg] https://repo.radeon.com/rocm/apt/6.3.1/ noble main" \
+echo "deb [arch=amd64 signed-by=/etc/apt/keyrings/rocm.gpg] https://repo.radeon.com/rocm/apt/6.3.2/ noble main" \
     | sudo tee --append /etc/apt/sources.list.d/rocm.list
 echo -e 'Package: *\nPin: release o=repo.radeon.com\nPin-Priority: 600' \
     | sudo tee /etc/apt/preferences.d/rocm-pin-600
@@ -194,7 +194,7 @@ python_cmd="python3.10"
 # workaround for ROCm + Torch > 2.4.x - https://github.com/comfyanonymous/ComfyUI/issues/3698
  export TORCH_BLAS_PREFER_HIPBLASLT=0
 # use specific versions to avoid downloading all the nightlies... ( update dates as needed )
-export TORCH_COMMAND="pip install --pre torch==2.7.0.dev20250126+rocm6.3  torchvision==0.22.0.dev20250126+rocm6.3 --extra-index-url https://download.pytorch.org/whl/nightly/rocm6.3"
+export TORCH_COMMAND="pip install --pre torch==2.7.0.dev20250204+rocm6.3  torchvision==0.22.0.dev20250204+rocm6.3 --extra-index-url https://download.pytorch.org/whl/nightly/rocm6.3"
  ## And if you want to call this from other programs...
  export COMMANDLINE_ARGS="--api"
 EOF
@@ -246,7 +246,7 @@ python3.10 -m pip install -U pip
 ## pre-install torch and torchvision from nightlies - note you may want to update versions... 
 ## Note the following manually includes the contents of requirements.txt - because otherwise attempting to install the requirements goes and reinstalls torch over again. 
 # python3.10 -m pip install --pre torch torchvision torchsde torchaudio einops transformers>=4.25.1 safetensors>=0.4.2 aiohttp pyyaml Pillow scipy tqdm psutil  --extra-index-url https://download.pytorch.org/whl/nightly/rocm6.2
-python3.10 -m pip install --pre torch==2.7.0.dev20250126+rocm6.3  torchvision==0.22.0.dev20250126+rocm6.3  torchsde torchaudio einops transformers>=4.25.1 safetensors>=0.4.2 aiohttp pyyaml Pillow scipy tqdm psutil  --extra-index-url https://download.pytorch.org/whl/nightly/rocm6.3
+python3.10 -m pip install --pre torch==2.7.0.dev20250204+rocm6.3  torchvision==0.22.0.dev20250204+rocm6.3  torchsde torchaudio einops transformers>=4.25.1 safetensors>=0.4.2 aiohttp pyyaml Pillow scipy tqdm psutil  --extra-index-url https://download.pytorch.org/whl/nightly/rocm6.3
 python3.10 -m pip install -r custom_nodes/ComfyUI-Manager/requirements.txt --extra-index-url https://download.pytorch.org/whl/nightly/rocm6.3
 # end vend if needed...
 deactivate
@@ -386,7 +386,7 @@ Instead of that we go and look through the files at https://download.pytorch.org
 Here we refer to specific nightly versions to keep things simple. 
 ```bash
 #pip install --pre -U torch torchvision  \
-pip install --pre -U torch==2.7.0.dev20250126+rocm6.3  torchvision==0.22.0.dev20250126+rocm6.3 \
+pip install --pre -U torch==2.7.0.dev20250204+rocm6.3  torchvision==0.22.0.dev20250204+rocm6.3 \
 	torchtext torchaudio pytorch-triton pytorch-triton-rocm  \
 	 --index-url https://download.pytorch.org/whl/nightly
 
