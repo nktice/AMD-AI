@@ -83,7 +83,8 @@ conda activate ollama
 
 ### Install Ollama
 ```bash
-pip install ollama
+sudo apt install -y curl
+curl -fsSL https://ollama.com/install.sh | sh
 ```
 
 ### Move where models go...
@@ -96,7 +97,10 @@ Make home directory...
 ```bash
 # Ollama's install, because it runs as a daemon / service, makes it's own user...
 sudo mkdir /home/ollama
+sudo mkdir /home/ollama/models
+sudo mkdir /home/ollama/tmp
 sudo chown -R ollama:ollama /home/ollama
+chmod 775 -R /home/ollama
 ```
 
 Edit systemd service config 
@@ -107,7 +111,8 @@ sudo systemctl edit ollama.service
 In this you will add to the section `[Service]` like the following : 
 ```
 [Service]
-Environment="OLLAMA_MODELS=/home/ollama"
+Environment="OLLAMA_MODELS=/home/ollama/models"
+Environment="TMPDIR=/home/ollama/tmp" 
 ```
 This lets Ollama know that is where you want it to put its models. 
 
@@ -126,6 +131,24 @@ To download a model with thier system we can use the following
 # ollama pull <name-of-model:size>
 # ollama pull codellama:70b
 ```
+
+#### Converting models...
+
+Here's an example for MistralAi's Mistral-Small-24B-Base-2501
+```
+cd deepseekai_DeepSeek-R1-Distill-Qwen-14B
+echo "FROM ." > modelfile 
+create dsr1q14b -f modelfile 
+```
+This then created a new model to access through the interface...
+```
+ollama list
+ollama run dsr1q14b
+```
+That responds to queries.
+
+
+#### More... 
 
 That is the basics of preparing Ollama, to get more info...
 ```
