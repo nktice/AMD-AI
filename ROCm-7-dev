@@ -233,7 +233,7 @@ Includes ComfyUI-Manager
 
 Install of packages like for Stable Diffusion ( included here in case you're not installed SD and just want ComfyUI... ) - but it's not bothered by Python 3.12... 
 ```bash
-sudo apt install -y wget git python3.10 python3.10-venv libgl1 
+sudo apt install -y wget git python3.10 python3.10-venv libgl1 sqlite
 ```
 
 ```bash
@@ -250,6 +250,7 @@ python3.10 -m pip install -U pip
 # python3.10 -m pip install -r requirements.txt  --extra-index-url https://download.pytorch.org/whl/nightly/rocm6.1
 ##
 ## Note the following manually includes the contents of requirements.txt - because otherwise attempting to install the requirements goes and reinstalls torch over again. 
+python3.10 -m pip install -r /home/n/ComfyUI/requirements.txt  --extra-index-url https://download.pytorch.org/whl/nightly/rocm6.4
 python3.10 -m pip install --pre torch==2.10.0.dev20250916+rocm6.4 torchvision==0.25.0.dev20250917+rocm6.4  torchsde torchaudio einops transformers>=4.25.1 safetensors>=0.4.2 aiohttp pyyaml Pillow scipy tqdm psutil av  --extra-index-url https://download.pytorch.org/whl/nightly/rocm6.4
 
 python3.10 -m pip install -r custom_nodes/ComfyUI-Manager/requirements.txt --extra-index-url https://download.pytorch.org/whl/nightly/rocm6.4
@@ -402,7 +403,7 @@ To get new models note the ~/text-generation-webui directory has a program " dow
 
 If you have old models,  link pre-stored models into the models
 ```bash
-# cd ~/text-generation-webui
+# cd ~/text-generation-webui/user_data
 # mv models models.1
 # ln -s /path/to/models models
 ```
@@ -415,7 +416,7 @@ sudo apt install curl
 ./start_linux.sh 
 ```
 
-
+It appears that as of this summer ( 2025 ) there is not currently support for various extensions including the sd_api_pictures 
 
 
 ## End - Oobabooga - Text-Generation-WebUI
