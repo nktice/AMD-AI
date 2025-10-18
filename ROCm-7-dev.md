@@ -196,7 +196,7 @@ python_cmd="python3.10"
  export TORCH_BLAS_PREFER_HIPBLASLT=0
 # use specific versions to avoid downloading all the nightlies... ( update dates as needed )
 # Note that torchvision sometimes needs the previous night's version of torch, so their dates are sequential
- export TORCH_COMMAND="pip install --pre torch==2.10.0.dev20250916+rocm6.4 torchvision==0.25.0.dev20250917+rocm6.4 --extra-index-url https://download.pytorch.org/whl/nightly/rocm6.4"
+ export TORCH_COMMAND="pip install --pre torch==2.10.0.dev20251016+rocm7.0 torchvision==0.25.0.dev20251017+rocm7.0 --extra-index-url https://download.pytorch.org/whl/nightly/rocm7.0"
  ## And if you want to call this from other programs...
  export COMMANDLINE_ARGS="--api"
  ## crashes with 2 cards, so to get it to run on the second card (only), unremark the following 
@@ -247,14 +247,11 @@ python3.10 -m venv venv
 source venv/bin/activate
 python3.10 -m pip install -U pip 
 ## pre-install torch and torchvision from nightlies - note you may want to update versions... 
-# python3.10 -m pip install --pre torch==2.5.0.dev20240704+rocm6.1 torchvision==0.20.0.dev20240704+rocm6.1 --extra-index-url https://download.pytorch.org/whl/nightly/rocm6.1
-# python3.10 -m pip install -r requirements.txt  --extra-index-url https://download.pytorch.org/whl/nightly/rocm6.1
-##
+python3.10 -m pip install --pre torch==2.10.0.dev20251016+rocm7.0 torchvision==0.25.0.dev20251017+rocm7.0  torchsde torchaudio einops transformers\>=4.25.1 safetensors\>=0.4.2 aiohttp pyyaml Pillow scipy tqdm psutil av  --extra-index-url https://download.pytorch.org/whl/nightly/rocm7.0
 ## Note the following manually includes the contents of requirements.txt - because otherwise attempting to install the requirements goes and reinstalls torch over again. 
-python3.10 -m pip install -r /home/n/ComfyUI/requirements.txt  --extra-index-url https://download.pytorch.org/whl/nightly/rocm6.4
-python3.10 -m pip install --pre torch==2.10.0.dev20250916+rocm6.4 torchvision==0.25.0.dev20250917+rocm6.4  torchsde torchaudio einops transformers>=4.25.1 safetensors>=0.4.2 aiohttp pyyaml Pillow scipy tqdm psutil av  --extra-index-url https://download.pytorch.org/whl/nightly/rocm6.4
+python3.10 -m pip install -r /home/n/ComfyUI/requirements.txt  --extra-index-url https://download.pytorch.org/whl/nightly/rocm7.0
 
-python3.10 -m pip install -r custom_nodes/ComfyUI-Manager/requirements.txt --extra-index-url https://download.pytorch.org/whl/nightly/rocm6.4
+python3.10 -m pip install -r custom_nodes/ComfyUI-Manager/requirements.txt --extra-index-url https://download.pytorch.org/whl/nightly/rocm7.0
 
 # end vend if needed...
 deactivate
@@ -282,12 +279,13 @@ chmod +x run_cpu.sh
 ```
 
 Update the config file to point to Stable Diffusion (presuming it's installed...)
+2025-10-17 - The format of this file has been completely changed, so the following code that used to work doesn't anymore...  This does give a clue as to what the config file is named and what you might want to do with it. 
 ```bash
-# config file - connecto stable-diffusion-webui 
-cp extra_model_paths.yaml.example extra_model_paths.yaml
-sed -i "s@path/to@`echo ~`@g" extra_model_paths.yaml
-# edit config file to point to your checkpoints etc 
-#vi extra_model_paths.yaml
+## config file - connecto stable-diffusion-webui 
+#cp extra_model_paths.yaml.example extra_model_paths.yaml
+#sed -i "s@path/to@`echo ~`@g" extra_model_paths.yaml
+## edit config file to point to your checkpoints etc 
+##vi extra_model_paths.yaml
 ```
 
 ## End ComfyUI install
@@ -320,32 +318,26 @@ Miniconda ( if you prefer this to Anaconda above... )
 ```bash
 cd ~/Downloads/
 wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
-bash Miniconda3-latest-Linux-x86_64.sh -b
+bash Miniconda3-latest-Linux-x86_64.sh -b -c
 cd ~
 ln -s miniconda3 conda
-```
-
-```bash
-# Accept Conda's TOS 
-conda tos accept --override-channels --channel https://repo.anaconda.com/pkgs/main
-conda tos accept --override-channels --channel https://repo.anaconda.com/pkgs/r
 ```
 
 
 ```bash
 echo "PATH=~/conda/bin:$PATH" >> ~/.profile
 source ~/.profile
+# Accept Conda's TOS 
+conda tos accept --override-channels --channel https://repo.anaconda.com/pkgs/main
+conda tos accept --override-channels --channel https://repo.anaconda.com/pkgs/r
 conda update -y -n base -c defaults conda
 ```
+
 
 ```bash
 conda install -y cmake ninja
 ```
 
-```bash
-conda init
-source ~/.profile
-```
 ### conda is now active...
 
 ### install pip
@@ -378,12 +370,14 @@ conda activate textgen
 
 ### bitsandbytes rocm 
 2024-04-24 - AMD's own ROCm version of bitsandbytes has been updated! - https://github.com/ROCm/bitsandbytes  ( ver 0.44.0.dev0 at time of writing ) 
+2025-10-17 - Looks like this has been updated in ways that are dysfunctional so this has been remarked out for now. 
+
 ```bash
-# conda activate textgen
-cd
-git clone https://github.com/ROCm/bitsandbytes.git
-cd bitsandbytes
-pip install .
+## conda activate textgen
+#cd
+#git clone https://github.com/ROCm/bitsandbytes.git
+#cd bitsandbytes
+#pip install .
 ```
 
 
@@ -417,12 +411,12 @@ sudo apt install curl
 ./start_linux.sh 
 ```
 
-It appears that as of this summer ( 2025 ) there is not currently support for various extensions including the sd_api_pictures 
+2025-10-17 - Image generation interaction is now somewhat more limited, that needs options for sd_api_pictures and send_pictures need to be turned on, and Stable Diffusion (started first) running.  
 
 
 ## End - Oobabooga - Text-Generation-WebUI
 
-
+2024-08-17 - 
 Here's an example, nvtop, sd console, tgw console... 
 this screencap taken using ROCm 6.1.3 - under this config : https://github.com/nktice/AMD-AI/blob/main/ROCm-6.1.3-Dev.md
 ![Alt text](Screenshot-2024-08-17.png)
