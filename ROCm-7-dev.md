@@ -1,25 +1,26 @@
-# AMD / Radeon 7900XTX 6900XT GPU ROCm install / setup / config 
-# Ubuntu 24.04.3  
+# AMD-AI - A choose your own adventure how-to user guide...
+Tested on hardware : AMD Radeon 7900XTX and 6900XT GPUs ( including dual cards), and the Ryzen AI Max 395+ ( Strix Halo ). 
+# Ubuntu Linux 24.04.3  
 # ROCm 7.0.2
-# Automatic1111 Stable Diffusion + ComfyUI  ( venv ) 
-# Oobabooga - Text Generation WebUI ( conda, Exllamav2, BitsAndBytes ) 
+# Stable Diffusion (Automatic1111 and ForgeUI for AMDGPUs ) + ComfyUI  ( venv ) 
+# Oobabooga - Text Generation WebUI ( conda ) 
 
-## Install notes / instructions / changelog ##
+## Introduction 
+Introduction note : I started writing this guide 2023, because at the time I had a lot of trouble getting stuff running.  There was a range of partial or out of date guides that I came across...  So I set out to write a fairly complete guide to help fill the void.  Many things have changed, and there's lots of small details that have come and gone.  Generally things have improved over the months I've been doing this.  As much as I'd hoped all the issues would resolve, and it'd be easy to do everything making such guide redundant, that's yet to happen.  There appear to be a lot of fiddly bits that need attention, simple workarounds to make things work together that aren't well explained. 
 
-2025-09-17 - Started new draft for Ubunutu 24.04.3 / ROCm 7 ...
+Please note that there is another supplemental set of instructions to use Ollama, and related tools kept in a separate page for simplicity - https://github.com/nktice/AMD-AI/blob/main/ollama-litellm-aider.md
 
-2025-10-17 - Working with GMKTec Evo-X2
+## Install notes / instructions / changelog 
+
+2025-09-17 - Started new draft for Ubunutu 24.04.3 / ROCm 7.0.2 ...
+2025-10-17 - Working with GMKTec Evo-X2... 
+2025-10-19 - added ForgeUI ( for AMDGPUs )
 
 --------
 
 
-# Ubuntu 22.04 / 23.04 / 23.10 / 24.04 - Base system install 
-Ubuntu 22.04 works great on Radeon 6900 XT video cards, 
-but does not support 7900XTX cards as they came out later 
-Ubuntu 23.04 is newer but has issues with some of the tools... 
-note there's one command to include the old system that solves such issues. 
-Ubuntu 23.10 - also generally working... 
-Ubuntu 24.04 - now works too... note comments. 
+# Ubuntu 24.04.3 - Base system install 
+This is all tested on Ubuntu Linux 24.04.3 - this appears to be now fairly well supported by drivers and tools. 
 
 At this point we assume you've done the system install
 and you know what that is, have a user, root, etc. 
@@ -159,7 +160,6 @@ sudo reboot
 ## End of OS / base setup
 
 --------
-2025-09-17 - the following is Untested yet with new configuration.
 
 
 # Stable Diffusion (Automatic1111) 
@@ -224,7 +224,62 @@ into the folder where you have other models ( to avoid issues )
 The first time this is run it will install the requirements.  May take a few tries for it to get everything the way it likes it. 
 
 
+
 ## end Stable Diffusion 
+
+
+## Stable Diffusion WebUI AMDGPU Forge ( Forge UI ) 
+
+2025-10-19 - In trying SD on a "Strix Halo" system it runs very slow...  What I'm guessing is it's using the CPU and not GPU.  A1111 predates current GPUs and processor types.   So I went in search of things that may run better, and came across this.  As it's derived from the old Stable Diffusion it works similar... So I was able to get it up and functioning with some adjustments.  
+
+Stable Diffusion WebUI AMDGPU Forge github : https://github.com/lshqqytiger/stable-diffusion-webui-amdgpu-forge
+
+Git from github - 
+```bash
+cd
+git clone https://github.com/lshqqytiger/stable-diffusion-webui-amdgpu-forge.git
+cd stable-diffusion-webui-amdgpu-forge
+```
+
+Update the config file...
+```bash
+tee --append webui-user.sh <<EOF
+# specify compatible python version
+python_cmd="python3.10"
+# use specific versions to avoid downloading all the nightlies... ( update dates as needed )
+# Note that torchvision sometimes needs the previous night's version of torch, so their dates are sequential
+ export TORCH_COMMAND="pip install --pre torch==2.10.0.dev20251016+rocm7.0 torchvision==0.25.0.dev20251017+rocm7.0 --extra-index-url https://download.pytorch.org/whl/nightly/rocm7.0"
+ ## And if you want to call this from other programs...
+ export COMMANDLINE_ARGS="--api"
+EOF
+```
+
+If you have models stored in some directory, you could link them now...
+```bash
+#mv models models.1
+#ln -s ~/models/  models
+```
+
+Initial setup of program environment, that gave me issues... 
+```bash
+./webui.sh
+```
+
+That went and got things... of which there wwre some issues, so I closed it out, and then manually ran program environment, and got what it wants...
+```bash
+source venv/bin/activate
+pip install "optimum[onnxruntime-gpu]" joblib --extra-index-url https://download.pytorch.org/whl/nightly/rocm7.0
+deactivate
+```
+
+And with those in place, I ran the program again, and it worked for me. 
+```bash
+./webui.sh
+```
+
+
+## End of Stable Diffusion WebUI AMDGPU Forge
+
 
 --- 
 
