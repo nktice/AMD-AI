@@ -205,7 +205,8 @@ EOF
 ```
 
 
-## If you keep models for SD somewhere, this is where you'd like them up...
+## Models 
+If you keep models for SD somewhere, this is where you'd link them up...
 If you don't do this, it will install a default to get you going. 
 Note that these start files do include things that it needs you'll want to copy
 into the folder where you have other models ( to avoid issues ) 
