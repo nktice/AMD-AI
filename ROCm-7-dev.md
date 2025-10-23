@@ -312,14 +312,11 @@ And with those in place, I ran the program again, and it worked for me.
 
 --- 
 
-# ComfyUI install script 
+# ComfyUI 
 - variation of https://raw.githubusercontent.com/ltdrdata/ComfyUI-Manager/main/scripts/install-comfyui-venv-linux.sh 
 Includes ComfyUI-Manager
+2025-10-22 - ComfyUI has been actively developed, and as such it can use modern python that comes in the packages ( old one also works... )   It's also quite fast ( compared to the old SD systems from above... ).  
 
-Install of packages like for Stable Diffusion ( included here in case you're not installed SD and just want ComfyUI... ) - but it's not bothered by Python 3.12... 
-```bash
-sudo apt install -y wget git python3.10 python3.10-venv libgl1 sqlite
-```
 
 ```bash
 cd 
@@ -327,29 +324,29 @@ git clone https://github.com/comfyanonymous/ComfyUI
 cd ComfyUI/custom_nodes
 git clone https://github.com/ltdrdata/ComfyUI-Manager
 cd ..
-python3.10 -m venv venv
+python3 -m venv venv
 source venv/bin/activate
-python3.10 -m pip install -U pip 
+python3 -m pip install -U pip 
 ## pre-install torch and torchvision from nightlies - note you may want to update versions... 
-python3.10 -m pip install --pre torch==2.10.0.dev20251016+rocm7.0 torchvision==0.25.0.dev20251017+rocm7.0  torchsde torchaudio einops transformers\>=4.25.1 safetensors\>=0.4.2 aiohttp pyyaml Pillow scipy tqdm psutil av  --extra-index-url https://download.pytorch.org/whl/nightly/rocm7.0
+python3 -m pip install --pre torch==2.10.0.dev20251021+rocm7.0 torchvision==0.25.0.dev20251022+rocm7.0  torchsde torchaudio einops transformers\>=4.25.1 safetensors\>=0.4.2 aiohttp pyyaml Pillow scipy tqdm psutil av  --extra-index-url https://download.pytorch.org/whl/nightly/rocm7.0
 ## Note the following manually includes the contents of requirements.txt - because otherwise attempting to install the requirements goes and reinstalls torch over again. 
-python3.10 -m pip install -r /home/n/ComfyUI/requirements.txt  --extra-index-url https://download.pytorch.org/whl/nightly/rocm7.0
+python3 -m pip install -r /home/n/ComfyUI/requirements.txt  --extra-index-url https://download.pytorch.org/whl/nightly/rocm7.0
 
-python3.10 -m pip install -r custom_nodes/ComfyUI-Manager/requirements.txt --extra-index-url https://download.pytorch.org/whl/nightly/rocm7.0
+python3 -m pip install -r custom_nodes/ComfyUI-Manager/requirements.txt --extra-index-url https://download.pytorch.org/whl/nightly/rocm7.0
 
 # end vend if needed...
 deactivate
 ```
 
 Scripts for running the program...
-Note that " TORCH_BLAS_PREFER_HIPBLASLT=0 " is needed as explained here - https://github.com/comfyanonymous/ComfyUI/issues/3698
+Note that " TORCH_BLAS_PREFER_HIPBLASLT=0 " was needed as explained here - https://github.com/comfyanonymous/ComfyUI/issues/3698
 
 ```bash
 # run_gpu.sh
 tee --append run_gpu.sh <<EOF
 #!/bin/bash
 source venv/bin/activate
-TORCH_BLAS_PREFER_HIPBLASLT=0 python3.10 main.py --preview-method auto
+TORCH_BLAS_PREFER_HIPBLASLT=0 python3 main.py --preview-method auto
 EOF
 chmod +x run_gpu.sh
 
@@ -357,13 +354,15 @@ chmod +x run_gpu.sh
 tee --append run_cpu.sh <<EOF
 #!/bin/bash
 source venv/bin/activate
-TORCH_BLAS_PREFER_HIPBLASLT=0 python3.10 main.py --preview-method auto --cpu
+TORCH_BLAS_PREFER_HIPBLASLT=0 python3 main.py --preview-method auto --cpu
 EOF
 chmod +x run_cpu.sh
 ```
 
 Update the config file to point to Stable Diffusion (presuming it's installed...)
+
 2025-10-17 - The format of this file has been completely changed, so the following code that used to work doesn't anymore...  This does give a clue as to what the config file is named and what you might want to do with it. 
+
 ```bash
 ## config file - connecto stable-diffusion-webui 
 #cp extra_model_paths.yaml.example extra_model_paths.yaml
@@ -372,7 +371,9 @@ Update the config file to point to Stable Diffusion (presuming it's installed...
 ##vi extra_model_paths.yaml
 ```
 
-## End ComfyUI install
+Note with the models, it's looking for models in models/checkpoints - so you'll need to put models into that folder to get it to work, or configure things so that it can find the parts that you want to use. 
+
+# End ComfyUI install
 
 
 ---
