@@ -1,6 +1,6 @@
 # AMD-AI - A choose your own adventure how-to user guide...
 Tested on hardware : AMD Radeon 7900XTX and 6900XT GPUs ( including dual cards), and the Ryzen AI Max 395+ ( Strix Halo ). 
-# Ubuntu Linux 24.04.3  
+# Ubuntu Linux 24.04.3  / 25.10
 # ROCm 7.0.2
 # Stable Diffusion (Automatic1111 and ForgeUI for AMDGPUs ) + ComfyUI  ( venv ) 
 # Oobabooga - Text Generation WebUI ( conda ) 
@@ -16,6 +16,8 @@ Please note that there is another supplemental set of instructions to use Ollama
 2025-10-17 - Working with GMKTec Evo-X2... 
 2025-10-19 - added ForgeUI ( for AMDGPUs )
 
+2025-10-22 - Testing functionality on newest version of Ubuntu 25.10 - requires some changes...
+
 --------
 
 
@@ -30,25 +32,28 @@ and you know what that is, have a user, root, etc.
 sudo apt update -y && sudo apt upgrade -y 
 ```
 
+If you need development and sources...
 ```bash 
-#turn on devel and sources.
-sudo apt-add-repository -y -s -s
-sudo apt install -y "linux-headers-$(uname -r)" \
-	"linux-modules-extra-$(uname -r)"
+##turn on devel and sources.
+#sudo apt-add-repository -y -s -s
+#sudo apt install -y "linux-headers-$(uname -r)" \
+#	"linux-modules-extra-$(uname -r)"
 ```
 
 #### [ for Ubuntu 23.04, 23.10, and 24.04 ... ]
 Some things may require various old packages so we need to add
 jammy packages, so that they can be installed, on lunar systems.
+2025-10-22 - The main thing that needs these old versions was the python 3.10 packages... those aren't working through these means after Ubuntu 24.04.03 , so instead I found means of installing python 3.10 from sources effectively, that will be included below.  
 ```bash
-sudo add-apt-repository -y -s deb http://security.ubuntu.com/ubuntu jammy main universe
+#sudo add-apt-repository -y -s deb http://security.ubuntu.com/ubuntu jammy main universe
 ```
 
 #### [ For Ubuntu 24.04 ... ] 
 This allows calls to older versions of Python by using "deadsnakes" 
+2025-10-22 - This way of doing things doesn't work after 24.04.3 - so I've added instructions for installing python 3.10 from sources below.  
 ```bash
-sudo add-apt-repository ppa:deadsnakes/ppa -y
-sudo apt update -y 
+# sudo add-apt-repository ppa:deadsnakes/ppa -y
+# sudo apt update -y 
 ```
 
 ## Add AMD GPU package sources 
@@ -73,10 +78,10 @@ sudo apt update -y
 ```
 
 AMDGPU DKMS
+2025-10-22 - It appears that enough of the related functionality is now built into the Linux kernel that this is no longer needed.  
 ```bash
-sudo apt install -y amdgpu-dkms
+# sudo apt install -y amdgpu-dkms
 ```
-Note : This commonly produces warning message about 'Possible missing firmware' these are just wanrings and things work anyway, they can be ignored. 
 
 # ROCm repositories for jammy
 https://rocmdocs.amd.com/en/latest/deploy/linux/os-native/install.html
@@ -94,8 +99,6 @@ This is lots of stuff, but comparatively small so worth including,
 as some stuff later may want as dependencies without much notice.
 ```bash
 # ROCm...
-# RIP rocm-dkms
-# sudo apt install -y rocm-dev rocm-libs rocm-hip-sdk rocm-dkms rocm-libs
 sudo apt install -y rocm-dev rocm-libs rocm-hip-sdk rocm-libs
 ```
 
@@ -118,8 +121,10 @@ echo "PATH=/opt/rocm/bin:/opt/rocm/opencl/bin:$PATH" >> ~/.profile
 ```bash
 sudo /opt/rocm/bin/rocminfo | grep gfx
 ```
+Examples of things you'd see... 
 Found : gfx1030 [ Radeon 6900 ]
 Found : gfx1100 [ Radeon 7900 ] 
+Found : gfx1151 [ Ryzen AI Max 395+ ( Strix Halo ) ] 
 
 ## Add user to groups
 Of course note to change the user name to match your user. 
@@ -149,23 +154,47 @@ sudo apt install -y nvtop
 
 ## Radeon specific tools...
 ```bash
-sudo apt install -y radeontop rovclock
+sudo apt install -y radeontop 
 ```
 
 ## and now we reboot...
 ```bash
-sudo reboot
+reboot
 ```
 
 ## End of OS / base setup
 
 --------
 
+# Stable Diffusion 
+Stable Diffusion is an amazing system to make AI art.  These open source tools are rather outdated now, and things have evolved.  It's been a challenge to get the python version that they will work with.  Newer versions break various dependencies, and things don't go well... 
 
-# Stable Diffusion (Automatic1111) 
-This system is built to use its own venv ( rather than Conda )...
+## How to install Python 3.10 - 
+These instructions are taken from this Q and A up on a forum : https://askubuntu.com/questions/1539019/how-to-install-python-3-10-on-ubuntu-24-10
 
-## Download Stable Diffusion ( Automatic1111 webui ) 
+Dependencies
+```bash
+sudo apt install -y build-essential libssl-dev libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm libffi-dev zlib1g-dev
+```
+
+Download and extract the sources :
+```bash
+cd /opt
+sudo wget https://www.python.org/ftp/python/3.10.12/Python-3.10.12.tgz
+sudo tar -xvf Python-3.10.12.tgz
+```
+
+Compile and Install
+```bash
+cd Python-3.10.12
+sudo ./configure --enable-optimizations
+sudo make altinstall -j
+```
+
+That is the magic to get that python version onto the system - that is essential for to get A1111 or forge UI up. 
+
+
+## Automatic1111 
 https://github.com/AUTOMATIC1111/stable-diffusion-webui
 Get the files...
 ```bash
@@ -174,10 +203,9 @@ git clone https://github.com/AUTOMATIC1111/stable-diffusion-webui.git
 cd stable-diffusion-webui
 ```
 
-# Requisites : 
+## Requisites : 
 Automatic1111 / Stable Diffusion doesn't work with newer versions of python, so we specify one it works with. 
 ```bash
-sudo apt install -y wget git python3.10 python3.10-venv libgl1
 python3.10 -m venv venv
 source venv/bin/activate
 python3.10 -m pip install -U pip
@@ -196,7 +224,7 @@ python_cmd="python3.10"
  export TORCH_BLAS_PREFER_HIPBLASLT=0
 # use specific versions to avoid downloading all the nightlies... ( update dates as needed )
 # Note that torchvision sometimes needs the previous night's version of torch, so their dates are sequential
- export TORCH_COMMAND="pip install --pre torch==2.10.0.dev20251016+rocm7.0 torchvision==0.25.0.dev20251017+rocm7.0 --extra-index-url https://download.pytorch.org/whl/nightly/rocm7.0"
+ export TORCH_COMMAND="pip install --pre torch==2.10.0.dev20251021+rocm7.0 torchvision==0.25.0.dev20251022+rocm7.0 --extra-index-url https://download.pytorch.org/whl/nightly/rocm7.0"
  ## And if you want to call this from other programs...
  export COMMANDLINE_ARGS="--api"
  ## crashes with 2 cards, so to get it to run on the second card (only), unremark the following 
@@ -226,8 +254,7 @@ The first time this is run it will install the requirements.  May take a few tri
 
 
 
-## end Stable Diffusion 
-
+## end A1111
 
 ## Stable Diffusion WebUI AMDGPU Forge ( Forge UI ) 
 
@@ -255,7 +282,7 @@ python_cmd="python3.10"
 EOF
 ```
 
-If you have models stored in some directory, you could link them now...
+If you have models stored in some directory, you could link them now...  
 ```bash
 #mv models models.1
 #ln -s ~/models/  models
@@ -266,7 +293,7 @@ Initial setup of program environment, that gave me issues...
 ./webui.sh
 ```
 
-That went and got things... of which there wwre some issues, so I closed it out, and then manually ran program environment, and got what it wants...
+Here's two packages it didn't seem to install just using the scripts...
 ```bash
 source venv/bin/activate
 pip install "optimum[onnxruntime-gpu]" joblib --extra-index-url https://download.pytorch.org/whl/nightly/rocm7.0
@@ -278,8 +305,9 @@ And with those in place, I ran the program again, and it worked for me.
 ./webui.sh
 ```
 
+## End Forge UI 
 
-## End of Stable Diffusion WebUI AMDGPU Forge
+# End of Stable Diffusion 
 
 
 --- 
