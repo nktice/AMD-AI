@@ -381,90 +381,16 @@ Note with the models, it's looking for models in models/checkpoints - so you'll 
 #  Oobabooga - Text Generation WebUI - ROCm 
 Project Website : https://github.com/oobabooga/text-generation-webui.git
 
-
 ## Conda
-First we'll need Conda ... Required for pytorch... Conda provides virtual environments for python, so that programs with different dependencies can have different environments.
-Here is more info on managing conda : https://docs.conda.io/projects/conda/en/latest/user-guide/getting-started.html#
-Other notes : https://docs.conda.io/projects/conda/en/latest/user-guide/install/linux.html
-Download info : https://www.anaconda.com/download/
+2025-10-23 - In working with Ubuntu 25.10 I found there's an issue with Conda in various forms.  Turns out Ubuntu is shipping with a version of md5sum that makes different results from standard version, thus causes messes... there's a work around, as I'll get to below... but in my review, I found that there is not need for a bunch of stuff that there used to be... Oobabooga now has a working installer that is usable.  [ It used to be that their installer didn't work, and so we needed to setup ourselves with the whole environment and dependencies... that appears over, so we can slim this all down to a few commands. ] 
 
+Here are the details of the work-around to use for new Ubuntu ( 25.10 ) :
+https://forum.anaconda.com/t/critical-installation-failure-persistent-internal-md5-mismatch-anaconda-miniconda-2025-06-on-ubuntu-25-10/107525
 
-Anaconda ( if you prefer this to miniconda below ) 
+Here are the commands to switch to GNU version of md5sum :
 ```bash
-#cd ~/Downloads/
-#wget https://repo.anaconda.com/archive/Anaconda3-2023.09-0-Linux-x86_64.sh
-#bash Anaconda3-2023.09-0-Linux-x86_64.sh -b
-#cd ~
-#ln -s anaconda3 conda
+sudo apt install coreutils-from-gnu coreutils-from-uutils- --allow-remove-essential
 ```
-
-Miniconda ( if you prefer this to Anaconda above... ) 
-[ https://docs.conda.io/projects/miniconda/en/latest/ ] 
-```bash
-cd ~/Downloads/
-wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
-bash Miniconda3-latest-Linux-x86_64.sh -b -c
-cd ~
-ln -s miniconda3 conda
-```
-
-
-```bash
-echo "PATH=~/conda/bin:$PATH" >> ~/.profile
-source ~/.profile
-# Accept Conda's TOS 
-conda tos accept --override-channels --channel https://repo.anaconda.com/pkgs/main
-conda tos accept --override-channels --channel https://repo.anaconda.com/pkgs/r
-conda update -y -n base -c defaults conda
-```
-
-
-```bash
-conda install -y cmake ninja
-```
-
-### conda is now active...
-
-### install pip
-```bash
-sudo apt install -y pip
-pip3 install --upgrade pip
-```
-
-#### useful pip stuff to know ... 
-```bash
-## show outdated packages...
-#pip list --outdated
-## check dependencies 
-#pip check
-## install specified bersion 
-#pip install <packagename>==<version>
-```
-
-### End conda and pip setup.
-
-## Oobabooga / Textgen webui 
-- https://github.com/oobabooga/text-generation-webui
-
-```bash
-conda create -n textgen python=3.11 -y
-conda activate textgen
-```
-
-
-
-### bitsandbytes rocm 
-2024-04-24 - AMD's own ROCm version of bitsandbytes has been updated! - https://github.com/ROCm/bitsandbytes  ( ver 0.44.0.dev0 at time of writing ) 
-2025-10-17 - Looks like this has been updated in ways that are dysfunctional so this has been remarked out for now. 
-
-```bash
-## conda activate textgen
-#cd
-#git clone https://github.com/ROCm/bitsandbytes.git
-#cd bitsandbytes
-#pip install .
-```
-
 
 ## Oobabooga / Text-generation-webui - Install webui...
 ```bash
