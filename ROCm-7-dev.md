@@ -18,6 +18,8 @@ Please note that there is another supplemental set of instructions to use Ollama
 
 2025-10-22 - Testing functionality on newest version of Ubuntu 25.10 - requires some changes...
 
+2025-10-23 - Appears AMD has released some new drivers for the Strix Halo - alas this series might not support older cards, and is a "prevew".  There are components, such as with Oobabooga, that are setup with versions of ROCm that don't support Strix Halo ( Ryzen AI Max ) series processors, but should work with older stuff through default install.  So here is a link to the Strix Halo drivers for those who want them... https://rocm.docs.amd.com/en/7.9.0-preview/install/rocm.html  I may include notes I find related to them where appropriate.  
+
 --------
 
 
