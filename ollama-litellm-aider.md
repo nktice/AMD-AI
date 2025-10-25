@@ -1,74 +1,17 @@
-# Ollama for Aider, and CrewAI
+# Ollama for Ollama Code, Aider, and CrewAI
 2024-08-21 - Here's a supplement for Aider with Ollama install instructions.  
 In order, Conda, Ollama, LiteLLM, and last it's Aider - 
 there are some issues I note for all these sysstems, but get them running.   
 This is the first draft, after getting to to work, and may revise more.  
 2024-08-22 - I have now added details about CrewAI... added at bottom. 
 
+2025-10-25 - Added section for Ollama Code 
+
 This guide is based on the first part of the guide as a foundation. 
 https://github.com/nktice/AMD-AI 
 It will likely work after the with ROCm drivers installed under Ubuntu, after the reboot, so if you've not done those parts, please go do them first. 
 
 
-## Conda
-First we'll need Conda ... this will keep python's installs and it's packages versioned together, as some versions may conflict and cause frustrations. 
-This is similar to instructions in guide, skip parts if needed. 
-Here is more info on managing conda : https://docs.conda.io/projects/conda/en/latest/user-guide/getting-started.html#
-Other notes : https://docs.conda.io/projects/conda/en/latest/user-guide/install/linux.html
-Download info : https://www.anaconda.com/download/
-
-Anaconda ( if you prefer this to miniconda below ) 
-```bash
-#cd ~/Downloads/
-#wget https://repo.anaconda.com/archive/Anaconda3-2023.09-0-Linux-x86_64.sh
-#bash Anaconda3-2023.09-0-Linux-x86_64.sh -b
-#cd ~
-#ln -s anaconda3 conda
-```
-
-Miniconda ( if you prefer this to Anaconda above... ) 
-[ https://docs.conda.io/projects/miniconda/en/latest/ ] 
-```bash
-cd ~/Downloads/
-wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
-bash Miniconda3-latest-Linux-x86_64.sh -b
-cd ~
-ln -s miniconda3 conda
-```
-
-```bash
-echo "PATH=~/conda/bin:$PATH" >> ~/.profile
-source ~/.profile
-conda update -y -n base -c defaults conda
-```
-
-```bash
-conda install -y cmake ninja
-```
-
-```bash
-conda init
-source ~/.profile
-```
-### conda is now active...
-
-### install pip
-```bash
-sudo apt install -y pip
-pip3 install --upgrade pip
-```
-
-#### useful pip stuff to know ... 
-```bash
-## show outdated packages...
-#pip list --outdated
-## check dependencies 
-#pip check
-## install specified bersion 
-#pip install <packagename>==<version>
-```
-
-### End conda and pip setup.
 
 ## Ollama
 Ollama provides a model loading service... Here's the project's page : https://github.com/ollama/ollama
@@ -133,6 +76,7 @@ To download a model with thier system we can use the following
 ```
 
 #### Converting models...
+If you want to use models loaded from elsewhere such as huggingface.co - here are some details regarding how to do it as a reference. 
 
 Here's an example for MistralAi's Mistral-Small-24B-Base-2501
 ```
@@ -162,6 +106,49 @@ I have had issues after a system restart with it not starting...  in the system 
 # conda activate ollama
 # ollama serve 
 ```
+
+## Ollama Code 
+There is a CLI that is a fork of Gemini's CLI that uses the OpenAI aPI and is functional for use of Ollama models : 
+https://github.com/tcsenpai/ollama-code 
+
+2025-10-25 - This section added, as gemini's cli is fairly useful, and running local allows for a wider range of application. 
+
+The program depends on the node.js system here's how to get that...
+Here is the github for nvm, the version manager... : https://github.com/nvm-sh/nvm
+Then we'll install and use the latest node.js version... 
+
+```bash
+# nvm
+wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash
+source ~/.bashrc
+nvm -v 
+# output : 0.40.3
+
+nvm install node
+nvm use node
+
+node -v
+# output : v25.0.0
+npm -v
+# output : 11.6.2
+
+# Next we install ollama-code 
+npm install -g @tcsenpai/ollama-code
+ollama-code --version
+# output : 0.0.3
+```
+
+Now we can run ollama-code at our convenience...
+
+If you would like to, their readme says that you can add a file like this :
+create ~/.config/ollama-code/config.json:
+```bash
+{
+  "baseUrl": "http://localhost:11434/v1",
+  "model": "gpt-oss:120b"
+}
+```
+I have found that this doesn't seem to be taking when it is loading - but it is useful to have those parameters handy to type in.  The API key if you're using localhost can be anything.   Also the model needs to be one that's installed and ready to use ( see 'getting models' in the above section on ollama install ). 
 
 
 ## LiteLLM
