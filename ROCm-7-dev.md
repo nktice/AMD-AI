@@ -324,6 +324,9 @@ cd sdnext
 SDNext is descended from Stable Diffusion such as seen above... so there is a lot of similar config, such as with venv... we'll want to pre-empt the default install methods and get torch installed...
 ```bash
 source venv/bin/activate
+# upgrade pip
+python3 -m pip install -U pip
+# pre-install torch and torchvision from nightlies 
 python3 -m pip install --pre torch==2.10.0.dev20251101+rocm7.0 torchvision==0.25.0.dev20251102+rocm7.0  --extra-index-url https://download.pytorch.org/whl/nightly/rocm7.0
 deactivate 
 ```
