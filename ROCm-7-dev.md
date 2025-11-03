@@ -260,7 +260,7 @@ The first time this is run it will install the requirements.  May take a few tri
 
 ## Stable Diffusion WebUI AMDGPU Forge ( Forge UI ) 
 
-2025-10-19 - In trying SD on a "Strix Halo" system it runs very slow...  What I'm guessing is it's using the CPU and not GPU.  A1111 predates current GPUs and processor types.   So I went in search of things that may run better, and came across this.  As it's derived from the old Stable Diffusion it works similar... So I was able to get it up and functioning with some adjustments.  
+2025-10-19 - In trying SD on a "Strix Halo" system it runs very slow...  What I'm guessing is it's using the CPU and not GPU.  A1111 predates current GPUs and processor types.   So I went in search of things that may run better, and came across this.  As it's derived from the old Stable Diffusion it works similar... So I was able to get it up and functioning with some adjustments.  It also runs slow, but since I got it working, I'll include it here.
 
 Stable Diffusion WebUI AMDGPU Forge github : https://github.com/lshqqytiger/stable-diffusion-webui-amdgpu-forge
 
@@ -309,7 +309,53 @@ And with those in place, I ran the program again, and it worked for me.
 
 ## End Forge UI 
 
+
+## SDNext
+Here are instructions for for setting up SD Next a descendent of Stable Diffusion that looks like it is maintained at the present time.  Project page : https://github.com/vladmandic/sdnext 
+2025-11-03 - Added these instructions...
+
+First we download the latest from GitHub...
+```bash
+cd
+git clone https://github.com/vladmandic/sdnext.git
+cd sdnext
+```
+
+SDNext is descended from Stable Diffusion such as seen above... so there is a lot of similar config, such as with venv... we'll want to pre-empt the default install methods and get torch installed...
+```bash
+source venv/bin/activate
+python3 -m pip install --pre torch==2.10.0.dev20251101+rocm7.0 torchvision==0.25.0.dev20251102+rocm7.0  --extra-index-url https://download.pytorch.org/whl/nightly/rocm7.0
+deactivate 
+```
+
+We may also want to prep our models folder to cut down on dupes...
+```bash
+# mv models models.1
+# ln -s ../models/ models
+```
+
+If you want to set configuration options it also can use the same file name as the older sd versions - alas they haven't offered examples, so I will offer one here for something I want.
+This parameter allows JavaScript access to the API... I've remarked this out, as it may not be secure for other users.
+```bash
+tee --append webui-user.sh <<EOF
+# export COMMANDLINE_ARGS="--cors-origins=*"
+EOF
+```
+
+
+Now we run the script that goes and sets it all up as they would expect...
+```bash
+./webui.sh
+```
+
+
+
+## End SDNext
+
 # End of Stable Diffusion 
+
+---
+
 
 
 --- 
