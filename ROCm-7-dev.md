@@ -1,7 +1,7 @@
 # AMD-AI - A choose your own adventure how-to user guide...
 Tested on hardware : AMD Radeon 7900XTX and 6900XT GPUs ( including dual cards), and the Ryzen AI Max 395+ ( Strix Halo ). 
 # Ubuntu Linux 24.04.3  / 25.10
-# ROCm 7.0.2
+# ROCm 7.1.1
 # Stable Diffusion (Automatic1111 and ForgeUI for AMDGPUs ) + ComfyUI  ( venv ) 
 # Oobabooga - Text Generation WebUI ( conda ) 
 
@@ -20,11 +20,15 @@ Please note that there is another supplemental set of instructions to use Ollama
 
 2025-10-23 - Appears AMD has released some new drivers for the Strix Halo - alas this series might not support older cards, and is a "prevew".  There are components, such as with Oobabooga, that are setup with versions of ROCm that don't support Strix Halo ( Ryzen AI Max ) series processors, but should work with older stuff through default install.  So here is a link to the Strix Halo drivers for those who want them... https://rocm.docs.amd.com/en/7.9.0-preview/install/rocm.html  I may include notes I find related to them where appropriate.  
 
+2025-11-27 - I had been having crahes with my Strix Halo that delayed updates.  I managed to find this page with a workaround that avoids crashes - https://github.com/ROCm/ROCm/issues/5590#issuecomment-3573570390 - So if that's soemthing that is relevant to you, review details there. 
+
 --------
 
 
 # Ubuntu 24.04.3 - Base system install 
 This is all tested on Ubuntu Linux 24.04.3 - this appears to be now fairly well supported by drivers and tools. 
+
+This has been tested on 25.10 too...
 
 At this point we assume you've done the system install
 and you know what that is, have a user, root, etc. 
@@ -34,77 +38,49 @@ and you know what that is, have a user, root, etc.
 sudo apt update -y && sudo apt upgrade -y 
 ```
 
-If you need development and sources...
-```bash 
-##turn on devel and sources.
-#sudo apt-add-repository -y -s -s
-#sudo apt install -y "linux-headers-$(uname -r)" \
-#	"linux-modules-extra-$(uname -r)"
-```
-
-#### [ for Ubuntu 23.04, 23.10, and 24.04 ... ]
-Some things may require various old packages so we need to add
-jammy packages, so that they can be installed, on lunar systems.
-2025-10-22 - The main thing that needs these old versions was the python 3.10 packages... those aren't working through these means after Ubuntu 24.04.03 , so instead I found means of installing python 3.10 from sources effectively, that will be included below.  
-```bash
-#sudo add-apt-repository -y -s deb http://security.ubuntu.com/ubuntu jammy main universe
-```
-
-#### [ For Ubuntu 24.04 ... ] 
-This allows calls to older versions of Python by using "deadsnakes" 
-2025-10-22 - This way of doing things doesn't work after 24.04.3 - so I've added instructions for installing python 3.10 from sources below.  
-```bash
-# sudo add-apt-repository ppa:deadsnakes/ppa -y
-# sudo apt update -y 
-```
 
 ## Add AMD GPU package sources 
 Make the directory if it doesn't exist yet.
 This location is recommended by the distribution maintainers.
+https://rocm.docs.amd.com/projects/install-on-linux/en/latest/install/install-methods/package-manager/package-manager-ubuntu.html
 
 ```bash
+# Make the directory if it doesn't exist yet.
+# This location is recommended by the distribution maintainers.
 sudo mkdir --parents --mode=0755 /etc/apt/keyrings
-```
 
-Download the key, convert the signing-key to a full
-Keyring required by apt and store in the keyring directory
-```bash
+# Download the key, convert the signing-key to a full
+# keyring required by apt and store in the keyring directory
 wget https://repo.radeon.com/rocm/rocm.gpg.key -O - | \
     gpg --dearmor | sudo tee /etc/apt/keyrings/rocm.gpg > /dev/null
 ```
-amdgpu repository for jammy
-```bash
-echo 'deb [arch=amd64 signed-by=/etc/apt/keyrings/rocm.gpg] https://repo.radeon.com/amdgpu/7.0.2/ubuntu jammy main' \
-    | sudo tee /etc/apt/sources.list.d/amdgpu.list
-sudo apt update -y 
-```
-
-AMDGPU DKMS
-2025-10-22 - It appears that enough of the related functionality is now built into the Linux kernel that this is no longer needed.  
-```bash
-# sudo apt install -y amdgpu-dkms
-```
-
-# ROCm repositories for jammy
-https://rocmdocs.amd.com/en/latest/deploy/linux/os-native/install.html
 
 ```bash
-echo "deb [arch=amd64 signed-by=/etc/apt/keyrings/rocm.gpg] https://repo.radeon.com/rocm/apt/7.0.2/ jammy main" \
-    | sudo tee --append /etc/apt/sources.list.d/rocm.list
-echo -e 'Package: *\nPin: release o=repo.radeon.com\nPin-Priority: 600' \
-    | sudo tee /etc/apt/preferences.d/rocm-pin-600
-sudo apt update -y
+sudo tee /etc/apt/sources.list.d/rocm.list << EOF
+deb [arch=amd64 signed-by=/etc/apt/keyrings/rocm.gpg] https://repo.radeon.com/rocm/apt/7.1.1 noble main
+deb [arch=amd64 signed-by=/etc/apt/keyrings/rocm.gpg] https://repo.radeon.com/graphics/7.1.1/ubuntu noble main
+EOF
+
+sudo tee /etc/apt/preferences.d/rocm-pin-600 << EOF
+Package: *
+Pin: release o=repo.radeon.com
+Pin-Priority: 600
+EOF
+
+sudo apt update
 ```
 
 # More AMD ROCm related packages 
-This is lots of stuff, but comparatively small so worth including,
-as some stuff later may want as dependencies without much notice.
+Here's a complete list of packages they offer and what they include...
+https://rocm.docs.amd.com/projects/install-on-linux/en/latest/install/install-methods/package-manager/package-manager-ubuntu.html#install-rocm
 ```bash
 # ROCm...
-sudo apt install -y rocm-dev rocm-libs rocm-hip-sdk rocm-libs
+# sudo apt install -y rocm 
+sudo apt install -y rocm rocm-dev rocm-libs rocm-hip-sdk rocm-libs
 ```
 
-
+# Post install setup 
+From : https://rocm.docs.amd.com/projects/install-on-linux/en/latest/install/post-install.html
 ```bash
 # ld.so.conf update 
 sudo tee --append /etc/ld.so.conf.d/rocm.conf <<EOF
@@ -118,6 +94,11 @@ sudo ldconfig
 # update path
 echo "PATH=/opt/rocm/bin:/opt/rocm/opencl/bin:$PATH" >> ~/.profile
 ```
+
+```bash
+export LD_LIBRARY_PATH=/opt/rocm-7.1.1/lib
+```
+
 
 ## Find graphics device
 ```bash
@@ -135,6 +116,7 @@ sudo adduser `whoami` video
 sudo adduser `whoami` render
 ```
 
+## Useful packages --
 ```bash
 # git and git-lfs (large file support
 sudo apt install -y git git-lfs
@@ -153,6 +135,10 @@ Note : I have had issues with the distro version crashes with 2 GPUs, installing
 ```bash
 sudo apt install -y nvtop 
 ```
+
+An alternative that seems worth mentioning here is Mission Center : https://missioncenter.io/ 
+It doesn't use apt, so we won't install it here, folks can look it up. 
+
 
 ## Radeon specific tools...
 ```bash
@@ -192,6 +178,8 @@ cd Python-3.10.12
 sudo ./configure --enable-optimizations
 sudo make altinstall -j
 ```
+Now we have python3.10 installed and it is ready to use for SD programs... 
+
 
 That is the magic to get that python version onto the system - that is essential for to get A1111 or forge UI up. 
 
@@ -221,12 +209,8 @@ tee --append webui-user.sh <<EOF
 python_cmd="python3.10"
  ## Torch for ROCm
 # generic import...
-# export TORCH_COMMAND="pip install torch torchvision --index-url https://download.pytorch.org/whl/nightly"
-# workaround for ROCm + Torch > 2.4.x - https://github.com/comfyanonymous/ComfyUI/issues/3698
- export TORCH_BLAS_PREFER_HIPBLASLT=0
-# use specific versions to avoid downloading all the nightlies... ( update dates as needed )
-# Note that torchvision sometimes needs the previous night's version of torch, so their dates are sequential
- export TORCH_COMMAND="pip install --pre torch==2.10.0.dev20251021+rocm7.0 torchvision==0.25.0.dev20251022+rocm7.0 --extra-index-url https://download.pytorch.org/whl/nightly/rocm7.0"
+# export TORCH_COMMAND="pip install torch torchvision --index-url https://download.pytorch.org/whl/nightly/rocm7.1"
+export TORCH_COMMAND="pip install --pre torch==2.10.0.dev20251123+rocm7.1 torchvision==0.25.0.dev20251124+rocm7.1 --extra-index-url https://download.pytorch.org/whl/nightly/rocm7.1"
  ## And if you want to call this from other programs...
  export COMMANDLINE_ARGS="--api"
  ## crashes with 2 cards, so to get it to run on the second card (only), unremark the following 
@@ -263,6 +247,7 @@ The first time this is run it will install the requirements.  May take a few tri
 2025-10-19 - In trying SD on a "Strix Halo" system it runs very slow...  What I'm guessing is it's using the CPU and not GPU.  A1111 predates current GPUs and processor types.   So I went in search of things that may run better, and came across this.  As it's derived from the old Stable Diffusion it works similar... So I was able to get it up and functioning with some adjustments.  It also runs slow, but since I got it working, I'll include it here.
 
 Stable Diffusion WebUI AMDGPU Forge github : https://github.com/lshqqytiger/stable-diffusion-webui-amdgpu-forge
+See section above on installing Python 3.10 ... 
 
 Git from github - 
 ```bash
@@ -278,7 +263,7 @@ tee --append webui-user.sh <<EOF
 python_cmd="python3.10"
 # use specific versions to avoid downloading all the nightlies... ( update dates as needed )
 # Note that torchvision sometimes needs the previous night's version of torch, so their dates are sequential
- export TORCH_COMMAND="pip install --pre torch==2.10.0.dev20251016+rocm7.0 torchvision==0.25.0.dev20251017+rocm7.0 --extra-index-url https://download.pytorch.org/whl/nightly/rocm7.0"
+ export TORCH_COMMAND="pip install --pre torch==2.10.0.dev20251123+rocm7.1 torchvision==0.25.0.dev20251124+rocm7.1 --extra-index-url https://download.pytorch.org/whl/nightly/rocm7.1"
  ## And if you want to call this from other programs...
  export COMMANDLINE_ARGS="--api"
 EOF
@@ -298,7 +283,7 @@ Initial setup of program environment, that gave me issues...
 Here's two packages it didn't seem to install just using the scripts...
 ```bash
 source venv/bin/activate
-pip install "optimum[onnxruntime-gpu]" joblib --extra-index-url https://download.pytorch.org/whl/nightly/rocm7.0
+pip install "optimum[onnxruntime-gpu]" joblib --extra-index-url https://download.pytorch.org/whl/nightly/rocm7.1
 deactivate
 ```
 
@@ -314,6 +299,10 @@ And with those in place, I ran the program again, and it worked for me.
 Here are instructions for for setting up SD Next a descendent of Stable Diffusion that looks like it is maintained at the present time.  Project page : https://github.com/vladmandic/sdnext 
 2025-11-03 - Added these instructions...
 
+```bash
+sudo apt install python3 python3-venv git git-lfs
+```
+
 First we download the latest from GitHub...
 ```bash
 cd
@@ -323,11 +312,12 @@ cd sdnext
 
 SDNext is descended from Stable Diffusion such as seen above... so there is a lot of similar config, such as with venv... we'll want to pre-empt the default install methods and get torch installed...
 ```bash
+python3 -m venv venv
 source venv/bin/activate
 # upgrade pip
 python3 -m pip install -U pip
-# pre-install torch and torchvision from nightlies 
-python3 -m pip install --pre torch==2.10.0.dev20251101+rocm7.0 torchvision==0.25.0.dev20251102+rocm7.0  --extra-index-url https://download.pytorch.org/whl/nightly/rocm7.0
+# If you want to pre-install torch and torchvision from nightlies 
+python3 -m pip install --pre torch==2.10.0.dev20251123+rocm7.1 torchvision==0.25.0.dev20251124+rocm7.1  --extra-index-url https://download.pytorch.org/whl/nightly/rocm7.1
 deactivate 
 ```
 
@@ -346,7 +336,9 @@ EOF
 ```
 
 
-Now we run the script that goes and sets it all up as they would expect...
+Now we run the script that goes and sets it all up as they would expect... 
+Sometimes it has errored, and needed running again to get all it wants.  
+Once it is setup then this command will run what is setup / installed. 
 ```bash
 ./webui.sh
 ```
@@ -379,11 +371,11 @@ python3 -m venv venv
 source venv/bin/activate
 python3 -m pip install -U pip 
 ## pre-install torch and torchvision from nightlies - note you may want to update versions... 
-python3 -m pip install --pre torch==2.10.0.dev20251021+rocm7.0 torchvision==0.25.0.dev20251022+rocm7.0  torchsde torchaudio einops transformers\>=4.25.1 safetensors\>=0.4.2 aiohttp pyyaml Pillow scipy tqdm psutil av  --extra-index-url https://download.pytorch.org/whl/nightly/rocm7.0
+python3 -m pip install --pre torch==2.10.0.dev20251123+rocm7.1 torchvision==0.25.0.dev20251124+rocm7.1  torchsde torchaudio einops transformers\>=4.25.1 safetensors\>=0.4.2 aiohttp pyyaml Pillow scipy tqdm psutil av  --extra-index-url https://download.pytorch.org/whl/nightly/rocm7.1
 ## Note the following manually includes the contents of requirements.txt - because otherwise attempting to install the requirements goes and reinstalls torch over again. 
-python3 -m pip install -r /home/n/ComfyUI/requirements.txt  --extra-index-url https://download.pytorch.org/whl/nightly/rocm7.0
+python3 -m pip install -r requirements.txt  --extra-index-url https://download.pytorch.org/whl/nightly/rocm7.1
 
-python3 -m pip install -r custom_nodes/ComfyUI-Manager/requirements.txt --extra-index-url https://download.pytorch.org/whl/nightly/rocm7.0
+python3 -m pip install -r custom_nodes/ComfyUI-Manager/requirements.txt --extra-index-url https://download.pytorch.org/whl/nightly/rocm7.1
 
 # end vend if needed...
 deactivate
@@ -431,6 +423,8 @@ Note with the models, it's looking for models in models/checkpoints - so you'll 
 
 #  Oobabooga - Text Generation WebUI - ROCm 
 Project Website : https://github.com/oobabooga/text-generation-webui.git
+
+2025-11-27 - At the present time I cannot get this working - unfortunately.  
 
 ## Conda
 2025-10-23 - In working with Ubuntu 25.10 I found there's an issue with Conda in various forms.  Turns out Ubuntu is shipping with a version of md5sum that makes different results from standard version, thus causes messes... there's a work around, as I'll get to below... but in my review, I found that there is not need for a bunch of stuff that there used to be... Oobabooga now has a working installer that is usable.  [ It used to be that their installer didn't work, and so we needed to setup ourselves with the whole environment and dependencies... that appears over, so we can slim this all down to a few commands. ] 
