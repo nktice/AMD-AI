@@ -343,6 +343,9 @@ Once it is setup then this command will run what is setup / installed.
 ./webui.sh
 ```
 
+## Note on memory use with SDNext ... 
+2025-11-25 - 
+A friend that I helped found that when generating lots of images system memory was a gradual slope up until program crash.  Turns out pymalloc is known to have some issues freeing memory.  SDNext's wiki has details for alternate memory systems - https://github.com/vladmandic/sdnext/wiki/Malloc - We switched over to the use of jemalloc and that resolved things. 
 
 
 ## End SDNext
