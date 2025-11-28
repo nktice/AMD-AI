@@ -347,6 +347,20 @@ Once it is setup then this command will run what is setup / installed.
 2025-11-25 - 
 A friend that I helped found that when generating lots of images system memory was a gradual slope up until program crash.  Turns out pymalloc is known to have some issues freeing memory.  SDNext's wiki has details for alternate memory systems - https://github.com/vladmandic/sdnext/wiki/Malloc - We switched over to the use of jemalloc and that resolved things. 
 
+To make that easy, here's commands that users can copy for themselves...
+```bash
+sudo apt install libjemalloc2
+sudo ldconfig
+tee --append sdnext.sh <<EOF
+#!/bin/sh
+#script to call webui.sh with parameters... add others if you like below... 
+export LD_PRELOAD=libjemalloc.so.2  
+./webui.sh --debug
+EOF
+chmod +x sdnext.sh
+```
+That creates a script called sdnext.sh for users to run. 
+
 
 ## End SDNext
 
@@ -471,6 +485,9 @@ sudo apt install curl
 ```
 
 2025-10-17 - Image generation interaction is now somewhat more limited, that needs options for sd_api_pictures and send_pictures need to be turned on, and Stable Diffusion (started first) running.  
+
+2025-11-27 - Had some adventures getting TGW to work using Strix Halo - Filed a bug report, but ended up finding a solution myself.  This took me a while, so I thought I'd share those notes in case it's helpful - https://github.com/oobabooga/text-generation-webui/issues/7326#issuecomment-3587022402
+
 
 
 ## End - Oobabooga - Text-Generation-WebUI
