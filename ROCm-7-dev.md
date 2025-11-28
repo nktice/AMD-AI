@@ -441,8 +441,6 @@ Note with the models, it's looking for models in models/checkpoints - so you'll 
 #  Oobabooga - Text Generation WebUI - ROCm 
 Project Website : https://github.com/oobabooga/text-generation-webui.git
 
-2025-11-27 - At the present time I cannot get this working - unfortunately.  
-
 ## Conda
 2025-10-23 - In working with Ubuntu 25.10 I found there's an issue with Conda in various forms.  Turns out Ubuntu is shipping with a version of md5sum that makes different results from standard version, thus causes messes... there's a work around, as I'll get to below... but in my review, I found that there is not need for a bunch of stuff that there used to be... Oobabooga now has a working installer that is usable.  [ It used to be that their installer didn't work, and so we needed to setup ourselves with the whole environment and dependencies... that appears over, so we can slim this all down to a few commands. ] 
 
