@@ -321,6 +321,11 @@ source venv/bin/activate
 python3 -m pip install -U pip
 # If you want to pre-install torch and torchvision from nightlies 
 python3 -m pip install --pre torch==2.10.0.dev20251123+rocm7.1 torchvision==0.25.0.dev20251124+rocm7.1  --extra-index-url https://download.pytorch.org/whl/nightly/rocm7.1
+## alternatively testing the newest versions of ROCm libraries / nightly compiles of 'theRock' - which may not work...
+## see their page at : https://github.com/ROCm/TheRock/blob/main/RELEASES.md 
+## Here are commands for strix-halo...
+# pip install --index-url https://rocm.nightlies.amd.com/v2/gfx1151/ "rocm[libraries,devel]"
+# pip install --index-url https://rocm.nightlies.amd.com/v2/gfx1151/ torch torchaudio torchvision
 deactivate 
 ```
 
