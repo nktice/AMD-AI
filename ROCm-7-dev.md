@@ -1,7 +1,7 @@
 # AMD-AI - A choose your own adventure how-to user guide...
 Tested on hardware : AMD Radeon 7900XTX and 6900XT GPUs ( including dual cards), and the Ryzen AI Max 395+ ( Strix Halo ). 
 # Ubuntu Linux 24.04.3  / 25.10
-# ROCm 7.1.1
+# ROCm 7.2
 # Stable Diffusion (Automatic1111 and ForgeUI for AMDGPUs ) + ComfyUI  ( venv ) 
 # Oobabooga - Text Generation WebUI ( conda ) 
 
@@ -21,6 +21,8 @@ Please note that there is another supplemental set of instructions to use Ollama
 2025-10-23 - Appears AMD has released some new drivers for the Strix Halo - alas this series might not support older cards, and is a "prevew".  There are components, such as with Oobabooga, that are setup with versions of ROCm that don't support Strix Halo ( Ryzen AI Max ) series processors, but should work with older stuff through default install.  So here is a link to the Strix Halo drivers for those who want them... https://rocm.docs.amd.com/en/7.9.0-preview/install/rocm.html  I may include notes I find related to them where appropriate.  
 
 2025-11-27 - I had been having crahes with my Strix Halo that delayed updates.  I managed to find this page with a workaround that avoids crashes - https://github.com/ROCm/ROCm/issues/5590#issuecomment-3573570390 - So if that's soemthing that is relevant to you, review details there. 
+
+2026-02-05 - Update version numbers for ROCm 7.2
 
 --------
 
@@ -57,8 +59,8 @@ wget https://repo.radeon.com/rocm/rocm.gpg.key -O - | \
 
 ```bash
 sudo tee /etc/apt/sources.list.d/rocm.list << EOF
-deb [arch=amd64 signed-by=/etc/apt/keyrings/rocm.gpg] https://repo.radeon.com/rocm/apt/7.1.1 noble main
-deb [arch=amd64 signed-by=/etc/apt/keyrings/rocm.gpg] https://repo.radeon.com/graphics/7.1.1/ubuntu noble main
+deb [arch=amd64 signed-by=/etc/apt/keyrings/rocm.gpg] https://repo.radeon.com/rocm/apt/7.2 noble main
+deb [arch=amd64 signed-by=/etc/apt/keyrings/rocm.gpg] https://repo.radeon.com/graphics/7.2/ubuntu noble main
 EOF
 
 sudo tee /etc/apt/preferences.d/rocm-pin-600 << EOF
@@ -96,7 +98,8 @@ echo "PATH=/opt/rocm/bin:/opt/rocm/opencl/bin:$PATH" >> ~/.profile
 ```
 
 ```bash
-export LD_LIBRARY_PATH=/opt/rocm-7.1.1/lib
+#export LD_LIBRARY_PATH=/opt/rocm-7.2/lib
+export LD_LIBRARY_PATH=/opt/rocm/lib
 ```
 
 
