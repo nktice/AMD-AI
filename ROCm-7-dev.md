@@ -321,11 +321,6 @@ python3 -m pip install --pre torch==2.10.0.dev20251123+rocm7.1 torchvision==0.25
 deactivate 
 ```
 
-We may also want to prep our models folder to cut down on dupes...
-```bash
-# mv models models.1
-# ln -s ../models/ models
-```
 
 If you want to set configuration options it also can use the same file name as the older sd versions - alas they haven't offered examples, so I will offer one here for something I want.
 This parameter allows JavaScript access to the API... I've remarked this out, as it may not be secure for other users.
@@ -356,6 +351,8 @@ tee --append sdnext.sh <<EOF
 #script to call webui.sh with parameters... add others if you like below... 
 export LD_PRELOAD=libjemalloc.so.2  
 ./webui.sh --debug
+# if you have models you can specify them on the command line such as with the following :
+#./webui.sh --debug --models-dir ~/models
 EOF
 chmod +x sdnext.sh
 ```
