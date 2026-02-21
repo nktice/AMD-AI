@@ -20,7 +20,7 @@ Please note that there is another supplemental set of instructions to use Ollama
 
 2025-10-23 - Appears AMD has released some new drivers for the Strix Halo - alas this series might not support older cards, and is a "prevew".  There are components, such as with Oobabooga, that are setup with versions of ROCm that don't support Strix Halo ( Ryzen AI Max ) series processors, but should work with older stuff through default install.  So here is a link to the Strix Halo drivers for those who want them... https://rocm.docs.amd.com/en/7.10.0-preview/install/rocm.html (link updated for new version)   I may include notes I find related to them where appropriate.  
 
-2025-11-27 - I had been having crahes with my Strix Halo that delayed updates.  I managed to find this page with a workaround that avoids crashes - https://github.com/ROCm/ROCm/issues/5590#issuecomment-3573570390 - So if that's soemthing that is relevant to you, review details there. 
+2025-11-27 - I had been having crahes with my Strix Halo that delayed updates.  I managed to find this page with a workaround that avoids crashes - https://github.com/ROCm/ROCm/issues/5590#issuecomment-3573570390 - So if that's soemthing that is relevant to you, review details there.  - it appears that as of 2026-02-21 Linux Kernel 6.19 is now in mainline kernels for Ubuntu, the new kernel combined with the updated firmware, and ROCm theRock nightly drivers appears to remove the need for the workaround(s).  
 
 2026-02-05 - Update version numbers for ROCm 7.2
 
