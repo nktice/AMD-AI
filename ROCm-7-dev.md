@@ -2,7 +2,7 @@
 Tested on hardware : AMD Radeon 7900XTX and 6900XT GPUs ( including dual cards), and the Ryzen AI Max 395+ ( Strix Halo ). 
 # Ubuntu Linux 24.04.3  / 25.10
 # ROCm 7.2
-# Stable Diffusion (Automatic1111 and ForgeUI for AMDGPUs ) + ComfyUI  ( venv ) 
+# Stable Diffusion (SDNext AMDGPUs ) + ComfyUI  ( venv ) 
 # Oobabooga - Text Generation WebUI ( conda ) 
 
 ## Introduction 
