@@ -321,7 +321,7 @@ https://forum.anaconda.com/t/critical-installation-failure-persistent-internal-m
 
 Here are the commands to switch to GNU version of md5sum :
 ```bash
-sudo apt install coreutils-from-gnu coreutils-from-uutils- --allow-remove-essential
+sudo apt install curl coreutils-from-gnu coreutils-from-uutils- --allow-remove-essential
 ```
 
 ## Oobabooga / Text-generation-webui - Install webui...
@@ -350,7 +350,6 @@ If you have old models,  link pre-stored models into the models
 ### Many things have changed so we're trying to use Oobabooga's installer 
 - it now uses Vulkan instead of ROCm... so some of the previous instructions may be redundant... working on it. 
 ```bash
-sudo apt install curl
 ./start_linux.sh 
 ```
 
