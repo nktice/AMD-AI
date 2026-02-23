@@ -18,7 +18,7 @@ Please note that there is another supplemental set of instructions to use Ollama
 
 2025-10-22 - Testing functionality on newest version of Ubuntu 25.10 - requires some changes...
 
-2025-10-23 - Appears AMD has released some new drivers for the Strix Halo - alas this series might not support older cards, and is a "prevew".  There are components, such as with Oobabooga, that are setup with versions of ROCm that don't support Strix Halo ( Ryzen AI Max ) series processors, but should work with older stuff through default install.  So here is a link to the Strix Halo drivers for those who want them... https://rocm.docs.amd.com/en/7.10.0-preview/install/rocm.html (link updated for new version)   I may include notes I find related to them where appropriate.  
+2025-10-23 - Appears AMD has released some new drivers for the Strix Halo - alas this series might not support older cards, and is a "prevew".  There are components, such as with Oobabooga, that are setup with versions of ROCm that don't support Strix Halo ( Ryzen AI Max ) series processors, but should work with older stuff through default install.  So here is a link to the Strix Halo drivers for those who want them... https://rocm.docs.amd.com/en/7.20.0-preview/install/rocm.html (link updated for new version)   I may include notes I find related to them where appropriate.  
 
 2025-11-27 - I had been having crahes with my Strix Halo that delayed updates.  I managed to find this page with a workaround that avoids crashes - https://github.com/ROCm/ROCm/issues/5590#issuecomment-3573570390 - So if that's soemthing that is relevant to you, review details there.  - it appears that as of 2026-02-21 Linux Kernel 6.19 is now in mainline kernels for Ubuntu, the new kernel combined with the updated firmware, and ROCm theRock nightly drivers appears to remove the need for the workaround(s).  
 
@@ -158,144 +158,7 @@ reboot
 --------
 
 # Stable Diffusion 
-Stable Diffusion is an amazing system to make AI art.  These open source tools are rather outdated now, and things have evolved.  It's been a challenge to get the python version that they will work with.  Newer versions break various dependencies, and things don't go well... 
-
-## How to install Python 3.10 - 
-These instructions are taken from this Q and A up on a forum : https://askubuntu.com/questions/1539019/how-to-install-python-3-10-on-ubuntu-24-10
-
-Dependencies
-```bash
-sudo apt install -y build-essential libssl-dev libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm libffi-dev zlib1g-dev
-```
-
-Download and extract the sources :
-```bash
-cd /opt
-sudo wget https://www.python.org/ftp/python/3.10.12/Python-3.10.12.tgz
-sudo tar -xvf Python-3.10.12.tgz
-```
-
-Compile and Install
-```bash
-cd Python-3.10.12
-sudo ./configure --enable-optimizations
-sudo make altinstall -j
-```
-Now we have python3.10 installed and it is ready to use for SD programs... 
-
-
-That is the magic to get that python version onto the system - that is essential for to get A1111 or forge UI up. 
-
-
-## Automatic1111 
-https://github.com/AUTOMATIC1111/stable-diffusion-webui
-Get the files...
-```bash
-cd
-git clone https://github.com/AUTOMATIC1111/stable-diffusion-webui.git
-cd stable-diffusion-webui
-```
-
-## Requisites : 
-Automatic1111 / Stable Diffusion doesn't work with newer versions of python, so we specify one it works with. 
-```bash
-python3.10 -m venv venv
-source venv/bin/activate
-python3.10 -m pip install -U pip
-deactivate
-```
-
-## Edit environment settings...
-```bash
-tee --append webui-user.sh <<EOF
-# specify compatible python version
-python_cmd="python3.10"
- ## Torch for ROCm
-# generic import...
-# export TORCH_COMMAND="pip install torch torchvision --index-url https://download.pytorch.org/whl/nightly/rocm7.1"
-export TORCH_COMMAND="pip install --pre torch==2.10.0.dev20251123+rocm7.1 torchvision==0.25.0.dev20251124+rocm7.1 --extra-index-url https://download.pytorch.org/whl/nightly/rocm7.1"
- ## And if you want to call this from other programs...
- export COMMANDLINE_ARGS="--api"
- ## crashes with 2 cards, so to get it to run on the second card (only), unremark the following 
- # export CUDA_VISIBLE_DEVICES="1"
-EOF
-```
-
-
-## Models 
-If you keep models for SD somewhere, this is where you'd link them up...
-If you don't do this, it will install a default to get you going. 
-Note that these start files do include things that it needs you'll want to copy
-into the folder where you have other models ( to avoid issues ) 
-```bash
-#mv models models.1
-#ln -s /path/to/models models 
-```
-
-## Run SD...
- Note that the first time it starts it may take it a while to go and get things
- it's not always good about saying what it's up to. 
-```bash
-./webui.sh 
-```
-
-The first time this is run it will install the requirements.  May take a few tries for it to get everything the way it likes it. 
-
-
-
-## end A1111
-
-## Stable Diffusion WebUI AMDGPU Forge ( Forge UI ) 
-
-2025-10-19 - In trying SD on a "Strix Halo" system it runs very slow...  What I'm guessing is it's using the CPU and not GPU.  A1111 predates current GPUs and processor types.   So I went in search of things that may run better, and came across this.  As it's derived from the old Stable Diffusion it works similar... So I was able to get it up and functioning with some adjustments.  It also runs slow, but since I got it working, I'll include it here.
-
-Stable Diffusion WebUI AMDGPU Forge github : https://github.com/lshqqytiger/stable-diffusion-webui-amdgpu-forge
-See section above on installing Python 3.10 ... 
-
-Git from github - 
-```bash
-cd
-git clone https://github.com/lshqqytiger/stable-diffusion-webui-amdgpu-forge.git
-cd stable-diffusion-webui-amdgpu-forge
-```
-
-Update the config file...
-```bash
-tee --append webui-user.sh <<EOF
-# specify compatible python version
-python_cmd="python3.10"
-# use specific versions to avoid downloading all the nightlies... ( update dates as needed )
-# Note that torchvision sometimes needs the previous night's version of torch, so their dates are sequential
- export TORCH_COMMAND="pip install --pre torch==2.10.0.dev20251123+rocm7.1 torchvision==0.25.0.dev20251124+rocm7.1 --extra-index-url https://download.pytorch.org/whl/nightly/rocm7.1"
- ## And if you want to call this from other programs...
- export COMMANDLINE_ARGS="--api"
-EOF
-```
-
-If you have models stored in some directory, you could link them now...  
-```bash
-#mv models models.1
-#ln -s ~/models/  models
-```
-
-Initial setup of program environment, that gave me issues... 
-```bash
-./webui.sh
-```
-
-Here's two packages it didn't seem to install just using the scripts...
-```bash
-source venv/bin/activate
-pip install "optimum[onnxruntime-gpu]" joblib --extra-index-url https://download.pytorch.org/whl/nightly/rocm7.1
-deactivate
-```
-
-And with those in place, I ran the program again, and it worked for me. 
-```bash
-./webui.sh
-```
-
-## End Forge UI 
+Stable Diffusion is an amazing system to make AI art.  SDNext is a well maintained and excellent successor to the older A1111 and similar systems.
 
 
 ## SDNext
@@ -313,14 +176,15 @@ git clone https://github.com/vladmandic/sdnext.git
 cd sdnext
 ```
 
-SDNext is descended from Stable Diffusion such as seen above... so there is a lot of similar config, such as with venv... we'll want to pre-empt the default install methods and get torch installed...
+Only if you need a newer version of torch than what it installs... 
+SDNext is descended from Stable Diffusion such as seen above... so there is a lot of similar config, such as with venv... we'll want to pre-empt the default install methods and get torch installed...  
 ```bash
 python3 -m venv venv
 source venv/bin/activate
 # upgrade pip
 python3 -m pip install -U pip
-# If you want to pre-install torch and torchvision from nightlies 
-python3 -m pip install --pre torch==2.10.0.dev20251123+rocm7.1 torchvision==0.25.0.dev20251124+rocm7.1  --extra-index-url https://download.pytorch.org/whl/nightly/rocm7.1
+# If you want to pre-install torch and torchvision from nightlies
+python3 -m pip install --pre torch==2.12.0.dev20260221+rocm7.2 torchvision==0.26.0.dev20260222+rocm7.2  --extra-index-url https://download.pytorch.org/whl/nightly/rocm7.2
 ## alternatively testing the newest versions of ROCm libraries / nightly compiles of 'theRock' - which may not work...
 ## see their page at : https://github.com/ROCm/TheRock/blob/main/RELEASES.md 
 ## Here are commands for strix-halo...
@@ -328,6 +192,9 @@ python3 -m pip install --pre torch==2.10.0.dev20251123+rocm7.1 torchvision==0.25
 # pip install --index-url https://rocm.nightlies.amd.com/v2/gfx1151/ torch torchaudio torchvision
 deactivate 
 ```
+
+
+
 
 
 If you want to set configuration options it also can use the same file name as the older sd versions - alas they haven't offered examples, so I will offer one here for something I want.
@@ -393,11 +260,11 @@ python3 -m venv venv
 source venv/bin/activate
 python3 -m pip install -U pip 
 ## pre-install torch and torchvision from nightlies - note you may want to update versions... 
-python3 -m pip install --pre torch==2.10.0.dev20251123+rocm7.1 torchvision==0.25.0.dev20251124+rocm7.1  torchsde torchaudio einops transformers\>=4.25.1 safetensors\>=0.4.2 aiohttp pyyaml Pillow scipy tqdm psutil av  --extra-index-url https://download.pytorch.org/whl/nightly/rocm7.1
+python3 -m pip install --pre torch==2.12.0.dev20260221+rocm7.2 torchvision==0.26.0.dev20260222+rocm7.2    torchsde torchaudio einops transformers\>=4.25.1 safetensors\>=0.4.2 aiohttp pyyaml Pillow scipy tqdm psutil av  --extra-index-url https://download.pytorch.org/whl/nightly/rocm7.2
 ## Note the following manually includes the contents of requirements.txt - because otherwise attempting to install the requirements goes and reinstalls torch over again. 
-python3 -m pip install -r requirements.txt  --extra-index-url https://download.pytorch.org/whl/nightly/rocm7.1
+python3 -m pip install -r requirements.txt  --extra-index-url https://download.pytorch.org/whl/nightly/rocm7.2
 
-python3 -m pip install -r custom_nodes/ComfyUI-Manager/requirements.txt --extra-index-url https://download.pytorch.org/whl/nightly/rocm7.1
+python3 -m pip install -r custom_nodes/ComfyUI-Manager/requirements.txt --extra-index-url https://download.pytorch.org/whl/nightly/rocm7.2
 
 # end vend if needed...
 deactivate
