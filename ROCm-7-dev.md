@@ -348,14 +348,36 @@ If you have old models,  link pre-stored models into the models
 
 
 ### Many things have changed so we're trying to use Oobabooga's installer 
-- it now uses Vulkan instead of ROCm... so some of the previous instructions may be redundant... working on it. 
 ```bash
 ./start_linux.sh 
 ```
 
-2025-10-17 - Image generation interaction is now somewhat more limited, that needs options for sd_api_pictures and send_pictures need to be turned on, and Stable Diffusion (started first) running.  
+2026-03-19 - With version 4.1 there appears to be an error when running the installer...  
+I filed a bug report with the following workaround here : https://github.com/oobabooga/text-generation-webui/issues/7436
 
-2025-11-27 - Had some adventures getting TGW to work using Strix Halo - Filed a bug report, but ended up finding a solution myself.  This took me a while, so I thought I'd share those notes in case it's helpful - https://github.com/oobabooga/text-generation-webui/issues/7326#issuecomment-3587022402
+Here's what the error looks like : 
+```
+ERROR: Could not find a version that satisfies the requirement triton==3.5.1+rocm7.2.0.gita272dfa8; platform_system == "Linux" and platform_machine == "x86_64" (from torch) (from versions: 3.2.0, 3.3.0, 3.3.1, 3.4.0, 3.5.0, 3.5.1, 3.6.0)
+ERROR: No matching distribution found for triton==3.5.1+rocm7.2.0.gita272dfa8; platform_system == "Linux" and platform_machine == "x86_64"
+```
+Tried running again, and alas the same issue kept on appearing...
+
+Here is what I've done so that I can work around getting this error, I'm posting it here as it may save others time getting things working.
+```
+# get into the environment
+conda activate installer_files/env 
+# Get torch, torchvision, and triton ( akin to what is described on pytorch.org 's website for nightly version ) 
+pip3 install --pre torch torchvision triton --index-url https://download.pytorch.org/whl/nightly/rocm7.2
+
+# Now with those in place, we re-try installing all the requirements to get the other missing pieces...
+pip install -r requirements/full/requirements_amd.txt
+conda deactivate
+
+# now we can start as usual...
+./start_linux.sh 
+```
+
+2025-11-27 - Had some adventures getting TGW to work using Strix Halo - Filed a bug report, but ended up finding a solution myself.  This took me a while, so I thought I'd share those notes in case it's helpful - https://github.com/oobabooga/text-generation-webui/issues/7326#issuecomment-3587022402 
 
 
 
