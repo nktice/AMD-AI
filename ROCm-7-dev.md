@@ -1,6 +1,6 @@
 # AMD-AI - A choose your own adventure how-to user guide...
 Tested on hardware : AMD Radeon 7900XTX and 6900XT GPUs ( including dual cards), and the Ryzen AI Max 395+ ( Strix Halo ). 
-# Ubuntu Linux 24.04.3  / 25.10
+# Ubuntu Linux 24.04.4  / 25.10
 # ROCm 7.2
 # Stable Diffusion (SDNext AMDGPUs ) + ComfyUI  ( venv ) 
 # Oobabooga - Text Generation WebUI ( conda ) 
@@ -353,29 +353,7 @@ If you have old models,  link pre-stored models into the models
 ```
 
 2026-03-19 - With version 4.1 there appears to be an error when running the installer...  
-I filed a bug report with the following workaround here : https://github.com/oobabooga/text-generation-webui/issues/7436
-
-Here's what the error looks like : 
-```
-ERROR: Could not find a version that satisfies the requirement triton==3.5.1+rocm7.2.0.gita272dfa8; platform_system == "Linux" and platform_machine == "x86_64" (from torch) (from versions: 3.2.0, 3.3.0, 3.3.1, 3.4.0, 3.5.0, 3.5.1, 3.6.0)
-ERROR: No matching distribution found for triton==3.5.1+rocm7.2.0.gita272dfa8; platform_system == "Linux" and platform_machine == "x86_64"
-```
-Tried running again, and alas the same issue kept on appearing...
-
-Here is what I've done so that I can work around getting this error, I'm posting it here as it may save others time getting things working.
-```
-# get into the environment
-conda activate installer_files/env 
-# Get torch, torchvision, and triton ( akin to what is described on pytorch.org 's website for nightly version ) 
-pip3 install --pre torch torchvision triton --index-url https://download.pytorch.org/whl/nightly/rocm7.2
-
-# Now with those in place, we re-try installing all the requirements to get the other missing pieces...
-pip install -r requirements/full/requirements_amd.txt
-conda deactivate
-
-# now we can start as usual...
-./start_linux.sh 
-```
+I filed a bug report with the following workaround here : https://github.com/oobabooga/text-generation-webui/issues/7436 - Issue now resolved, but I will leave the link here in case it's helpful. 
 
 2025-11-27 - Had some adventures getting TGW to work using Strix Halo - Filed a bug report, but ended up finding a solution myself.  This took me a while, so I thought I'd share those notes in case it's helpful - https://github.com/oobabooga/text-generation-webui/issues/7326#issuecomment-3587022402 
 
