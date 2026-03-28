@@ -27,7 +27,7 @@ Please note that there is another supplemental set of instructions to use Ollama
 --------
 
 
-# Ubuntu 24.04.3 - Base system install 
+# Ubuntu 24.04.4 - Base system install 
 This is all tested on Ubuntu Linux 24.04.3 - this appears to be now fairly well supported by drivers and tools. 
 
 This has been tested on 25.10 too...
