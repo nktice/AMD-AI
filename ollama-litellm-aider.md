@@ -20,8 +20,8 @@ Linux install guide : https://github.com/ollama/ollama/blob/main/docs/linux.md
 
 ### setup a conda environment...
 ```bash
-conda create -n ollama python=3.11 -y
-conda activate ollama
+# conda create -n ollama python=3.11 -y
+# conda activate ollama
 ```
 
 ### Install Ollama
