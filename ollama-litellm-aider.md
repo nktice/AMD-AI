@@ -107,6 +107,10 @@ I have had issues after a system restart with it not starting...  in the system 
 # ollama serve 
 ```
 
+## Claude Code with Ollama
+Here is a website that has details on using the Claude Code frontend backed by Ollama where you can pick the model that it is using :
+https://docs.ollama.com/integrations/claude-code
+
 ## Ollama Code 
 There is a CLI that is a fork of Gemini's CLI that uses the OpenAI aPI and is functional for use of Ollama models : 
 https://github.com/tcsenpai/ollama-code 
