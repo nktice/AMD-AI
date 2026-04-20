@@ -1,14 +1,14 @@
 # AMD-AI - A choose your own adventure how-to user guide...
-Tested on hardware : AMD Radeon 7900XTX and 6900XT GPUs ( including dual cards), and the Ryzen AI Max 395+ ( Strix Halo ). 
+Tested on hardware : AMD Radeon 7900XTX and 6900XT GPUs ( including dual cards ), and the Ryzen AI Max 395+ ( Strix Halo ). 
 # Ubuntu Linux 24.04.4  / 25.10
 # ROCm 7.2
 # Stable Diffusion (SDNext AMDGPUs ) + ComfyUI  ( venv ) 
-# Oobabooga - Text Generation WebUI ( conda ) 
+# Oobabooga - TextGen 
 
 ## Introduction 
 Introduction note : I started writing this guide 2023, because at the time I had a lot of trouble getting stuff running.  There was a range of partial or out of date guides that I came across...  So I set out to write a fairly complete guide to help fill the void.  Many things have changed, and there's lots of small details that have come and gone.  Generally things have improved over the months I've been doing this.  As much as I'd hoped all the issues would resolve, and it'd be easy to do everything making such guide redundant, that's yet to happen.  There appear to be a lot of fiddly bits that need attention, simple workarounds to make things work together that aren't well explained. 
 
-Please note that there is another supplemental set of instructions to use Ollama, and related tools kept in a separate page for simplicity - https://github.com/nktice/AMD-AI/blob/main/ollama-litellm-aider.md
+Please note that there is another supplemental set of instructions to use Ollama, and related tools ( Cluade Code, LiteLLM, Aider ) kept in a separate page for simplicity - https://github.com/nktice/AMD-AI/blob/main/ollama-litellm-aider.md
 
 ## Install notes / instructions / changelog 
 
@@ -310,8 +310,8 @@ Note with the models, it's looking for models in models/checkpoints - so you'll 
 
 ---
 
-#  Oobabooga - Text Generation WebUI - ROCm 
-Project Website : https://github.com/oobabooga/text-generation-webui.git
+#  Oobabooga - TextGen - ROCm 
+Project Website : https://github.com/oobabooga/textgen
 
 ## Conda
 2025-10-23 - In working with Ubuntu 25.10 I found there's an issue with Conda in various forms.  Turns out Ubuntu is shipping with a version of md5sum that makes different results from standard version, thus causes messes... there's a work around, as I'll get to below... but in my review, I found that there is not need for a bunch of stuff that there used to be... Oobabooga now has a working installer that is usable.  [ It used to be that their installer didn't work, and so we needed to setup ourselves with the whole environment and dependencies... that appears over, so we can slim this all down to a few commands. ] 
@@ -324,24 +324,24 @@ Here are the commands to switch to GNU version of md5sum :
 sudo apt install curl coreutils-from-gnu coreutils-from-uutils- --allow-remove-essential
 ```
 
-## Oobabooga / Text-generation-webui - Install webui...
+## Oobabooga / textgen - Install webui...
+
 ```bash
 cd
-git clone https://github.com/oobabooga/text-generation-webui
-cd text-generation-webui
+git clone https://github.com/oobabooga/textgen
+cd textgen
 ```
 
 Models 
 If you're new to this - new models can be downloaded from the shell via a python script, or from a form in the interface.
 There are lots of them - http://huggingface.co 
-Generally the GPTQ models by TheBloke are likely to load... https://huggingface.co/TheBloke  The 30B/33B models will load on 24GB of VRAM, but may error, or run out of memory depending on usage and parameters.  
-Worthy of mention, TurboDerp ( author of the exllama loaders ) has been posting exllamav2 ( exl2 ) processed versions of models - https://huggingface.co/turboderp ( for use with exllamav2 loader ) - when downloading, note the --branch option.  
+Generally the GPTQ models by TheBloke are likely to load... https://huggingface.co/unsloth  The 30B/33B models will load on 24GB of VRAM, but may error, or run out of memory depending on usage and parameters.  
 
-To get new models note the ~/text-generation-webui directory has a program " download-model.py " that is made for downloading models from HuggingFace's collection.  
+To get new models note the ~/textgen directory has a program " download-model.py " that is made for downloading models from HuggingFace's collection.  
 
 If you have old models,  link pre-stored models into the models
 ```bash
-# cd ~/text-generation-webui/user_data
+# cd ~/textgen/user_data
 # mv models models.1
 # ln -s /path/to/models models
 ```
@@ -353,13 +353,13 @@ If you have old models,  link pre-stored models into the models
 ```
 
 2026-03-19 - With version 4.1 there appears to be an error when running the installer...  
-I filed a bug report with the following workaround here : https://github.com/oobabooga/text-generation-webui/issues/7436 - Issue now resolved, but I will leave the link here in case it's helpful. 
+I filed a bug report with the following workaround here : https://github.com/oobabooga/textgen/issues/7436 - Issue now resolved, but I will leave the link here in case it's helpful. 
 
-2025-11-27 - Had some adventures getting TGW to work using Strix Halo - Filed a bug report, but ended up finding a solution myself.  This took me a while, so I thought I'd share those notes in case it's helpful - https://github.com/oobabooga/text-generation-webui/issues/7326#issuecomment-3587022402 
+2025-11-27 - Had some adventures getting TGW to work using Strix Halo - Filed a bug report, but ended up finding a solution myself.  This took me a while, so I thought I'd share those notes in case it's helpful - https://github.com/oobabooga/textgen/issues/7326#issuecomment-3587022402 
 
 
 
-## End - Oobabooga - Text-Generation-WebUI
+## End - Oobabooga - TextGen
 
 2024-08-17 - 
 Here's an example, nvtop, sd console, tgw console... 
