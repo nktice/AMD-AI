@@ -184,7 +184,7 @@ source venv/bin/activate
 # upgrade pip
 python3 -m pip install -U pip
 # If you want to pre-install torch and torchvision from nightlies
-python3 -m pip install --pre torch==2.12.0.dev20260221+rocm7.2 torchvision==0.26.0.dev20260222+rocm7.2  --extra-index-url https://download.pytorch.org/whl/nightly/rocm7.2
+python3 -m pip install --pre torch==2.13.0.dev20260419+rocm7.2 torchvision==0.27.0.dev20260420+rocm7.2  --extra-index-url https://download.pytorch.org/whl/nightly/rocm7.2
 ## alternatively testing the newest versions of ROCm libraries / nightly compiles of 'theRock' - which may not work...
 ## see their page at : https://github.com/ROCm/TheRock/blob/main/RELEASES.md 
 ## Here are commands for strix-halo...
@@ -260,7 +260,7 @@ python3 -m venv venv
 source venv/bin/activate
 python3 -m pip install -U pip 
 ## pre-install torch and torchvision from nightlies - note you may want to update versions... 
-python3 -m pip install --pre torch==2.12.0.dev20260221+rocm7.2 torchvision==0.26.0.dev20260222+rocm7.2    torchsde torchaudio einops transformers\>=4.25.1 safetensors\>=0.4.2 aiohttp pyyaml Pillow scipy tqdm psutil av  --extra-index-url https://download.pytorch.org/whl/nightly/rocm7.2
+python3 -m pip install --pre torch==2.13.0.dev20260419+rocm7.2 torchvision==0.27.0.dev20260420+rocm7.2   torchsde torchaudio einops transformers\>=4.25.1 safetensors\>=0.4.2 aiohttp pyyaml Pillow scipy tqdm psutil av --extra-index-url https://download.pytorch.org/whl/nightly/rocm7.2
 ## Note the following manually includes the contents of requirements.txt - because otherwise attempting to install the requirements goes and reinstalls torch over again. 
 python3 -m pip install -r requirements.txt  --extra-index-url https://download.pytorch.org/whl/nightly/rocm7.2
 
