@@ -78,11 +78,11 @@ To download a model with thier system we can use the following
 #### Converting models...
 If you want to use models loaded from elsewhere such as huggingface.co - here are some details regarding how to do it as a reference. 
 
-Here's an example for MistralAi's Mistral-Small-24B-Base-2501
+Here's an example...
 ```
 cd deepseekai_DeepSeek-R1-Distill-Qwen-14B
 echo "FROM ." > modelfile 
-create dsr1q14b -f modelfile 
+ollama create dsr1q14b -f modelfile 
 ```
 This then created a new model to access through the interface...
 ```
