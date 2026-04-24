@@ -1,7 +1,7 @@
 # AMD-AI - A choose your own adventure how-to user guide...
 Tested on hardware : AMD Radeon 7900XTX and 6900XT GPUs ( including dual cards ), and the Ryzen AI Max 395+ ( Strix Halo ). 
-# Ubuntu Linux 24.04.4  / 25.10
-# ROCm 7.2
+# Ubuntu Linux 24.04.4  / 25.10 / 26.04 
+# ROCm 7.2.2
 # Stable Diffusion (SDNext AMDGPUs ) + ComfyUI  ( venv ) 
 # Oobabooga - TextGen 
 
@@ -22,13 +22,13 @@ Please note that there is another supplemental set of instructions to use Ollama
 
 2025-11-27 - I had been having crahes with my Strix Halo that delayed updates.  I managed to find this page with a workaround that avoids crashes - https://github.com/ROCm/ROCm/issues/5590#issuecomment-3573570390 - So if that's soemthing that is relevant to you, review details there.  - it appears that as of 2026-02-21 Linux Kernel 6.19 is now in mainline kernels for Ubuntu, the new kernel combined with the updated firmware, and ROCm theRock nightly drivers appears to remove the need for the workaround(s).  
 
-2026-02-05 - Update version numbers for ROCm 7.2
+2026-04-23 - Updates for Ubuntu 26.04 LTS ...  ROCm 7.2.2
 
 --------
 
 
-# Ubuntu 24.04.4 - Base system install 
-This is all tested on Ubuntu Linux 24.04.3 - this appears to be now fairly well supported by drivers and tools. 
+# Ubuntu 24.04.4 / 25.10 / 26.04 - Base system install 
+This is all tested on Ubuntu Linux 26.04 - this appears to be now fairly well supported by drivers and tools. 
 
 This has been tested on 25.10 too...
 
@@ -59,8 +59,8 @@ wget https://repo.radeon.com/rocm/rocm.gpg.key -O - | \
 
 ```bash
 sudo tee /etc/apt/sources.list.d/rocm.list << EOF
-deb [arch=amd64 signed-by=/etc/apt/keyrings/rocm.gpg] https://repo.radeon.com/rocm/apt/7.2 noble main
-deb [arch=amd64 signed-by=/etc/apt/keyrings/rocm.gpg] https://repo.radeon.com/graphics/7.2/ubuntu noble main
+deb [arch=amd64 signed-by=/etc/apt/keyrings/rocm.gpg] https://repo.radeon.com/rocm/apt/7.2.2 noble main
+deb [arch=amd64 signed-by=/etc/apt/keyrings/rocm.gpg] https://repo.radeon.com/graphics/7.2.1/ubuntu noble main
 EOF
 
 sudo tee /etc/apt/preferences.d/rocm-pin-600 << EOF
