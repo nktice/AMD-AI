@@ -1,7 +1,7 @@
 # AMD AI - A guide for common AI tools on AMD Radeon GPU systems
-## AMD Radeon 7900XTX GPU ROCm install / setup / config 
+## Tested on AMD Radeon 7900XTX GPU and Strix Halo ( Ryzen AI Max 395+ ) 
 # Ubuntu 26.04
-# ROCm 7.2.2
+# ROCm 7.2.2  install / setup / config 
 # SDnext ( Stable Diffusion ) + ComfyUI ( venv ) 
 # Oobabooga - TextGen WebUI
 
