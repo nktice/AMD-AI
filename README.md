@@ -21,7 +21,9 @@ This file is focused on the current stable version of PyTorch.  There is another
 
 [ ... updates abridged ... ] 
 
-2026-04-24 - Updates for new Ubuntu LTS 26.04 ...
+Please note 'dev' version that's more frequently maintained at the following : https://github.com/nktice/AMD-AI/blob/main/ROCm-7-dev.md 
+
+2026-04-24 - Updates for new Ubuntu LTS 26.04 ... 
 
 
 -----
