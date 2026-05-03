@@ -43,7 +43,7 @@ sudo mkdir /home/ollama
 sudo mkdir /home/ollama/models
 sudo mkdir /home/ollama/tmp
 sudo chown -R ollama:ollama /home/ollama
-chmod 775 -R /home/ollama
+sudo chmod 775 -R /home/ollama
 ```
 
 Edit systemd service config 
