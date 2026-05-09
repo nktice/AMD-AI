@@ -1,7 +1,7 @@
 # AMD-AI - A choose your own adventure how-to user guide...
 Tested on hardware : AMD Radeon 7900XTX and 6900XT GPUs ( including dual cards ), and the Ryzen AI Max 395+ ( Strix Halo ). 
 # Ubuntu Linux 24.04.4  / 25.10 / 26.04 
-# ROCm 7.2.2
+# ROCm 7.2.3
 # Stable Diffusion (SDNext AMDGPUs ) + ComfyUI  ( venv ) 
 # Oobabooga - TextGen 
 
@@ -59,8 +59,8 @@ wget https://repo.radeon.com/rocm/rocm.gpg.key -O - | \
 
 ```bash
 sudo tee /etc/apt/sources.list.d/rocm.list << EOF
-deb [arch=amd64 signed-by=/etc/apt/keyrings/rocm.gpg] https://repo.radeon.com/rocm/apt/7.2.2 noble main
-deb [arch=amd64 signed-by=/etc/apt/keyrings/rocm.gpg] https://repo.radeon.com/graphics/7.2.1/ubuntu noble main
+deb [arch=amd64 signed-by=/etc/apt/keyrings/rocm.gpg] https://repo.radeon.com/rocm/apt/7.2.3 noble main
+deb [arch=amd64 signed-by=/etc/apt/keyrings/rocm.gpg] https://repo.radeon.com/graphics/7.2.3/ubuntu noble main
 EOF
 
 sudo tee /etc/apt/preferences.d/rocm-pin-600 << EOF
@@ -184,7 +184,8 @@ source venv/bin/activate
 # upgrade pip
 python3 -m pip install -U pip
 # If you want to pre-install torch and torchvision from nightlies
-python3 -m pip install --pre torch==2.13.0.dev20260419+rocm7.2 torchvision==0.27.0.dev20260420+rocm7.2  --extra-index-url https://download.pytorch.org/whl/nightly/rocm7.2
+#python3 -m pip install --pre torch==2.13.0.dev20260419+rocm7.2 torchvision==0.27.0.dev20260420+rocm7.2  --extra-index-url https://download.pytorch.org/whl/nightly/rocm7.2
+python3 -m pip install --pre torch torchvision  --extra-index-url https://download.pytorch.org/whl/nightly/rocm7.2
 ## alternatively testing the newest versions of ROCm libraries / nightly compiles of 'theRock' - which may not work...
 ## see their page at : https://github.com/ROCm/TheRock/blob/main/RELEASES.md 
 ## Here are commands for strix-halo...
@@ -260,7 +261,7 @@ python3 -m venv venv
 source venv/bin/activate
 python3 -m pip install -U pip 
 ## pre-install torch and torchvision from nightlies - note you may want to update versions... 
-python3 -m pip install --pre torch==2.13.0.dev20260419+rocm7.2 torchvision==0.27.0.dev20260420+rocm7.2   torchsde torchaudio einops transformers\>=4.25.1 safetensors\>=0.4.2 aiohttp pyyaml Pillow scipy tqdm psutil av --extra-index-url https://download.pytorch.org/whl/nightly/rocm7.2
+#python3 -m pip install --pre torch==2.13.0.dev20260419+rocm7.2 torchvision==0.27.0.dev20260420+rocm7.2   torchsde python3 -m pip install --pre torch torchvision   torchsde torchaudio einops transformers\>=4.25.1 safetensors\>=0.4.2 aiohttp pyyaml Pillow scipy tqdm psutil av --extra-index-url https://download.pytorch.org/whl/nightly/rocm7.2
 ## Note the following manually includes the contents of requirements.txt - because otherwise attempting to install the requirements goes and reinstalls torch over again. 
 python3 -m pip install -r requirements.txt  --extra-index-url https://download.pytorch.org/whl/nightly/rocm7.2
 
