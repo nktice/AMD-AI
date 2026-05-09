@@ -1,7 +1,7 @@
 # AMD AI - A guide for common AI tools on AMD Radeon GPU systems
 ## Tested on AMD Radeon 7900XTX GPU and Strix Halo ( Ryzen AI Max 395+ ) 
 # Ubuntu 26.04
-# ROCm 7.2.2  install / setup / config 
+# ROCm 7.2.3  install / setup / config 
 # SDnext ( Stable Diffusion ) + ComfyUI ( venv ) 
 # Oobabooga - TextGen WebUI
 
@@ -60,8 +60,8 @@ wget https://repo.radeon.com/rocm/rocm.gpg.key -O - | \
 
 ```bash
 sudo tee /etc/apt/sources.list.d/rocm.list << EOF
-deb [arch=amd64 signed-by=/etc/apt/keyrings/rocm.gpg] https://repo.radeon.com/rocm/apt/7.2.2 noble main
-deb [arch=amd64 signed-by=/etc/apt/keyrings/rocm.gpg] https://repo.radeon.com/graphics/7.2.1/ubuntu noble main
+deb [arch=amd64 signed-by=/etc/apt/keyrings/rocm.gpg] https://repo.radeon.com/rocm/apt/7.2.3 noble main
+deb [arch=amd64 signed-by=/etc/apt/keyrings/rocm.gpg] https://repo.radeon.com/graphics/7.2.3/ubuntu noble main
 EOF
 
 sudo tee /etc/apt/preferences.d/rocm-pin-600 << EOF
