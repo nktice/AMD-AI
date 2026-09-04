@@ -316,18 +316,66 @@ If you have old models,  link pre-stored models into the models
 # ln -s /path/to/models models
 ```
 
+If you have your own user_data directory...
+```
+# mv ~/textgen/user_data user_data.1
+# ln -s ~/user_data/ user_data
+```
+
 
 ### Many things have changed so we're trying to use Oobabooga's installer 
+2026-09-04 - There are some issues with running Textgen ( which does not appear to be in development at this point, the author having moved to Unsloth Studio ).  So the following is a list of what I did to get it working...  If you are wondering if it is worth the effort to do the upgrade, the claimed improvement is ROCm 10.0 is 3.3x faster at inference than ROCm 7x. 
+
+This will only partially work, but it gets the conda environment how it wants it, so run this and it'll error but we'll go from there...
 ```bash
 ./start_linux.sh 
 ```
 
-2026-03-19 - With version 4.1 there appears to be an error when running the installer...  
-I filed a bug report with the following workaround here : https://github.com/oobabooga/textgen/issues/7436 - Issue now resolved, but I will leave the link here in case it's helpful. 
+For me it barfs with errors that look like this 
+```
+  ERROR: HTTP error 404 while getting https://repo.radeon.com/rocm/manylinux/rocm-rel-7.2/torch-2.9.0%2Brocm7.2.0.lw.git7e1940d4-cp313-cp313-linux_x86_64.whl
+ERROR: Could not install requirement torch==2.9.0+rocm7.2.0.lw.git7e1940d4 from https://repo.radeon.com/rocm/manylinux/rocm-rel-7.2/torch-2.9.0%2Brocm7.2.0.lw.git7e1940d4-cp313-cp313-linux_x86_64.whl because of HTTP error 404 Client Error: Not Found for url: https://repo.radeon.com/rocm/manylinux/rocm-rel-7.2/torch-2.9.0%2Brocm7.2.0.lw.git7e1940d4-cp313-cp313-linux_x86_64.whl for URL https://repo.radeon.com/rocm/manylinux/rocm-rel-7.2/torch-2.9.0%2Brocm7.2.0.lw.git7e1940d4-cp313-cp313-linux_x86_64.whl
+```
 
-2025-11-27 - Had some adventures getting TGW to work using Strix Halo - Filed a bug report, but ended up finding a solution myself.  This took me a while, so I thought I'd share those notes in case it's helpful - https://github.com/oobabooga/textgen/issues/7326#issuecomment-3587022402 
+To work around that... Next we will follow the local install of the latest llama.cpp - it's akin to the instructions I wrote here for the Strix-Halo  https://github.com/oobabooga/textgen/issues/7326#issuecomment-3587022402 
 
+Initialize access to the Textgen's conda environment 
+```bash
+conda activate installer_files/env
+```
 
+Get llama.cpp the way textgen wants it...
+```bash
+git clone --recurse-submodules https://github.com/oobabooga/llama-cpp-binaries
+# this breaks on the part where it includes the original llama.cpp code because it's addressed ssh not http...
+cd llama-cpp-binaries/
+## original 
+git clone --recurse-submodules https://github.com/ggml-org/llama.cpp
+```
+
+Compile llama.cpp - notice the target - this needs to match the targets you want like gfx1151 for Strix Halo, or gfx1100 for Radeon 7900 XTX - `sudo rocminfo | grep -i gfx ` will show your yours. 
+```bash
+CMAKE_ARGS="-DLLAMA_HIPBLAS=ON -DGPU_TARGETS=gfx1151 -DGGML_HIP=ON  -DGGML_HIP_ROCWMMA_FATTN=ON" pip install -v . --force-reinstall --no-cache-dir   --extra-index-url https://download.pytorch.org/whl/nightly/rocm10.0
+```
+
+# Now back to textgen's requirements for AMD - 
+```bash
+cd ..
+# manually install latest pytorch and torchvision 
+python3 -m pip install --pre torch torchvision  --extra-index-url https://download.pytorch.org/whl/nightly/rocm10.0
+# get the rest of the expected requirements 
+python3 -m pip install -r ./requirements/full/requirements_amd.txt  --extra-index-url https://download.pytorch.org/whl/nightly/rocm10.0 
+```
+
+Leave conda env
+```bash
+conda deactivate
+```
+
+Now it should have all the stuff it needs to run
+```bash
+./start_linux.sh 
+```
 
 ## End - Oobabooga - TextGen
 
