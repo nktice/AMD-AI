@@ -69,7 +69,8 @@ Here's a complete list of packages they offer and what they include...
 ```bash
 # ROCm...
 sudo apt install amdrocm10.0
-#sudo apt install -y rocm rocm-dev rocm-libs rocm-hip-sdk rocm-libs
+# And if you're ever going to want to compile anything related... [ the dev file names / packages have all changed... ] 
+# sudo apt install amdrocm-core-dev10.0
 ```
 
 ```bash
