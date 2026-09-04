@@ -1,7 +1,7 @@
 # AMD-AI - A choose your own adventure how-to user guide...
 Tested on hardware : AMD Radeon 7900XTX and 6900XT GPUs ( including dual cards ), and the Ryzen AI Max 395+ ( Strix Halo ). 
 # Ubuntu Linux 26.04 
-# ROCm 10...
+# ROCm 10.0 ...
 # Stable Diffusion (SDNext AMDGPUs ) + ComfyUI  ( venv ) 
 # Oobabooga - TextGen 
 
@@ -11,7 +11,7 @@ Introduction note : I started writing this guide 2023, because at the time I had
 Please note that there is another supplemental set of instructions to use Ollama, and related tools ( Cluade Code, LiteLLM, Aider ) kept in a separate page for simplicity - https://github.com/nktice/AMD-AI/blob/main/ollama-litellm-aider.md
 
 ## Install notes / instructions / changelog 
-2026-09-03 - Update to ROCm 10... 
+2026-09-03 - Update to ROCm 10.0 ... 
 
 --------
 
@@ -65,32 +65,16 @@ sudo apt update
 
 # More AMD ROCm related packages 
 Here's a complete list of packages they offer and what they include...
-https://rocm.docs.amd.com/projects/install-on-linux/en/latest/install/install-methods/package-manager/package-manager-ubuntu.html#install-rocm
+
 ```bash
 # ROCm...
 sudo apt install amdrocm10.0
 #sudo apt install -y rocm rocm-dev rocm-libs rocm-hip-sdk rocm-libs
 ```
 
-# Post install setup 
-From : https://rocm.docs.amd.com/projects/install-on-linux/en/latest/install/post-install.html
-```bash
-## ld.so.conf update 
-#sudo tee --append /etc/ld.so.conf.d/rocm.conf <<EOF
-#/opt/rocm/lib
-#/opt/rocm/lib64
-#EOF
-#sudo ldconfig
-```
-
 ```bash
 # update path
 echo "PATH=/opt/rocm/bin:/opt/rocm/opencl/bin:$PATH" >> ~/.profile
-```
-
-```bash
-#export LD_LIBRARY_PATH=/opt/rocm-7.2/lib
-#export LD_LIBRARY_PATH=/opt/rocm/lib
 ```
 
 
@@ -169,8 +153,7 @@ source venv/bin/activate
 # upgrade pip
 python3 -m pip install -U pip
 # If you want to pre-install torch and torchvision from nightlies
-#python3 -m pip install --pre torch==2.13.0.dev20260419+rocm7.2 torchvision==0.27.0.dev20260420+rocm7.2  --extra-index-url https://download.pytorch.org/whl/nightly/rocm7.2
-python3 -m pip install --pre torch torchvision  --extra-index-url https://download.pytorch.org/whl/nightly/rocm7.2
+python3 -m pip install --pre torch torchvision  --extra-index-url https://download.pytorch.org/whl/nightly/rocm10.0
 ## alternatively testing the newest versions of ROCm libraries / nightly compiles of 'theRock' - which may not work...
 ## see their page at : https://github.com/ROCm/TheRock/blob/main/RELEASES.md 
 ## Here are commands for strix-halo...
@@ -246,11 +229,11 @@ python3 -m venv venv
 source venv/bin/activate
 python3 -m pip install -U pip 
 ## pre-install torch and torchvision from nightlies - note you may want to update versions... 
-#python3 -m pip install --pre torch==2.13.0.dev20260419+rocm7.2 torchvision==0.27.0.dev20260420+rocm7.2   torchsde python3 -m pip install --pre torch torchvision   torchsde torchaudio einops transformers\>=4.25.1 safetensors\>=0.4.2 aiohttp pyyaml Pillow scipy tqdm psutil av --extra-index-url https://download.pytorch.org/whl/nightly/rocm7.2
+#python3 -m pip install --pre torch torchvision --extra-index-url https://download.pytorch.org/whl/nightly/rocm10.0
 ## Note the following manually includes the contents of requirements.txt - because otherwise attempting to install the requirements goes and reinstalls torch over again. 
-python3 -m pip install -r requirements.txt  --extra-index-url https://download.pytorch.org/whl/nightly/rocm7.2
+python3 -m pip install -r requirements.txt  --extra-index-url https://download.pytorch.org/whl/nightly/rocm10.0
 
-python3 -m pip install -r custom_nodes/ComfyUI-Manager/requirements.txt --extra-index-url https://download.pytorch.org/whl/nightly/rocm7.2
+python3 -m pip install -r custom_nodes/ComfyUI-Manager/requirements.txt --extra-index-url https://download.pytorch.org/whl/nightly/rocm10.0
 
 # end vend if needed...
 deactivate
