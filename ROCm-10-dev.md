@@ -135,8 +135,15 @@ Stable Diffusion is an amazing system to make AI art.  SDNext is a well maintain
 Here are instructions for for setting up SD Next a descendent of Stable Diffusion that looks like it is maintained at the present time.  Project page : https://github.com/vladmandic/sdnext 
 2025-11-03 - Added these instructions...
 
+2026-09-06 - Had to update to use deadsnakes to get a supported version of python...
+
 ```bash
-sudo apt install python3 python3-venv git git-lfs
+sudo apt update
+sudo apt install software-properties-common
+sudo add-apt-repository ppa:deadsnakes/ppa -y
+sudo apt update
+
+sudo apt install python3.13 python3.13-venv -y
 ```
 
 First we download the latest from GitHub...
@@ -149,7 +156,7 @@ cd sdnext
 Only if you need a newer version of torch than what it installs... 
 SDNext is descended from Stable Diffusion such as seen above... so there is a lot of similar config, such as with venv... we'll want to pre-empt the default install methods and get torch installed...  
 ```bash
-python3 -m venv venv
+python3.13 -m venv venv
 source venv/bin/activate
 # upgrade pip
 python3 -m pip install -U pip
