@@ -21,11 +21,11 @@ This file is focused on the current stable version of PyTorch.  There is another
 
 [ ... updates abridged ... ] 
 
-Please note 'dev' version that's more frequently maintained at the following : https://github.com/nktice/AMD-AI/blob/main/ROCm-7-dev.md 
-
 2026-04-24 - Updates for new Ubuntu LTS 26.04 ... 
 
 2026-06-24 - Update to use ROCm 7.2.4
+
+2026-09-14 - There is a new dev version for ROCm 10.0.0 -> https://github.com/nktice/AMD-AI/blob/main/ROCm-10-dev.md
 
 -----
 
